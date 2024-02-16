@@ -1,4 +1,7 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'amplifyconfiguration.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,32 +31,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _amplifyConfigured = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _configureAmplify();
+  }
+
+  void _configureAmplify() async {
+  AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+  try {
+    await Amplify.addPlugins([authPlugin]);
+    await Amplify.configure(amplifyconfig); // 'amplifyconfig' is defined in 'amplifyconfiguration.dart'
+    print('Successfully configured Amplify 🎉');
+    setState(() {
+      _amplifyConfigured = true;
+    });
+  } on AmplifyAlreadyConfiguredException {
+    //Amplify already created
+  } catch (e) {
+    //Error message
+  }
+}
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                print('Login Pressed!');
-              },
-              child: Text('Login'),
-            ),
-            SizedBox(width: 20), // Space between buttons
-            ElevatedButton(
-              onPressed: () {
-                print('Register Pressed!');
-              },
-              child: Text('Register'),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Scaffold();
   }
 }

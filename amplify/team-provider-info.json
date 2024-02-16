@@ -10,6 +10,11 @@
       "StackName": "amplify-loginflutertest-dev-05646",
       "StackId": "arn:aws:cloudformation:eu-north-1:905418211943:stack/amplify-loginflutertest-dev-05646/2abeb9c0-cac3-11ee-9022-06caf440f419",
       "AmplifyAppId": "dmcdexrpfopw6"
+    },
+    "categories": {
+      "auth": {
+        "loginflutertest87750405": {}
+      }
     }
   }
 }
