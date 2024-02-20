@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'amplifyconfiguration.dart';
+import 'package:flutter_application_test1/screens/login_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,6 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return LoginScreen();
   }
 }
