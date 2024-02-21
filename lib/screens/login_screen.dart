@@ -1,6 +1,8 @@
+import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:flutter_application_test1/screens/signup_screen.dart';
 import 'package:flutter_application_test1/utils/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -48,8 +50,7 @@ class LoginScreen extends StatelessWidget {
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Theme.of(context).primaryColor),
-                    foregroundColor:
-                      MaterialStateProperty.all(Colors.white),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
               ),
               SizedBox(
@@ -75,7 +76,32 @@ class LoginScreen extends StatelessWidget {
 
   Future<void> _loginButtonOnPressed(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      //TODO: Login code
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+
+      try {
+        // Request to Amplify for signing in
+        final SignInResult signInResult = await Amplify.Auth.signIn(
+          username: email,
+          password: password,
+        );
+
+        if (signInResult.isSignedIn) {
+          // User is now signed in; navigate to the app's home or a landing page
+          // This could be a main screen or dashboard for authenticated users
+          // Implement your own navigation method or screen transition
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (_) => MainScreen()));
+        } else {
+          // Could provide generic message or action for non-completed login,
+          // e.g., request more login methods or perform a 2FA step if required
+          print("An unknown authentication state was returned.");
+        }
+      } on AuthException catch (e) {
+        // e.message contains error data; you might want to display this to the end user
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.message)));
+      }
     }
   }
 
