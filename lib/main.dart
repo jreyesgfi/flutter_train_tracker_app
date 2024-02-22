@@ -3,6 +3,9 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'amplifyconfiguration.dart';
 import 'package:flutter_application_test1/screens/login_screen.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:flutter_application_test1/models/ModelProvider.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -42,10 +45,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _configureAmplify() async {
   AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+  AmplifyDataStore datastorePlugin =
+      AmplifyDataStore(modelProvider: ModelProvider.instance);
+  
   try {
-    await Amplify.addPlugins([authPlugin]);
+    await Amplify.addPlugins([authPlugin, datastorePlugin]);
     await Amplify.configure(amplifyconfig); // 'amplifyconfig' is defined in 'amplifyconfiguration.dart'
-    print('Successfully configured Amplify 🎉');
+    // 'Successfully configured Amplify 🎉'
     setState(() {
       _amplifyConfigured = true;
     });
