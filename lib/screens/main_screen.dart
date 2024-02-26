@@ -15,30 +15,12 @@ class _MainScreenState extends State<MainScreen> {
   // Retrieve the exercises
   List<Exercise> exercises = [];
   String _userId = '';
-  late Exercise _newEntry;
-
-  void initializeEntry() async {
-    setState(() {
-      _newEntry = Exercise(
-        updatedAt: TemporalDateTime.now(), // Current timestamp
-        userId: _userId, // Placeholder, replace with the actual user ID
-        date: TemporalDate.now(), // Example date
-        muscle: "Chest", // Example muscle group
-        exercise: "Bench Press", // Example exercise
-        maxWeight: 100.0, // Example maximum weight
-        minWeight: 80.0, // Example minimum weight
-        maxReps: 10, // Example maximum repetitions
-        minReps: 8, // Example minimum repetitions
-      );
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     fetchUserId();
     fetchExercises();
-    initializeEntry();
   }
 
   void fetchUserId() async {
@@ -103,8 +85,8 @@ class _MainScreenState extends State<MainScreen> {
           }
           // Placeholder for new entry form
           else if (index == exercises.length) {
-            return EditableExerciseCard(exercise: _newEntry,
-             onPublishSuccess: () {fetchExercises();initializeEntry();},
+            return EditableExerciseCard(userId: _userId,
+             onPublishSuccess: () {fetchExercises();},
              );
           }
         },
