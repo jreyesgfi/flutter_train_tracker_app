@@ -3,9 +3,9 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'amplifyconfiguration.dart';
 import 'package:flutter_application_test1/screens/login_screen.dart';
+import 'package:flutter_application_test1/screens/main_screen.dart'; // Make sure you have this import for MainScreen
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter_application_test1/models/ModelProvider.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -44,26 +44,63 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _configureAmplify() async {
-  AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-  AmplifyDataStore datastorePlugin =
-      AmplifyDataStore(modelProvider: ModelProvider.instance);
-  
-  try {
-    await Amplify.addPlugins([authPlugin, datastorePlugin]);
-    await Amplify.configure(amplifyconfig); // 'amplifyconfig' is defined in 'amplifyconfiguration.dart'
-    // 'Successfully configured Amplify 🎉'
-    setState(() {
-      _amplifyConfigured = true;
-    });
-  } on AmplifyAlreadyConfiguredException {
-    //Amplify already created
-  } catch (e) {
-    //Error message
+    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+    AmplifyDataStore datastorePlugin =
+        AmplifyDataStore(modelProvider: ModelProvider.instance);
+
+    try {
+      await Amplify.addPlugins([authPlugin, datastorePlugin]);
+      await Amplify.configure(amplifyconfig);
+      setState(() {
+        _amplifyConfigured = true;
+      });
+    } on AmplifyAlreadyConfiguredException {
+      // Amplify was already configured. This is fine since we're likely in hot reload/restart.
+    } catch (e) {
+      print("An error occurred configuring Amplify: $e");
+    }
   }
-}
+
+  Future<bool> _checkUserLoggedIn() async {
+    try {
+      final session = await Amplify.Auth.fetchAuthSession();
+      return session.isSignedIn;
+    } catch (e) {
+      print("Error checking logged in user: $e");
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return LoginScreen();
+    if (!_amplifyConfigured) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return FutureBuilder<bool>(
+        future: _checkUserLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == true) {
+              // User is logged in
+              return MainScreen(); // Navigate to the MainScreen if the user is logged in
+            } else {
+              // User is not logged in or error in fetching session
+              return LoginScreen(); // Navigate to the LoginScreen if the user is not logged in
+            }
+          } else {
+            // Waiting for future to complete (i.e., checking login state)
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 }

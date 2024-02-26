@@ -98,8 +98,6 @@ class LoginScreen extends StatelessWidget {
           print("An unknown authentication state was returned.");
         }
       } on AuthException catch (e) {
-        Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (_) => MainScreen()));
         // e.message contains error data; you might want to display this to the end user
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.message)));
