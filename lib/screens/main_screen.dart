@@ -1,8 +1,9 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/components/ExerciseCard.dart';
-
+import 'package:flutter_application_test1/components/MuscleDateSelector.dart'; // Ensure this import is correct
 import 'package:flutter_application_test1/models/Exercise.dart';
+import 'package:intl/intl.dart'; // For date formatting
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -12,15 +13,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // Retrieve the exercises
   List<Exercise> exercises = [];
   String _userId = '';
+  DateTime _selectedDate = DateTime.now(); // Default to current date
+  String _selectedMuscle = 'Hombro';
 
   @override
   void initState() {
     super.initState();
     fetchUserId();
-    fetchExercises();
+    fetchExercises(); // Initially fetch all exercises
   }
 
   void fetchUserId() async {
@@ -31,65 +33,121 @@ class _MainScreenState extends State<MainScreen> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('UserId Error: $e'),
-        ),
+        SnackBar(content: Text('UserId Error: $e')),
       );
     }
   }
 
-  void fetchExercises() async {
+  void fetchExercises({String? muscle, DateTime? selectedDate}) async {
     try {
-      // Assuming you have configured Amplify API or DataStore
-      List<Exercise> updatedExercises = await Amplify.DataStore.query(
-          Exercise.classType,
-          where: Exercise.USERID.eq(_userId));
+      // Fetch exercises from the DataStore based only on the user ID.
+      List<Exercise> allExercises = await Amplify.DataStore.query(
+        Exercise.classType,
+        where: Exercise.USERID.eq(_userId),
+      );
 
-      // Update the state (triggering a refresh)
+      // If a muscle is specified, manually filter the exercises by muscle.
+      if (muscle != null) {
+        allExercises = allExercises
+            .where((exercise) => exercise.muscle == muscle)
+            .toList();
+      }
+
+      // Convert selectedDate to TemporalDate for comparison, if present.
+      TemporalDate? temporalSelectedDate =
+          selectedDate != null ? TemporalDate(selectedDate) : null;
+
+      // Further filter the fetched exercises by date, if a date is specified.
+      if (temporalSelectedDate != null) {
+        allExercises =
+            filterExercisesByDate(allExercises, temporalSelectedDate);
+      }
+
+      // Update the state with the filtered exercises.
       if (mounted) {
         setState(() {
-          exercises = updatedExercises;
+          exercises = allExercises;
         });
       }
     } catch (e) {
-      Future.microtask(() => {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('An error occurred while fetching exercises: $e'),
-              ),
-            )
-          });
+      print('Error fetching exercises: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('An error occurred while fetching exercises: $e')),
+      );
     }
   }
 
-  // UI
+  List<Exercise> filterExercisesByDate(
+      List<Exercise> exercises, TemporalDate selectedDate) {
+    TemporalDate? latestDateBeforeSelected;
+
+    for (var exercise in exercises) {
+      TemporalDate exerciseDate = exercise.date; // Now using TemporalDate
+      if (exerciseDate.compareTo(selectedDate) < 0) {
+        // compareTo returns a negative value if exerciseDate is before selectedDate
+        if (latestDateBeforeSelected == null ||
+            exerciseDate.compareTo(latestDateBeforeSelected) > 0) {
+          latestDateBeforeSelected = exerciseDate;
+        }
+      }
+    }
+
+    if (latestDateBeforeSelected != null) {
+      return exercises
+          .where((exercise) =>
+              exercise.date.compareTo(latestDateBeforeSelected!) == 0 ||
+              exercise.date.compareTo(selectedDate) == 0)
+          .toList();
+    } else {
+      return [];
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
-    // Calculate itemCount: existing exercises + 1 for the new entry form + 1 for the button
-    int itemCount =
-        exercises.length + 1; // Now only +2 for the form and the button
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Main Screen"),
       ),
-      body: ListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (context, index) {
-          // Existing exercises
-          if (index < exercises.length) {
-            final exercise = exercises[index];
-            return ExerciseCard(exercise: exercise,
-             onDeleteSuccess: () {fetchExercises();},
-             );
-          }
-          // Placeholder for new entry form
-          else if (index == exercises.length) {
-            return EditableExerciseCard(userId: _userId,
-             onPublishSuccess: () {fetchExercises();},
-             );
-          }
-        },
+      body: Column(
+        children: [
+          MuscleDateSelector(
+            onMuscleChanged: (muscle) {
+              _selectedMuscle = muscle!;
+              fetchExercises(muscle: muscle, selectedDate: _selectedDate);
+            },
+            onDateChanged: (date) {
+              _selectedDate = date!;
+              fetchExercises(muscle: _selectedMuscle, selectedDate: date);
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount:
+                  exercises.length + 1, // +1 for the EditableExerciseCard
+              itemBuilder: (context, index) {
+                if (index < exercises.length) {
+                  final exercise = exercises[index];
+                  return ExerciseCard(
+                    exercise: exercise,
+                    onDeleteSuccess: () => fetchExercises(
+                        muscle: _selectedMuscle, selectedDate: _selectedDate),
+                  );
+                } else {
+                  // Placeholder for new entry form
+                  return EditableExerciseCard(
+                    userId: _userId,
+                    selectedDate: _selectedDate,
+                    selectedMuscle: _selectedMuscle,
+                    onPublishSuccess: () => fetchExercises(
+                        muscle: _selectedMuscle, selectedDate: _selectedDate),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
