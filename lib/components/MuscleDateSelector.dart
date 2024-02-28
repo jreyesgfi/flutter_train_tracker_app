@@ -16,7 +16,7 @@ class MuscleDateSelector extends StatefulWidget {
 }
 
 class _MuscleDateSelectorState extends State<MuscleDateSelector> {
-  String? _selectedMuscle;
+  String _selectedMuscle='Hombro';
   DateTime? _selectedDate;
 
   @override
@@ -25,24 +25,6 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Row(
         children: [
-          // Muscle Dropdown
-          Expanded(
-            child: DropdownButtonFormField<String>(
-              value: _selectedMuscle,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedMuscle = newValue;
-                });
-                widget.onMuscleChanged(newValue);
-              },
-              items: const [
-                DropdownMenuItem(value: 'Pecho', child: Text('Pecho')),
-                DropdownMenuItem(value: 'Hombro', child: Text('Hombro')),
-                // Add other muscles as DropdownMenuItem
-              ],
-              decoration: InputDecoration(labelText: "Select Muscle"),
-            ),
-          ),
           // Date Picker
           Expanded(
             child: TextButton(
@@ -65,6 +47,25 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                   : DateFormat('yyyy-MM-dd').format(_selectedDate!)),
             ),
           ),
+          // Muscle Dropdown
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: _selectedMuscle,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedMuscle = newValue??'';
+                });
+                widget.onMuscleChanged(newValue);
+              },
+              items: const [
+                DropdownMenuItem(value: 'Pecho', child: Text('Pecho')),
+                DropdownMenuItem(value: 'Hombro', child: Text('Hombro')),
+                // Add other muscles as DropdownMenuItem
+              ],
+              decoration: InputDecoration(labelText: "Select Muscle"),
+            ),
+          ),
+          
         ],
       ),
     );

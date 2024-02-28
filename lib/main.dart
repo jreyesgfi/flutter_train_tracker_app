@@ -1,6 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/theme/custom_colors.dart';
 import 'amplifyconfiguration.dart';
 import 'package:flutter_application_test1/screens/login_screen.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart'; // Make sure you have this import for MainScreen
@@ -17,8 +18,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login Demo',
       theme: ThemeData(
+        primaryColor: Color.fromARGB(255, 248, 107, 0),
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        extensions: const <ThemeExtension<dynamic>>[
+          CustomColors(
+            greyColor: Color.fromARGB(255, 192, 192, 192),
+            greenColor: Color.fromARGB(255, 105, 202, 108),
+          ),
+        ]
       ),
       home: MyHomePage(title: 'Login Demo'),
     );

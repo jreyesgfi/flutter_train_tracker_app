@@ -62,6 +62,8 @@ class _MainScreenState extends State<MainScreen> {
         allExercises =
             filterExercisesByDate(allExercises, temporalSelectedDate);
       }
+      // Sort With Date Descending
+      allExercises.sort((a, b) => b.date.compareTo(a.date));
 
       // Update the state with the filtered exercises.
       if (mounted) {
@@ -103,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
       return [];
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,20 +129,21 @@ class _MainScreenState extends State<MainScreen> {
               itemCount:
                   exercises.length + 1, // +1 for the EditableExerciseCard
               itemBuilder: (context, index) {
-                if (index < exercises.length) {
-                  final exercise = exercises[index];
-                  return ExerciseCard(
-                    exercise: exercise,
-                    onDeleteSuccess: () => fetchExercises(
-                        muscle: _selectedMuscle, selectedDate: _selectedDate),
-                  );
-                } else {
-                  // Placeholder for new entry form
+                if (index == 0) {
+                  // EditableExerciseCard always at the top
                   return EditableExerciseCard(
                     userId: _userId,
                     selectedDate: _selectedDate,
                     selectedMuscle: _selectedMuscle,
                     onPublishSuccess: () => fetchExercises(
+                        muscle: _selectedMuscle, selectedDate: _selectedDate),
+                  );
+                } else {
+                  // Adjust index by -1 because the first item is the EditableExerciseCard
+                  final exercise = exercises[index - 1];
+                  return ExerciseCard(
+                    exercise: exercise,
+                    onDeleteSuccess: () => fetchExercises(
                         muscle: _selectedMuscle, selectedDate: _selectedDate),
                   );
                 }

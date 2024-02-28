@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_test1/theme/custom_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter_application_test1/theme/roulette_numeric_input.dart';
 
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -30,41 +32,50 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Card(
-    elevation: 2.0,
-    margin: const EdgeInsets.symmetric(horizontal:16.0,vertical: 8), // Unified margin as requested
-    child: Padding(
-      padding: const EdgeInsets.all(16.0), // Inner padding as requested
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Column(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      decoration: BoxDecoration(
+        border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: 1), // Use theme for color
+        borderRadius: BorderRadius.circular(4), // Same rounded corner as Card
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Stack(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${exercise.exercise}", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20.0)),
-                Text("${DateFormat('yyyy-MM-dd').format(exercise.date.getDateTime())}", style: TextStyle(fontSize: 16.0)),
-                SizedBox(height: 8,),
-                Text("Weight: ${exercise.maxWeight} / ${exercise.minWeight}", style: TextStyle(fontSize: 16.0)),
-                Text("Reps: ${exercise.maxReps} / ${exercise.minReps}", style: TextStyle(fontSize: 16.0)),
+                Text("${exercise.exercise}",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+                SizedBox(height: 4), // Adjust spacing
+                Text(
+                    "${DateFormat('yyyy-MM-dd').format(exercise.date.getDateTime())}",
+                    style: TextStyle(fontSize: 16.0)),
+                SizedBox(height: 8), // Adjust spacing for visual separation
+                Text("Weight: ${exercise.maxWeight} / ${exercise.minWeight}",
+                    style: TextStyle(fontSize: 16.0)),
+                Text("Reps: ${exercise.maxReps} / ${exercise.minReps}",
+                    style: TextStyle(fontSize: 16.0)),
                 // Additional exercise details can be added here as needed
               ],
             ),
-          ),
-          Positioned(
-            right: 0.0,
-            top: 0.0,
-            child: IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () => _deleteEntry(context),
+            Positioned(
+              right: 0.0,
+              top: 0.0,
+              child: IconButton(
+                icon: Icon(Icons.delete, color: Theme.of(context).primaryColor),
+                onPressed: () => _deleteEntry(
+                    context), // Ensure this method is defined to accept BuildContext
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
 
 class EditableExerciseCard extends StatefulWidget {
@@ -153,54 +164,72 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
       bool shouldShow =
           widget.selectedMuscle != null && muscleExercises != null;
 
-      return shouldShow
-          ? DropdownButtonFormField<String>(
-              value: _selectedExercise,
-              items:
-                  muscleExercises.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedExercise = value;
-                });
-              },
-              decoration: InputDecoration(labelText: "Exercise"),
-            )
-          : Container();
+      return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          double width = constraints.maxWidth * 0.6; // 60% of the parent width
+
+          return shouldShow
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Container(
+                    width: width, // Set the calculated width here
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedExercise,
+                      items: muscleExercises
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedExercise = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: "Exercise"),
+                    ),
+                  ),
+                )
+              : Container();
+        },
+      );
     }
 
-    return Card(
-      elevation: 2.0,
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      decoration: BoxDecoration(
+        border: Border.all(
+            color: Theme.of(context).primaryColor,
+            width: 1), // Main color border
+        borderRadius: BorderRadius.circular(4),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal:16.0,vertical:24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   exerciseDropdown(),
-                  NumericInputWithIncrementDecrement(
+                  NumericRoulettePicker(
                     label: "Max Weight",
                     controller: _maxWeightController,
                     allowDecimal: true,
                   ),
-                  NumericInputWithIncrementDecrement(
+                  NumericRoulettePicker(
                     label: "Min Weight",
                     controller: _minWeightController,
                     allowDecimal: true,
                   ),
-                  NumericInputWithIncrementDecrement(
+                  NumericRoulettePicker(
                     label: "Max Reps",
                     controller: _maxRepsController,
                   ),
-                  NumericInputWithIncrementDecrement(
+                  NumericRoulettePicker(
                     label: "Min Reps",
                     controller: _minRepsController,
                   )
@@ -214,7 +243,8 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
                 children: [
                   // Save button as an icon button
                   IconButton(
-                    icon: Icon(Icons.save, color: Colors.green),
+                    icon: Icon(Icons.file_download_done, color: Theme.of(context).primaryColor),
+                    
                     onPressed: () => _publishEntry(context),
                   ),
                   // Assuming onDelete is defined similarly for EditableExerciseCard
@@ -225,83 +255,6 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class NumericInputWithIncrementDecrement extends StatelessWidget {
-  final String label;
-  final TextEditingController controller;
-  final bool allowDecimal; // New property to control decimal input
-
-  NumericInputWithIncrementDecrement({
-    Key? key,
-    required this.label,
-    required this.controller,
-    this.allowDecimal = false, // Defaults to not allowing decimals
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          flex: 3,
-          child: Text(label),
-        ),
-        IconButton(
-          icon: Icon(Icons.remove, size: 30),
-          onPressed: () {
-            double currentValue = allowDecimal
-                ? double.tryParse(controller.text) ?? 0
-                : int.tryParse(controller.text)?.toDouble() ?? 0;
-            if (currentValue > 0) {
-              // Prevent negative values
-              controller.text = allowDecimal
-                  ? '${(currentValue - 1).toStringAsFixed(1)}'
-                  : '${(currentValue - 1).toInt()}';
-            }
-          },
-        ),
-        Container(
-          width: 40,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: allowDecimal
-                ? TextInputType.numberWithOptions(decimal: true)
-                : TextInputType.number,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.symmetric(vertical: 0),
-              border: InputBorder.none,
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).primaryColor),
-              ),
-            ),
-            style: TextStyle(fontSize: 18),
-            inputFormatters: [
-              // Optional: Use input formatters to further restrict input
-              if (!allowDecimal) FilteringTextInputFormatter.digitsOnly,
-              // Add input formatter for positive numbers only if needed
-            ],
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.add, size: 30),
-          onPressed: () {
-            double currentValue = allowDecimal
-                ? double.tryParse(controller.text) ?? 0
-                : int.tryParse(controller.text)?.toDouble() ?? 0;
-            controller.text = allowDecimal
-                ? '${(currentValue + 1).toStringAsFixed(1)}'
-                : '${(currentValue + 1).toInt()}';
-          },
-        ),
-      ],
     );
   }
 }
