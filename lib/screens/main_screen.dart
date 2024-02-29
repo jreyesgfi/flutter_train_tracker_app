@@ -17,12 +17,12 @@ class _MainScreenState extends State<MainScreen> {
   String _userId = '';
   DateTime _selectedDate = DateTime.now(); // Default to current date
   String _selectedMuscle = 'Hombro';
+  bool _needToFetch = false;
 
   @override
   void initState() {
     super.initState();
     fetchUserId();
-    fetchExercises(); // Initially fetch all exercises
   }
 
   void fetchUserId() async {
@@ -38,72 +38,26 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void fetchExercises({String? muscle, DateTime? selectedDate}) async {
-    try {
-      // Fetch exercises from the DataStore based only on the user ID.
-      List<Exercise> allExercises = await Amplify.DataStore.query(
-        Exercise.classType,
-        where: Exercise.USERID.eq(_userId),
-      );
+    void triggerFetch() {
+    setState(() {
+      _needToFetch = true;
+    });
+  }
 
-      // If a muscle is specified, manually filter the exercises by muscle.
-      if (muscle != null) {
-        allExercises = allExercises
-            .where((exercise) => exercise.muscle == muscle)
-            .toList();
-      }
+  void resetFetchFlag() {
+    setState(() {
+      _needToFetch = false;
+    });
+  }
 
-      // Convert selectedDate to TemporalDate for comparison, if present.
-      TemporalDate? temporalSelectedDate =
-          selectedDate != null ? TemporalDate(selectedDate) : null;
-
-      // Further filter the fetched exercises by date, if a date is specified.
-      if (temporalSelectedDate != null) {
-        allExercises =
-            filterExercisesByDate(allExercises, temporalSelectedDate);
-      }
-      // Sort With Date Descending
-      allExercises.sort((a, b) => b.date.compareTo(a.date));
-
+  void updateExercises(List<Exercise> finalExercises) async {
       // Update the state with the filtered exercises.
       if (mounted) {
         setState(() {
-          exercises = allExercises;
+          exercises = finalExercises;
+          _needToFetch = false;
         });
       }
-    } catch (e) {
-      print('Error fetching exercises: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('An error occurred while fetching exercises: $e')),
-      );
-    }
-  }
-
-  List<Exercise> filterExercisesByDate(
-      List<Exercise> exercises, TemporalDate selectedDate) {
-    TemporalDate? latestDateBeforeSelected;
-
-    for (var exercise in exercises) {
-      TemporalDate exerciseDate = exercise.date; // Now using TemporalDate
-      if (exerciseDate.compareTo(selectedDate) < 0) {
-        // compareTo returns a negative value if exerciseDate is before selectedDate
-        if (latestDateBeforeSelected == null ||
-            exerciseDate.compareTo(latestDateBeforeSelected) > 0) {
-          latestDateBeforeSelected = exerciseDate;
-        }
-      }
-    }
-
-    if (latestDateBeforeSelected != null) {
-      return exercises
-          .where((exercise) =>
-              exercise.date.compareTo(latestDateBeforeSelected!) == 0 ||
-              exercise.date.compareTo(selectedDate) == 0)
-          .toList();
-    } else {
-      return [];
-    }
   }
 
   @override
@@ -115,14 +69,8 @@ class _MainScreenState extends State<MainScreen> {
       body: Column(
         children: [
           MuscleDateSelector(
-            onMuscleChanged: (muscle) {
-              _selectedMuscle = muscle!;
-              fetchExercises(muscle: muscle, selectedDate: _selectedDate);
-            },
-            onDateChanged: (date) {
-              _selectedDate = date!;
-              fetchExercises(muscle: _selectedMuscle, selectedDate: date);
-            },
+            onExercisesFetched: updateExercises,
+            needToFetch: _needToFetch,
           ),
           Expanded(
             child: ListView.builder(
@@ -135,16 +83,14 @@ class _MainScreenState extends State<MainScreen> {
                     userId: _userId,
                     selectedDate: _selectedDate,
                     selectedMuscle: _selectedMuscle,
-                    onPublishSuccess: () => fetchExercises(
-                        muscle: _selectedMuscle, selectedDate: _selectedDate),
+                    onPublishSuccess: triggerFetch,
                   );
                 } else {
                   // Adjust index by -1 because the first item is the EditableExerciseCard
                   final exercise = exercises[index - 1];
                   return ExerciseCard(
                     exercise: exercise,
-                    onDeleteSuccess: () => fetchExercises(
-                        muscle: _selectedMuscle, selectedDate: _selectedDate),
+                    onDeleteSuccess: triggerFetch,
                   );
                 }
               },

@@ -1,0 +1,3 @@
+Hi! today I have some fancy gym exercise register coded in fluter i provide you with the files, so the user access to the main_screen, login with aws (which is developed with amplify) and can save new entries as well as capture the previous ones. There are a few issues I want to solve.
+Filtering:
+They Idea was that when you select a day you got the last training (based on the date) and the current training (the exercises that have the current date). it happens that when you select a date you dont get
