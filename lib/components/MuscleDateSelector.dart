@@ -1,13 +1,16 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
+import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MuscleDateSelector extends StatefulWidget {
   final Function(List<Exercise>) onExercisesFetched;
   final bool needToFetch;
 
-  const MuscleDateSelector({Key? key, required this.onExercisesFetched, required this.needToFetch})
+  const MuscleDateSelector(
+      {Key? key, required this.onExercisesFetched, required this.needToFetch})
       : super(key: key);
 
   @override
@@ -20,14 +23,20 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
   String _userId = '';
 
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    fetchUserId();
+  }
 
   @override
-void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
-  super.didUpdateWidget(oldWidget);
-  if (widget.needToFetch) {
-    fetchExercises();
+  void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.needToFetch) {
+      fetchExercises();
+    }
   }
-}
+
   void fetchUserId() async {
     try {
       final user = await Amplify.Auth.getCurrentUser();
@@ -109,6 +118,22 @@ void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
     return combinedExercises;
   }
 
+  void onDatePicked(context, DateTime pickedDate) {
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+    Provider.of<MuscleDateSelectionModel>(context, listen: false)
+        .updateDate(pickedDate);
+  }
+
+  void onMusclePicked(context, String pickedMuscle) {
+    setState(() {
+      _selectedMuscle = pickedMuscle;
+    });
+    Provider.of<MuscleDateSelectionModel>(context, listen: true)
+        .updateMuscle(pickedMuscle);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -126,14 +151,14 @@ void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
                   child: DateSelectionFormField(
                     context: context,
                     initialDate: _selectedDate,
+                    onDatePicked: (pickedDate) {
+                      onDatePicked(context, pickedDate);
+                    },
                     validator: (value) {
                       if (value == null) {
                         return 'Please select a date';
                       }
-                      return null; // if the date is selected, validation passes
-                    },
-                    onSaved: (value) {
-                      _selectedDate = value;
+                      return null;
                     },
                   ),
                 ),
@@ -142,11 +167,10 @@ void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _selectedMuscle,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedMuscle = newValue ?? '';
-                      });
-                      // Again, form submission will handle this part
+                    onChanged: (pickedMuscle) {
+                      if (pickedMuscle!=null){
+                        onMusclePicked(context, pickedMuscle);
+                      }
                     },
                     items: const [
                       DropdownMenuItem(value: 'Pecho', child: Text('Pecho')),
@@ -189,11 +213,15 @@ void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
 
 // Custom form field for date selection
 class DateSelectionFormField extends FormField<DateTime> {
+  final Function(DateTime)
+      onDatePicked; // Add a callback for when a date is picked
+
   DateSelectionFormField({
     FormFieldSetter<DateTime>? onSaved,
     FormFieldValidator<DateTime>? validator,
     DateTime? initialDate,
     required BuildContext context,
+    required this.onDatePicked, // Require the callback in the constructor
   }) : super(
           onSaved: onSaved,
           validator: validator,
@@ -208,7 +236,10 @@ class DateSelectionFormField extends FormField<DateTime> {
                   lastDate: DateTime(2025),
                 );
                 if (picked != null) {
-                  state.didChange(picked);
+                  state
+                      .didChange(picked); // This updates the form field's state
+                  onDatePicked(
+                      picked); // This updates the parent widget's state
                 }
               },
               child: Text(

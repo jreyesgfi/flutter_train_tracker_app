@@ -4,6 +4,7 @@ import 'package:flutter_application_test1/components/ExerciseCard.dart';
 import 'package:flutter_application_test1/components/MuscleDateSelector.dart'; // Ensure this import is correct
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:intl/intl.dart'; // For date formatting
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -15,8 +16,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Exercise> exercises = [];
   String _userId = '';
-  DateTime _selectedDate = DateTime.now(); // Default to current date
-  String _selectedMuscle = 'Hombro';
   bool _needToFetch = false;
 
   @override
@@ -62,7 +61,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ChangeNotifierProvider<MuscleDateSelectionModel>(
+      create: (context)=>MuscleDateSelectionModel(),
+    child: Scaffold(
       appBar: AppBar(
         title: Text("Main Screen"),
       ),
@@ -81,8 +82,6 @@ class _MainScreenState extends State<MainScreen> {
                   // EditableExerciseCard always at the top
                   return EditableExerciseCard(
                     userId: _userId,
-                    selectedDate: _selectedDate,
-                    selectedMuscle: _selectedMuscle,
                     onPublishSuccess: triggerFetch,
                   );
                 } else {
@@ -98,6 +97,25 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+    )
     );
+  }
+}
+
+class MuscleDateSelectionModel extends ChangeNotifier{
+  String _selectedMuscle = '';
+  DateTime _selectedDate = DateTime.now();
+
+  // Getter
+  String get selectedMuscle => _selectedMuscle;
+  DateTime get selectedDate => _selectedDate;
+  
+  // Setter
+  void updateDate(DateTime newDate) {
+    _selectedDate = newDate;
+  }
+  void updateMuscle(String newMuscle) {
+    _selectedMuscle = newMuscle;
+    notifyListeners();
   }
 }

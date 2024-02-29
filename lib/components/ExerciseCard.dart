@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:flutter_application_test1/theme/custom_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_application_test1/theme/roulette_numeric_input.dart';
+import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -80,15 +82,11 @@ class ExerciseCard extends StatelessWidget {
 
 class EditableExerciseCard extends StatefulWidget {
   final String userId;
-  final String selectedMuscle;
-  final DateTime selectedDate;
   final VoidCallback onPublishSuccess;
 
   EditableExerciseCard({
     Key? key,
     required this.userId,
-    required this.selectedMuscle,
-    required this.selectedDate,
     required this.onPublishSuccess,
   }) : super(key: key);
 
@@ -124,12 +122,17 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   }
 
   void _publishEntry(context) async {
+    final staticModel =
+        Provider.of<MuscleDateSelectionModel>(context, listen: false);
+    final selectedMuscle = staticModel.selectedMuscle;
+    final selectedDate = staticModel.selectedDate;
+
     // Assuming you have a method to create or update the exercise
     final newExercise = Exercise(
       updatedAt: TemporalDateTime.now(),
       userId: widget.userId,
-      date: TemporalDate(widget.selectedDate),
-      muscle: widget.selectedMuscle,
+      date: TemporalDate(selectedDate),
+      muscle: selectedMuscle,
       exercise: _selectedExercise!,
       maxWeight: double.tryParse(_maxWeightController.text),
       minWeight: double.tryParse(_minWeightController.text),
@@ -160,36 +163,27 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   @override
   Widget build(BuildContext context) {
     Widget exerciseDropdown() {
-      List<String>? muscleExercises = _exercises[widget.selectedMuscle];
-      bool shouldShow =
-          widget.selectedMuscle != null && muscleExercises != null;
-
-      return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          double width = constraints.maxWidth * 0.6; // 60% of the parent width
+      return Consumer<MuscleDateSelectionModel>(
+        builder: (context, model, child) {
+          List<String>? muscleExercises = _exercises[model.selectedMuscle];
+          bool shouldShow =
+              model.selectedMuscle.isNotEmpty && muscleExercises != null;
 
           return shouldShow
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Container(
-                    width: width, // Set the calculated width here
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedExercise,
-                      items: muscleExercises
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedExercise = value;
-                        });
-                      },
-                      decoration: InputDecoration(labelText: "Exercise"),
-                    ),
-                  ),
+              ? DropdownButtonFormField<String>(
+                  value: _selectedExercise,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedExercise = value;
+                    });
+                  },
+                  items: muscleExercises!.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(labelText: "Exercise"),
                 )
               : Container();
         },
@@ -243,8 +237,8 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
                 children: [
                   // Save button as an icon button
                   IconButton(
-                    icon: Icon(Icons.file_download_done, color: Theme.of(context).primaryColor),
-                    
+                    icon: Icon(Icons.file_download_done,
+                        color: Theme.of(context).primaryColor),
                     onPressed: () => _publishEntry(context),
                   ),
                   // Assuming onDelete is defined similarly for EditableExerciseCard
