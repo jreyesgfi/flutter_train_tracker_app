@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart';
+import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
+import 'package:flutter_application_test1/theme/components/nextButton.dart';
 import 'package:flutter_application_test1/theme/custom_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
@@ -38,10 +40,8 @@ class ExerciseCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       decoration: BoxDecoration(
-        border: Border.all(
-            color: Theme.of(context).dividerColor,
-            width: 1), // Use theme for color
-        borderRadius: BorderRadius.circular(4), // Same rounded corner as Card
+        color: Theme.of(context).canvasColor, // Use the theme's background color
+        borderRadius: BorderRadius.circular(20), 
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -102,7 +102,6 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   late TextEditingController _maxRepsController;
   late TextEditingController _minRepsController;
 
-
   String? _selectedExercise;
 
   @override
@@ -127,7 +126,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
       userId: widget.userId,
       date: TemporalDate(selectedDate),
       muscle: selectedMuscle,
-      exercise: _selectedExercise!,
+      exercise: _selectedExercise??'',
       maxWeight: double.tryParse(_maxWeightController.text),
       minWeight: double.tryParse(_minWeightController.text),
       maxReps: int.tryParse(_maxRepsController.text),
@@ -159,92 +158,99 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
     Widget exerciseDropdown() {
       return Consumer<MuscleDateSelectionModel>(
         builder: (context, model, child) {
-          List<String>? muscleExercises = exercisesByMuscle[model.selectedMuscle];
-          bool shouldShow =
-              model.selectedMuscle.isNotEmpty && muscleExercises != null;
+          List<String>? muscleExercises =
+              exercisesByMuscle[model.selectedMuscle];
 
           // Ensure _selectedExercise is valid for the current muscle
-          if (muscleExercises== null || !muscleExercises.contains(_selectedExercise)) {
-            _selectedExercise = null;
+          if (muscleExercises == null ||
+              !muscleExercises.contains(_selectedExercise)) {
+            _selectedExercise = null; // Reset selected exercise if not valid
           }
 
-          return shouldShow
-              ? DropdownButtonFormField<String>(
-                  value: _selectedExercise,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedExercise = value;
-                    });
-                  },
-                  items: muscleExercises.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(labelText: "Exercise"),
-                )
-              : Container();
+          return CustomDropdownFormField(
+            initialValue: _selectedExercise,
+            onChanged: (value) {
+              setState(() {
+                _selectedExercise = value;
+              });
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please select an exercise';
+              }
+              return null;
+            },
+            items: muscleExercises?.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList() ??
+                [],
+            hintText: "Select Exercise",
+          );
         },
       );
     }
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        border: Border.all(
-            color: Theme.of(context).primaryColor,
-            width: 1), // Main color border
-        borderRadius: BorderRadius.circular(4),
+        color: Theme.of(context).cardColor, // Use the theme's background color
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  exerciseDropdown(),
-                  NumericRoulettePicker(
-                    label: "Max Weight",
-                    controller: _maxWeightController,
-                    allowDecimal: true,
+            Row(
+              // This Row will contain the dropdown and another widget horizontally
+              children: [
+                Flexible(
+                  // Use Expanded to ensure the dropdown takes minimal necessary space
+                  flex:
+                      3, // Adjust the flex factor based on how much space you want the dropdown to take relative to other elements
+                  child: exerciseDropdown(), // Your dropdown widget
+                ),
+                Flexible(
+                  // Another widget (for illustration, let's use a placeholder)
+                  flex: 2, // Adjust based on your layout needs
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4), // Example padding
+                    alignment: Alignment.center,
                   ),
-                  NumericRoulettePicker(
-                    label: "Min Weight",
-                    controller: _minWeightController,
-                    allowDecimal: true,
-                  ),
-                  NumericRoulettePicker(
-                    label: "Max Reps",
-                    controller: _maxRepsController,
-                  ),
-                  NumericRoulettePicker(
-                    label: "Min Reps",
-                    controller: _minRepsController,
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-            Positioned(
-              right: 0.0,
-              top: 0.0,
-              child: Row(
-                children: [
-                  // Save button as an icon button
-                  IconButton(
-                    icon: Icon(Icons.file_download_done,
-                        color: Theme.of(context).primaryColor),
-                    onPressed: () => _publishEntry(context),
-                  ),
-                  // Assuming onDelete is defined similarly for EditableExerciseCard
-                  // IconButton for delete (if applicable)
-                ],
-              ),
+            // Other widgets like NumericRoulettePicker can follow here, outside the Row
+            NumericRoulettePicker(
+              label: "Max Weight",
+              controller: _maxWeightController,
+              allowDecimal: true,
             ),
+            NumericRoulettePicker(
+              label: "Min Weight",
+              controller: _minWeightController,
+              allowDecimal: true,
+            ),
+            NumericRoulettePicker(
+              label: "Max Reps",
+              controller: _maxRepsController,
+            ),
+            NumericRoulettePicker(
+              label: "Min Reps",
+              controller: _minRepsController,
+            ),
+            Builder(
+  builder: (context) {
+    return NextButton(
+      onTap: () => _publishEntry(context),
+    );
+  },
+)
           ],
         ),
       ),

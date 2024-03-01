@@ -5,6 +5,7 @@ import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
 import 'package:flutter_application_test1/theme/components/DateSelectorFormField.dart';
+import 'package:flutter_application_test1/theme/components/NextButton.dart';
 
 import 'package:provider/provider.dart';
 
@@ -140,17 +141,18 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Form(
-        key: _formKey, // Ensure you've defined this key in your state class
+        key: _formKey,
         child: Column(
-          mainAxisSize:
-              MainAxisSize.min, // To keep the column tight around its children
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Custom Date Selection Form Field
-                Expanded(
+                // Date Selection Field
+                Flexible(
+                  flex: 5, // Adjust flex factor based on your needs
                   child: DateSelectionFormField(
                     context: context,
                     initialDate: null,
@@ -164,13 +166,13 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                       return null;
                     },
                   ),
-                ),
-                SizedBox(width: 10), // Spacing between elements
-                // Muscle Dropdown
-                Expanded(
+                ), // Adjust spacing as needed
+                // Muscle Dropdown Field
+                Flexible(
+                  flex: 5, // Adjust flex factor based on your needs
                   child: CustomDropdownFormField(
                     initialValue: null,
-                    onSaved: (pickedMuscle) {
+                    onChanged: (pickedMuscle) {
                       if (pickedMuscle != null) {
                         onMusclePicked(context, pickedMuscle);
                       }
@@ -181,32 +183,20 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                       }
                       return null;
                     },
-                    items: muscles.map((String muscle){
-                      return DropdownMenuItem(value:muscle, child:Text(muscle));
+                    items: muscles.map((String muscle) {
+                      return DropdownMenuItem<String>(
+                          value: muscle, child: Text(muscle));
                     }).toList(),
                     hintText: "Select Muscle",
                   ),
                 ),
+                
+                NextButton(onTap: ()=> {
+                  if (_formKey.currentState!.validate()) {
+                    fetchExercises()
+                  }
+                })
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Container(
-                height: 40, // Standard Material button height
-                width: 40, // Making it a circle
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor, // Button color
-                  shape: BoxShape.circle, // Circular shape
-                ),
-                child: InkWell(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      fetchExercises();
-                    }
-                  },
-                  child: Icon(Icons.arrow_forward, color: Colors.white),
-                ),
-              ),
             ),
           ],
         ),

@@ -19,12 +19,19 @@ class MyApp extends StatelessWidget {
       title: 'Login Demo',
       theme: ThemeData(
           primaryColor: Colors.orange.shade700,
-          primaryColorDark: Color.fromARGB(255, 0, 6, 10),
+          primaryColorLight: Colors.orange.shade50,
+          hintColor: Colors.orange.shade200,
+          primaryColorDark: Color.fromARGB(255, 71, 37, 0),
           primarySwatch: Colors.orange,
+          cardColor: Colors.orange.shade50,
+          canvasColor: Color.fromARGB(120, 230, 230, 233),
           colorScheme: ColorScheme.fromSwatch(
+            backgroundColor: Color.fromARGB(252, 252, 252, 255),
             primarySwatch: Colors.orange, // Your primary swatch
             accentColor: Colors.orange.shade700, // Your accent color
+            cardColor: Colors.orange.shade50,
           ),
+          
           visualDensity: VisualDensity.adaptivePlatformDensity,
           inputDecorationTheme: InputDecorationTheme(
             labelStyle:

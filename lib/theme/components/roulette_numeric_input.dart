@@ -62,7 +62,7 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColorDark,
               ),
             ),
           ),
@@ -76,8 +76,8 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(4),
@@ -113,7 +113,7 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
                             fontWeight: FontWeight.bold,
                             color: index == _currentPage
                                 ? Colors.white
-                                : context.customColors.greyColor,
+                                : Theme.of(context).hintColor,
                           ),
                         ),
                       ),

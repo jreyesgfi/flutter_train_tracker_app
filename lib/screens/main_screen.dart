@@ -65,7 +65,8 @@ class _MainScreenState extends State<MainScreen> {
       create: (context)=>MuscleDateSelectionModel(),
     child: Scaffold(
       appBar: AppBar(
-        title: Text("Main Screen"),
+        backgroundColor: Theme.of(context).primaryColor,
+        toolbarHeight: 4,
       ),
       body: Column(
         children: [

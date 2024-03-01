@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdownFormField extends FormField<String> {
+  final void Function(String?)? onChanged;
+
   CustomDropdownFormField({
     Key? key,
+    this.onChanged,
     FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,
     String? initialValue,
@@ -16,8 +19,7 @@ class CustomDropdownFormField extends FormField<String> {
           builder: (FormFieldState<String> state) {
             return ElevatedButton(
               onPressed: () {
-                // The context from the builder can be used here
-                _showCustomDropdown(state.context, items, state);
+                _showCustomDropdown(state.context, items, state, onChanged);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,11 +32,12 @@ class CustomDropdownFormField extends FormField<String> {
           },
         );
 
-  // Moved the _showCustomDropdown function outside the constructor
+  // Update the function signature to accept onChanged
   static void _showCustomDropdown(
     BuildContext context,
     List<DropdownMenuItem<String>> items,
     FormFieldState<String> state,
+    void Function(String?)? onChanged, // Accept onChanged callback here
   ) {
     showModalBottomSheet(
       context: context,
@@ -45,7 +48,10 @@ class CustomDropdownFormField extends FormField<String> {
             return ListTile(
               title: Text(item.value!),
               onTap: () {
-                state.didChange(item.value);
+                state.didChange(item.value); // Update the form field's state
+                if (onChanged != null) {
+                  onChanged(item.value); // Invoke onChanged callback if it's not null
+                }
                 Navigator.pop(context);
               },
             );
