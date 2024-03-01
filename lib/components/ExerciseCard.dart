@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:flutter_application_test1/theme/custom_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/theme/roulette_numeric_input.dart';
+import 'package:flutter_application_test1/theme/components/roulette_numeric_input.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -101,14 +102,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   late TextEditingController _maxRepsController;
   late TextEditingController _minRepsController;
 
-  // Example options for muscles and exercises
-  final List<String> _muscles = ['Pecho', 'Hombro', 'Espalda', 'Pierna'];
-  final Map<String, List<String>> _exercises = {
-    'Pecho': ['Press Banca', 'Press Inclinado', 'Aperturas'],
-    'Hombro': ['Elevaciones Laterales', 'Press Militar', 'Face Pull'],
-    'Espalda': ['Remo Vertical', 'Remo Horizontal']
-    // Add other muscles and exercises as needed
-  };
+
   String? _selectedExercise;
 
   @override
@@ -165,9 +159,14 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
     Widget exerciseDropdown() {
       return Consumer<MuscleDateSelectionModel>(
         builder: (context, model, child) {
-          List<String>? muscleExercises = _exercises[model.selectedMuscle];
+          List<String>? muscleExercises = exercisesByMuscle[model.selectedMuscle];
           bool shouldShow =
               model.selectedMuscle.isNotEmpty && muscleExercises != null;
+
+          // Ensure _selectedExercise is valid for the current muscle
+          if (muscleExercises== null || !muscleExercises.contains(_selectedExercise)) {
+            _selectedExercise = null;
+          }
 
           return shouldShow
               ? DropdownButtonFormField<String>(
@@ -177,7 +176,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
                       _selectedExercise = value;
                     });
                   },
-                  items: muscleExercises!.map((String value) {
+                  items: muscleExercises.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),

@@ -1,8 +1,11 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
+import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
+import 'package:flutter_application_test1/theme/components/DateSelectorFormField.dart';
+
 import 'package:provider/provider.dart';
 
 class MuscleDateSelector extends StatefulWidget {
@@ -130,7 +133,7 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
     setState(() {
       _selectedMuscle = pickedMuscle;
     });
-    Provider.of<MuscleDateSelectionModel>(context, listen: true)
+    Provider.of<MuscleDateSelectionModel>(context, listen: false)
         .updateMuscle(pickedMuscle);
   }
 
@@ -150,7 +153,7 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                 Expanded(
                   child: DateSelectionFormField(
                     context: context,
-                    initialDate: _selectedDate,
+                    initialDate: null,
                     onDatePicked: (pickedDate) {
                       onDatePicked(context, pickedDate);
                     },
@@ -165,42 +168,43 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                 SizedBox(width: 10), // Spacing between elements
                 // Muscle Dropdown
                 Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: _selectedMuscle,
-                    onChanged: (pickedMuscle) {
-                      if (pickedMuscle!=null){
+                  child: CustomDropdownFormField(
+                    initialValue: null,
+                    onSaved: (pickedMuscle) {
+                      if (pickedMuscle != null) {
                         onMusclePicked(context, pickedMuscle);
                       }
                     },
-                    items: const [
-                      DropdownMenuItem(value: 'Pecho', child: Text('Pecho')),
-                      DropdownMenuItem(value: 'Hombro', child: Text('Hombro')),
-                      // Add other muscles as DropdownMenuItem
-                    ],
-                    decoration: InputDecoration(
-                        labelText: "Select Muscle",
-                        border:
-                            OutlineInputBorder()), // Added border for consistency
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select a muscle';
+                      }
+                      return null;
+                    },
+                    items: muscles.map((String muscle){
+                      return DropdownMenuItem(value:muscle, child:Text(muscle));
+                    }).toList(),
+                    hintText: "Select Muscle",
                   ),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Trigger form submission and validation here
-                  if (_formKey.currentState!.validate()) {
-                    fetchExercises();
-                  }
-                },
-                icon: Icon(Icons.search), // Icon for the button
-                label: Text(
-                    'Submit'), // Text is optional, can be omitted for an icon-only button
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Background color
-                  foregroundColor: Colors.white, // Icon and text color
-                  // Add other styling attributes as needed, like shape, elevation, etc.
+              child: Container(
+                height: 40, // Standard Material button height
+                width: 40, // Making it a circle
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor, // Button color
+                  shape: BoxShape.circle, // Circular shape
+                ),
+                child: InkWell(
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      fetchExercises();
+                    }
+                  },
+                  child: Icon(Icons.arrow_forward, color: Colors.white),
                 ),
               ),
             ),
@@ -209,47 +213,4 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
       ),
     );
   }
-}
-
-// Custom form field for date selection
-class DateSelectionFormField extends FormField<DateTime> {
-  final Function(DateTime)
-      onDatePicked; // Add a callback for when a date is picked
-
-  DateSelectionFormField({
-    FormFieldSetter<DateTime>? onSaved,
-    FormFieldValidator<DateTime>? validator,
-    DateTime? initialDate,
-    required BuildContext context,
-    required this.onDatePicked, // Require the callback in the constructor
-  }) : super(
-          onSaved: onSaved,
-          validator: validator,
-          initialValue: initialDate,
-          builder: (FormFieldState<DateTime> state) {
-            return TextButton(
-              onPressed: () async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: state.value ?? DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2025),
-                );
-                if (picked != null) {
-                  state
-                      .didChange(picked); // This updates the form field's state
-                  onDatePicked(
-                      picked); // This updates the parent widget's state
-                }
-              },
-              child: Text(
-                state.value == null
-                    ? 'Select Date'
-                    : DateFormat('yyyy-MM-dd').format(state.value!),
-                style: TextStyle(
-                    color: Colors.black), // Adjust text style as needed
-              ),
-            );
-          },
-        );
 }

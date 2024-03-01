@@ -18,16 +18,45 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login Demo',
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 248, 107, 0),
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        extensions: const <ThemeExtension<dynamic>>[
-          CustomColors(
-            greyColor: Color.fromARGB(255, 192, 192, 192),
-            greenColor: Color.fromARGB(255, 105, 202, 108),
+          primaryColor: Colors.orange.shade700,
+          primaryColorDark: Color.fromARGB(255, 0, 6, 10),
+          primarySwatch: Colors.orange,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.orange, // Your primary swatch
+            accentColor: Colors.orange.shade700, // Your accent color
           ),
-        ]
-      ),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle:
+                TextStyle(color: Color.fromARGB(255, 0, 27, 44)), // Label color
+            hintStyle: TextStyle(color: Colors.orange.shade700),
+          ),
+          textTheme: const TextTheme(
+            bodySmall: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
+            bodyLarge: TextStyle(
+                color:
+                    Color.fromARGB(255, 0, 6, 10)), // Default body text style
+            bodyMedium: TextStyle(
+                color:
+                    Color.fromARGB(255, 0, 6, 10)), // Default body text style
+            displayMedium: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
+            displayLarge: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
+            displaySmall: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              elevation: 0, // Remove shadow
+              backgroundColor:
+                  Colors.orange.shade700, // Background color
+              foregroundColor: Colors.white, // Text color
+            ),
+          ),
+          extensions: const <ThemeExtension<dynamic>>[
+            CustomColors(
+              greyColor: Color.fromARGB(255, 192, 192, 192),
+              greenColor: Color.fromARGB(255, 105, 202, 108),
+            ),
+          ]),
       home: MyHomePage(title: 'Login Demo'),
     );
   }
