@@ -1,3 +1,8 @@
-Hi! today I have some fancy gym exercise register coded in fluter i provide you with the files, so the user access to the main_screen, login with aws (which is developed with amplify) and can save new entries as well as capture the previous ones. There are a few issues I want to solve.
-Filtering:
-They Idea was that when you select a day you got the last training (based on the date) and the current training (the exercises that have the current date). it happens that when you select a date you dont get
+
+
+Hi! today I have some fancy gym exercise register coded in fluter i provide you the files, so the user access to the main_screen, login with aws (which is developed with amplify) and can save new entries as well as capture the previous ones.
+There is a ExerciseCard component which define the logic of how to display each field in the cards of both saved entries and the new one.
+Also there is a MuscleDateSelector component to select both a muscle and a date and its info is shared with the Exercise Card through a provider. 
+In this component we can search for the selection (date and muscle) and we retrieve all the exercises within the selected date and the previous session to the date selected.
+
+There are a few features I want to add.

@@ -16,12 +16,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Exercise> exercises = [];
   String _userId = '';
-  bool _needToFetch = false;
 
   @override
   void initState() {
     super.initState();
     fetchUserId();
+  }
+
+  @override
+  void dispose() {
+    // Clean up listener
+    super.dispose();
   }
 
   void fetchUserId() async {
@@ -37,86 +42,85 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-    void triggerFetch() {
-    setState(() {
-      _needToFetch = true;
-    });
-  }
-
-  void resetFetchFlag() {
-    setState(() {
-      _needToFetch = false;
-    });
-  }
-
-  void updateExercises(List<Exercise> finalExercises) async {
-      // Update the state with the filtered exercises.
-      if (mounted) {
-        setState(() {
-          exercises = finalExercises;
-          _needToFetch = false;
-        });
-      }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MuscleDateSelectionModel>(
-      create: (context)=>MuscleDateSelectionModel(),
-    child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        toolbarHeight: 4,
-      ),
-      body: Column(
-        children: [
-          MuscleDateSelector(
-            onExercisesFetched: updateExercises,
-            needToFetch: _needToFetch,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount:
-                  exercises.length + 1, // +1 for the EditableExerciseCard
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // EditableExerciseCard always at the top
-                  return EditableExerciseCard(
-                    userId: _userId,
-                    onPublishSuccess: triggerFetch,
-                  );
-                } else {
-                  // Adjust index by -1 because the first item is the EditableExerciseCard
-                  final exercise = exercises[index - 1];
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => ExerciseProvider()),
+      ChangeNotifierProvider(
+          create: (context) => MuscleDateSelectionProvider()),
+    ], child: mainScreenUI());
+  }
+
+  Widget mainScreenUI() {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          toolbarHeight: 4,
+        ),
+        body: Consumer<ExerciseProvider>(
+            builder: (context, exerciseProvider, child) {
+          return Column(
+            children: [
+              const MuscleDateSelector(),
+              EditableExerciseCard(
+                userId: _userId,
+                onPublishSuccess: exerciseProvider.fetch,
+              ),
+              Expanded(
+                  child: ListView.builder(
+                itemCount: exerciseProvider.allExercises.length,
+                itemBuilder: (context, index) {
+                  final exercise = exerciseProvider.allExercises[index];
                   return ExerciseCard(
                     exercise: exercise,
-                    onDeleteSuccess: triggerFetch,
+                    onDeleteSuccess: exerciseProvider.fetch,
                   );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    )
-    );
+                },
+              )),
+            ],
+          );
+        }));
   }
 }
 
-class MuscleDateSelectionModel extends ChangeNotifier{
+class MuscleDateSelectionProvider extends ChangeNotifier {
   String _selectedMuscle = '';
   DateTime _selectedDate = DateTime.now();
 
   // Getter
   String get selectedMuscle => _selectedMuscle;
   DateTime get selectedDate => _selectedDate;
-  
+
   // Setter
   void updateDate(DateTime newDate) {
     _selectedDate = newDate;
   }
+
   void updateMuscle(String newMuscle) {
     _selectedMuscle = newMuscle;
+    notifyListeners();
+  }
+}
+
+// Inside ExerciseProvider
+
+class ExerciseProvider extends ChangeNotifier {
+  List<Exercise> _allExercises = [];
+  bool _needToFetch = true;
+
+  // Getters
+  List<Exercise> get allExercises => _allExercises;
+  bool get needToFetch => _needToFetch;
+
+  // Setter
+  void updateAllExercises(List<Exercise> exercises) {
+    _allExercises = exercises;
+    _needToFetch = false;
+    notifyListeners();
+  }
+
+  void fetch() {
+    _needToFetch = true;
     notifyListeners();
   }
 }

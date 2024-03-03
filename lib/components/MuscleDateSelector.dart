@@ -10,12 +10,9 @@ import 'package:flutter_application_test1/theme/components/NextButton.dart';
 import 'package:provider/provider.dart';
 
 class MuscleDateSelector extends StatefulWidget {
-  final Function(List<Exercise>) onExercisesFetched;
-  final bool needToFetch;
-
-  const MuscleDateSelector(
-      {Key? key, required this.onExercisesFetched, required this.needToFetch})
-      : super(key: key);
+  const MuscleDateSelector({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _MuscleDateSelectorState createState() => _MuscleDateSelectorState();
@@ -31,14 +28,6 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
   void initState() {
     super.initState();
     fetchUserId();
-  }
-
-  @override
-  void didUpdateWidget(covariant MuscleDateSelector oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.needToFetch) {
-      fetchExercises();
-    }
   }
 
   void fetchUserId() async {
@@ -73,8 +62,12 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
         allExercises = filterExercisesByDate(allExercises);
       }
 
-      // Call the callback with the filtered list
-      widget.onExercisesFetched(allExercises);
+      // Pass new exercises to provider
+      if (mounted) {
+        final exerciseProvider = Provider.of<ExerciseProvider>(context, listen: false);
+        exerciseProvider.updateAllExercises(allExercises);
+      }
+
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -126,7 +119,7 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
     setState(() {
       _selectedDate = pickedDate;
     });
-    Provider.of<MuscleDateSelectionModel>(context, listen: false)
+    Provider.of<MuscleDateSelectionProvider>(context, listen: false)
         .updateDate(pickedDate);
   }
 
@@ -134,73 +127,80 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
     setState(() {
       _selectedMuscle = pickedMuscle;
     });
-    Provider.of<MuscleDateSelectionModel>(context, listen: false)
+    Provider.of<MuscleDateSelectionProvider>(context, listen: false)
         .updateMuscle(pickedMuscle);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Date Selection Field
-                Flexible(
-                  flex: 5, // Adjust flex factor based on your needs
-                  child: DateSelectionFormField(
-                    context: context,
-                    initialDate: null,
-                    onDatePicked: (pickedDate) {
-                      onDatePicked(context, pickedDate);
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a date';
-                      }
-                      return null;
-                    },
+    return Consumer<ExerciseProvider>(
+        builder: (context, exerciseProvider, child) {
+      if (exerciseProvider.needToFetch) {
+        fetchExercises();
+      }
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Date Selection Field
+                  Flexible(
+                    flex: 5, // Adjust flex factor based on your needs
+                    child: DateSelectionFormField(
+                      context: context,
+                      initialDate: null,
+                      onDatePicked: (pickedDate) {
+                        onDatePicked(context, pickedDate);
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select a date';
+                        }
+                        return null;
+                      },
+                    ),
+                  ), // Adjust spacing as needed
+                  // Muscle Dropdown Field
+                  Flexible(
+                    flex: 5, // Adjust flex factor based on your needs
+                    child: CustomDropdownFormField(
+                      initialValue: null,
+                      onChanged: (pickedMuscle) {
+                        if (pickedMuscle != null) {
+                          onMusclePicked(context, pickedMuscle);
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a muscle';
+                        }
+                        return null;
+                      },
+                      items: muscles.map((String muscle) {
+                        return DropdownMenuItem<String>(
+                            value: muscle, child: Text(muscle));
+                      }).toList(),
+                      hintText: "Select Muscle",
+                    ),
                   ),
-                ), // Adjust spacing as needed
-                // Muscle Dropdown Field
-                Flexible(
-                  flex: 5, // Adjust flex factor based on your needs
-                  child: CustomDropdownFormField(
-                    initialValue: null,
-                    onChanged: (pickedMuscle) {
-                      if (pickedMuscle != null) {
-                        onMusclePicked(context, pickedMuscle);
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a muscle';
-                      }
-                      return null;
-                    },
-                    items: muscles.map((String muscle) {
-                      return DropdownMenuItem<String>(
-                          value: muscle, child: Text(muscle));
-                    }).toList(),
-                    hintText: "Select Muscle",
-                  ),
-                ),
-                
-                NextButton(onTap: ()=> {
-                  if (_formKey.currentState!.validate()) {
-                    fetchExercises()
-                  }
-                })
-              ],
-            ),
-          ],
+
+                  NextButton(
+                      onTap: () => {
+                            if (_formKey.currentState!.validate())
+                              {fetchExercises()}
+                          })
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

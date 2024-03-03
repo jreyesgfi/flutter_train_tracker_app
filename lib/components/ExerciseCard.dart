@@ -116,7 +116,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
 
   void _publishEntry(context) async {
     final staticModel =
-        Provider.of<MuscleDateSelectionModel>(context, listen: false);
+        Provider.of<MuscleDateSelectionProvider>(context, listen: false);
     final selectedMuscle = staticModel.selectedMuscle;
     final selectedDate = staticModel.selectedDate;
 
@@ -156,7 +156,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   @override
   Widget build(BuildContext context) {
     Widget exerciseDropdown() {
-      return Consumer<MuscleDateSelectionModel>(
+      return Consumer<MuscleDateSelectionProvider>(
         builder: (context, model, child) {
           List<String>? muscleExercises =
               exercisesByMuscle[model.selectedMuscle];

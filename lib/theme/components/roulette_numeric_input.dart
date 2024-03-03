@@ -53,20 +53,6 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
         : const PageScrollPhysics();
     return Row(
       children: [
-        // Label occupying half of the width
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-                color: Theme.of(context).primaryColorDark,
-              ),
-            ),
-          ),
-        ),
         // Roulette picker occupying the remaining half
         Expanded(
           child: Stack(
@@ -80,7 +66,7 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
                   height: 40,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
@@ -124,6 +110,21 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
             ],
           ),
         ),
+        // Label occupying half of the width
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              widget.label,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+          ),
+        ),
+        
       ],
     );
   }
