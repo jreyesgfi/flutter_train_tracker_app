@@ -40,8 +40,9 @@ class ExerciseCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor, // Use the theme's background color
-        borderRadius: BorderRadius.circular(20), 
+        color:
+            Theme.of(context).canvasColor, // Use the theme's background color
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,6 +102,8 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   late TextEditingController _minWeightController;
   late TextEditingController _maxRepsController;
   late TextEditingController _minRepsController;
+  var _automaticScroll = false;
+  var _lastExercise;
 
   String? _selectedExercise;
 
@@ -112,6 +115,36 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
     _minWeightController = TextEditingController(text: '0');
     _maxRepsController = TextEditingController(text: '0');
     _minRepsController = TextEditingController(text: '0');
+
+    // _maxWeightPicker= NumericRoulettePicker(
+    //           label: "Max Weight",
+    //           controller: _maxWeightController,
+    //           allowDecimal: true,
+    //         );
+    // _minWeightPicker = NumericRoulettePicker(
+    //           label: "Min Weight",
+    //           controller: _minWeightController,
+    //           allowDecimal: true,
+    //         );
+    // _maxRepsPicker = NumericRoulettePicker(
+    //           label: "Max Reps",
+    //           controller: _maxRepsController,
+    //         );
+    // _minRepsPicker = NumericRoulettePicker(
+    //           label: "Min Reps",
+    //           controller: _minRepsController,
+    //         );
+  }
+
+  //dispose the controllers
+  @override
+  void dispose() {
+    _exerciseController.dispose();
+    _maxWeightController.dispose();
+    _minWeightController.dispose();
+    _maxRepsController.dispose();
+    _minRepsController.dispose();
+    super.dispose();
   }
 
   void _publishEntry(context) async {
@@ -126,7 +159,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
       userId: widget.userId,
       date: TemporalDate(selectedDate),
       muscle: selectedMuscle,
-      exercise: _selectedExercise??'',
+      exercise: _selectedExercise ?? '',
       maxWeight: double.tryParse(_maxWeightController.text),
       minWeight: double.tryParse(_minWeightController.text),
       maxReps: int.tryParse(_maxRepsController.text),
@@ -142,15 +175,40 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
     }
   }
 
-  //dispose the controllers
-  @override
-  void dispose() {
-    _exerciseController.dispose();
-    _maxWeightController.dispose();
-    _minWeightController.dispose();
-    _maxRepsController.dispose();
-    _minRepsController.dispose();
-    super.dispose();
+  void _updateSelectedExercise(String? value) async {
+    if (value == null) {
+      return;
+    } 
+    final lastExercise = await _getLastExerciseWithName(value);
+    setState(() {
+      _selectedExercise = value;
+       _automaticScroll = true;
+      if (lastExercise != null) {
+        _lastExercise = lastExercise;
+        // _maxWeightController.text = _lastExercise!.maxWeight.toString();
+        // _minWeightController.text = _lastExercise!.minWeight.toString();
+        // _maxRepsController.text = _lastExercise!.maxReps.toString();
+        // _minRepsController.text = _lastExercise!.minReps.toString();
+      }
+      //_automaticScroll = false;
+    });
+  }
+
+  Future<Exercise?> _getLastExerciseWithName(String name) async {
+    try {
+      final List<Exercise> exercises = await Amplify.DataStore.query(
+        Exercise.classType,
+        where: Exercise.EXERCISE.eq(name),
+        sortBy: [Exercise.DATE.descending()],
+      );
+
+      if (exercises.isNotEmpty) {
+        return exercises.first;
+      }
+    } catch (e) {
+      //
+    }
+    return null;
   }
 
   @override
@@ -171,7 +229,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
             initialValue: _selectedExercise,
             onChanged: (value) {
               setState(() {
-                _selectedExercise = value;
+                _updateSelectedExercise(value);
               });
             },
             validator: (value) {
@@ -195,7 +253,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor, // Use the theme's background color
         borderRadius: BorderRadius.circular(20),
@@ -226,31 +284,39 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
               ],
             ),
             // Other widgets like NumericRoulettePicker can follow here, outside the Row
+            // _maxWeightPicker,
+            // _minWeightPicker,
+            // _maxRepsPicker,
+            // _minRepsPicker,
             NumericRoulettePicker(
               label: "Max Weight",
               controller: _maxWeightController,
               allowDecimal: true,
+              value: _lastExercise?.maxWeight?? 0,
             ),
             NumericRoulettePicker(
               label: "Min Weight",
               controller: _minWeightController,
               allowDecimal: true,
+              value: _lastExercise?.minWeight?? 0,
             ),
             NumericRoulettePicker(
               label: "Max Reps",
               controller: _maxRepsController,
+              value: _lastExercise?.maxReps.toDouble()?? 0,
             ),
             NumericRoulettePicker(
               label: "Min Reps",
               controller: _minRepsController,
+               value: _lastExercise?.minReps.toDouble()?? 0,
             ),
             Builder(
-  builder: (context) {
-    return NextButton(
-      onTap: () => _publishEntry(context),
-    );
-  },
-)
+              builder: (context) {
+                return NextButton(
+                  onTap: () => _publishEntry(context),
+                );
+              },
+            )
           ],
         ),
       ),

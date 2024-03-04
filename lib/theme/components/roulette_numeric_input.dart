@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/theme/custom_colors.dart';
 
 class NumericRoulettePicker extends StatefulWidget {
   final TextEditingController controller;
@@ -8,10 +7,13 @@ class NumericRoulettePicker extends StatefulWidget {
   final double maxValue;
   final double step;
   final String label;
+  final double value;
+  
 
   NumericRoulettePicker({
     Key? key,
     required this.controller,
+    this.value = 0,
     this.allowDecimal = false,
     this.minValue = 0.0,
     this.maxValue = 100.0,
@@ -32,33 +34,53 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
   void initState() {
     super.initState();
     step = widget.allowDecimal ? widget.step / 2 : widget.step;
-    // Calculate the initial page based on the controller's text value or min value.
-    double initialPageValue =
-        (double.tryParse(widget.controller.text) ?? widget.minValue) / step;
-    // Ensure that initialPageValue is within the range of min and max values.
-    initialPageValue =
-        initialPageValue.clamp(widget.minValue / step, widget.maxValue / step);
-    _currentPage = initialPageValue.toInt();
+    double initialValue = (widget.value ?? widget.minValue) / step;
+    initialValue =
+        initialValue.clamp(widget.minValue / step, widget.maxValue / step);
+    _currentPage = initialValue.toInt();
     _pageController = PageController(
       viewportFraction: 0.33,
       initialPage: _currentPage,
     );
   }
+  @override
+void didUpdateWidget(NumericRoulettePicker oldWidget) {
+  super.didUpdateWidget(oldWidget);
+  if (widget.value != oldWidget.value) {
+    _controllerValueChanged();
+  }
+}
+
+  void _controllerValueChanged() {
+    final value = widget.value;
+
+    int pageIndex = ((value - widget.minValue) / step).toInt();
+        setState(() {
+      double clampedValue = value.clamp(widget.minValue, widget.maxValue);
+      widget.controller.text =
+          (clampedValue * step).toStringAsFixed(widget.allowDecimal ? 1 : 0);
+    });
+
+    _pageController.animateToPage(
+      pageIndex,
+      duration: const Duration(milliseconds: 500), // Adjust duration as needed
+      curve: Curves.ease,
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    // Custom ScrollPhysics to increase swipe strength for decimal values
     final PageScrollPhysics physics = widget.allowDecimal
         ? _EnhancedPageScrollPhysics()
         : const PageScrollPhysics();
     return Row(
       children: [
-        // Roulette picker occupying the remaining half
         Expanded(
           child: Stack(
             alignment: Alignment.centerRight,
             children: [
-              // Static colored square as a reference for the selected number
               Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -70,7 +92,6 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
                   ),
                 ),
               ),
-              // roulette picker
               Container(
                 height: 60,
                 child: PageView.builder(
@@ -78,7 +99,6 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
                   physics: physics,
                   onPageChanged: (index) {
                     setState(() {
-                      // Use the adjusted step value from the state for calculations.
                       double newValue = (index * step)
                           .clamp(widget.minValue, widget.maxValue);
                       widget.controller.text =
@@ -110,7 +130,6 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
             ],
           ),
         ),
-        // Label occupying half of the width
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
@@ -124,20 +143,17 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
             ),
           ),
         ),
-        
       ],
     );
   }
 }
 
-// Custom ScrollPhysics to increase swipe strength
 class _EnhancedPageScrollPhysics extends PageScrollPhysics {
   const _EnhancedPageScrollPhysics({ScrollPhysics? parent})
       : super(parent: parent);
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
-    // Increase the swipe strength by multiplying the offset
     return super.applyPhysicsToUserOffset(position, offset * 2.0);
   }
 
