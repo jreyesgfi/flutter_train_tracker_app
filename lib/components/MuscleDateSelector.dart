@@ -183,8 +183,7 @@ class _MuscleDateSelectorState extends State<MuscleDateSelector> {
                         return null;
                       },
                       items: muscles.map((String muscle) {
-                        return DropdownMenuItem<String>(
-                            value: muscle, child: Text(muscle));
+                        return CustomDropdownItem(value: muscle);
                       }).toList(),
                       hintText: "Select Muscle",
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_test1/functions/comparison/is_same_day.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/screens/main_screen.dart';
 import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
@@ -102,7 +103,6 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   late TextEditingController _minWeightController;
   late TextEditingController _maxRepsController;
   late TextEditingController _minRepsController;
-  var _automaticScroll = false;
   var _lastExercise;
 
   String? _selectedExercise;
@@ -178,11 +178,10 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   void _updateSelectedExercise(String? value) async {
     if (value == null) {
       return;
-    } 
+    }
     final lastExercise = await _getLastExerciseWithName(value);
     setState(() {
       _selectedExercise = value;
-       _automaticScroll = true;
       if (lastExercise != null) {
         _lastExercise = lastExercise;
         // _maxWeightController.text = _lastExercise!.maxWeight.toString();
@@ -190,23 +189,26 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
         // _maxRepsController.text = _lastExercise!.maxReps.toString();
         // _minRepsController.text = _lastExercise!.minReps.toString();
       }
-      //_automaticScroll = false;
     });
   }
 
   Future<Exercise?> _getLastExerciseWithName(String name) async {
     try {
-      final List<Exercise> exercises = await Amplify.DataStore.query(
-        Exercise.classType,
-        where: Exercise.EXERCISE.eq(name),
-        sortBy: [Exercise.DATE.descending()],
-      );
+      // Access ExerciseProvider from the context
+      final exerciseProvider =
+          Provider.of<ExerciseProvider>(context, listen: false);
+      final List<Exercise> exercises = exerciseProvider.allExercises
+          .where((exercise) => exercise.exercise == name)
+          .toList();
 
+      // Sort by date descending and get the first one if available
+      exercises
+          .sort((a, b) => b.date.getDateTime().compareTo(a.date.getDateTime()));
       if (exercises.isNotEmpty) {
         return exercises.first;
       }
     } catch (e) {
-      //
+      // Handle error
     }
     return null;
   }
@@ -214,37 +216,35 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
   @override
   Widget build(BuildContext context) {
     Widget exerciseDropdown() {
-      return Consumer<MuscleDateSelectionProvider>(
-        builder: (context, model, child) {
-          List<String>? muscleExercises =
-              exercisesByMuscle[model.selectedMuscle];
+      return Consumer2<MuscleDateSelectionProvider, ExerciseProvider>(
+        builder: (context, dateModel, exerciseModel, child) {
+          final selectedDate = dateModel.selectedDate;
+          List<String> muscleExercises =
+              exercisesByMuscle[dateModel.selectedMuscle] ?? [];
 
-          // Ensure _selectedExercise is valid for the current muscle
-          if (muscleExercises == null ||
-              !muscleExercises.contains(_selectedExercise)) {
-            _selectedExercise = null; // Reset selected exercise if not valid
-          }
-
+          // Filter or mark exercises that have been done on the selected date
+          final doneExercises = exerciseModel.allExercises
+              .where((exercise) =>
+                  isSameDay(exercise.date.getDateTime(), selectedDate)&&
+                  muscleExercises.contains(exercise.exercise))
+              .map((e) => e.exercise)
+              .toSet();
+          print(doneExercises);
           return CustomDropdownFormField(
             initialValue: _selectedExercise,
             onChanged: (value) {
-              setState(() {
+              if (!doneExercises.contains(value)) {
                 _updateSelectedExercise(value);
-              });
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please select an exercise';
               }
-              return null;
+              // Otherwise, do not update the selection
             },
-            items: muscleExercises?.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList() ??
-                [],
+            items: muscleExercises.map((String value) {
+              bool isDone = doneExercises.contains(value);
+              return CustomDropdownItem(
+                value: value,
+                available: !isDone, // Set to false if the exercise is done
+              );
+            }).toList(),
             hintText: "Select Exercise",
           );
         },
@@ -269,7 +269,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
                 Flexible(
                   // Use Expanded to ensure the dropdown takes minimal necessary space
                   flex:
-                      3, // Adjust the flex factor based on how much space you want the dropdown to take relative to other elements
+                      4, // Adjust the flex factor based on how much space you want the dropdown to take relative to other elements
                   child: exerciseDropdown(), // Your dropdown widget
                 ),
                 Flexible(
@@ -292,23 +292,23 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
               label: "Max Weight",
               controller: _maxWeightController,
               allowDecimal: true,
-              value: _lastExercise?.maxWeight?? 0,
+              value: _lastExercise?.maxWeight ?? 0,
             ),
             NumericRoulettePicker(
               label: "Min Weight",
               controller: _minWeightController,
               allowDecimal: true,
-              value: _lastExercise?.minWeight?? 0,
+              value: _lastExercise?.minWeight ?? 0,
             ),
             NumericRoulettePicker(
               label: "Max Reps",
               controller: _maxRepsController,
-              value: _lastExercise?.maxReps.toDouble()?? 0,
+              value: _lastExercise?.maxReps.toDouble() ?? 0,
             ),
             NumericRoulettePicker(
               label: "Min Reps",
               controller: _minRepsController,
-               value: _lastExercise?.minReps.toDouble()?? 0,
+              value: _lastExercise?.minReps.toDouble() ?? 0,
             ),
             Builder(
               builder: (context) {

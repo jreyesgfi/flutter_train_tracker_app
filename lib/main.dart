@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.orange.shade700,
           primaryColorLight: Colors.orange.shade50,
           hintColor: Colors.orange.shade200,
-          primaryColorDark: Color.fromARGB(255, 71, 37, 0),
+          primaryColorDark: Color.fromARGB(255, 12, 6, 0),
           primarySwatch: Colors.orange,
           cardColor: Colors.orange.shade50,
           canvasColor: Color.fromARGB(120, 230, 230, 233),
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Color.fromARGB(252, 252, 252, 255),
             primarySwatch: Colors.orange, // Your primary swatch
             accentColor: Colors.orange.shade700, // Your accent color
-            cardColor: Colors.orange.shade50,
+            cardColor: Color.fromARGB(231, 255, 255, 255),
           ),
           
           visualDensity: VisualDensity.adaptivePlatformDensity,
