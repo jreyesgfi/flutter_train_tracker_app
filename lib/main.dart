@@ -2,7 +2,6 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'infrastructure_layer/config/amplifyconfiguration.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/login_screen.dart';
@@ -18,9 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Demo',
-      theme: AppTheme.theme, // Use the centralized theme
-      home: MyHomePage(title: 'Login Demo'),
+      title: 'Gymiphy',
+       theme: AppTheme.theme, // Use the centralized theme
+      home: MyHomePage(title: 'Gymiphy'),
     );
   }
 }
