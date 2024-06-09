@@ -1,6 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'infrastructure_layer/config/amplifyconfiguration.dart';
@@ -18,53 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login Demo',
-      theme: ThemeData(
-          primaryColor: Colors.orange.shade700,
-          primaryColorLight: Colors.orange.shade50,
-          hintColor: Colors.orange.shade200,
-          primaryColorDark: Color.fromARGB(255, 12, 6, 0),
-          primarySwatch: Colors.orange,
-          cardColor: Colors.orange.shade50,
-          canvasColor: Color.fromARGB(120, 230, 230, 233),
-          colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: Color.fromARGB(252, 252, 252, 255),
-            primarySwatch: Colors.orange, // Your primary swatch
-            accentColor: Colors.orange.shade700, // Your accent color
-            cardColor: Color.fromARGB(231, 255, 255, 255),
-          ),
-          
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle:
-                TextStyle(color: Color.fromARGB(255, 0, 27, 44)), // Label color
-            hintStyle: TextStyle(color: Colors.orange.shade700),
-          ),
-          textTheme: const TextTheme(
-            bodySmall: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
-            bodyLarge: TextStyle(
-                color:
-                    Color.fromARGB(255, 0, 6, 10)), // Default body text style
-            bodyMedium: TextStyle(
-                color:
-                    Color.fromARGB(255, 0, 6, 10)), // Default body text style
-            displayMedium: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
-            displayLarge: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
-            displaySmall: TextStyle(color: Color.fromARGB(255, 0, 6, 10)),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              elevation: 0, // Remove shadow
-              backgroundColor:
-                  Colors.orange.shade700, // Background color
-              foregroundColor: Colors.white, // Text color
-            ),
-          ),
-          extensions: const <ThemeExtension<dynamic>>[
-            CustomColors(
-              greyColor: Color.fromARGB(255, 192, 192, 192),
-              greenColor: Color.fromARGB(255, 105, 202, 108),
-            ),
-          ]),
+      theme: AppTheme.theme, // Use the centralized theme
       home: MyHomePage(title: 'Login Demo'),
     );
   }
