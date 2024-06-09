@@ -17,7 +17,7 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
+// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, override_on_non_overriding_member, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
@@ -27,7 +27,6 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 class Exercise extends amplify_core.Model {
   static const classType = const _ExerciseModelType();
   final String id;
-  final amplify_core.TemporalDateTime? _updatedAt;
   final String? _userId;
   final amplify_core.TemporalDate? _date;
   final String? _muscle;
@@ -37,6 +36,7 @@ class Exercise extends amplify_core.Model {
   final int? _maxReps;
   final int? _minReps;
   final amplify_core.TemporalDateTime? _createdAt;
+  final amplify_core.TemporalDateTime? _updatedAt;
 
   @override
   getInstanceType() => classType;
@@ -49,19 +49,6 @@ class Exercise extends amplify_core.Model {
       return ExerciseModelIdentifier(
         id: id
       );
-  }
-  
-  amplify_core.TemporalDateTime get updatedAt {
-    try {
-      return _updatedAt!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
   }
   
   String get userId {
@@ -136,12 +123,15 @@ class Exercise extends amplify_core.Model {
     return _createdAt;
   }
   
-  const Exercise._internal({required this.id, required updatedAt, required userId, required date, required muscle, required exercise, maxWeight, minWeight, maxReps, minReps, createdAt}): _updatedAt = updatedAt, _userId = userId, _date = date, _muscle = muscle, _exercise = exercise, _maxWeight = maxWeight, _minWeight = minWeight, _maxReps = maxReps, _minReps = minReps, _createdAt = createdAt;
+  amplify_core.TemporalDateTime? get updatedAt {
+    return _updatedAt;
+  }
   
-  factory Exercise({String? id, required amplify_core.TemporalDateTime updatedAt, required String userId, required amplify_core.TemporalDate date, required String muscle, required String exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
+  const Exercise._internal({required this.id, required userId, required date, required muscle, required exercise, maxWeight, minWeight, maxReps, minReps, createdAt, updatedAt}): _userId = userId, _date = date, _muscle = muscle, _exercise = exercise, _maxWeight = maxWeight, _minWeight = minWeight, _maxReps = maxReps, _minReps = minReps, _createdAt = createdAt, _updatedAt = updatedAt;
+  
+  factory Exercise({String? id, required String userId, required amplify_core.TemporalDate date, required String muscle, required String exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
     return Exercise._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      updatedAt: updatedAt,
       userId: userId,
       date: date,
       muscle: muscle,
@@ -161,7 +151,6 @@ class Exercise extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is Exercise &&
       id == other.id &&
-      _updatedAt == other._updatedAt &&
       _userId == other._userId &&
       _date == other._date &&
       _muscle == other._muscle &&
@@ -181,7 +170,6 @@ class Exercise extends amplify_core.Model {
     
     buffer.write("Exercise {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
     buffer.write("userId=" + "$_userId" + ", ");
     buffer.write("date=" + (_date != null ? _date!.format() : "null") + ", ");
     buffer.write("muscle=" + "$_muscle" + ", ");
@@ -190,16 +178,16 @@ class Exercise extends amplify_core.Model {
     buffer.write("minWeight=" + (_minWeight != null ? _minWeight!.toString() : "null") + ", ");
     buffer.write("maxReps=" + (_maxReps != null ? _maxReps!.toString() : "null") + ", ");
     buffer.write("minReps=" + (_minReps != null ? _minReps!.toString() : "null") + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null"));
+    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Exercise copyWith({amplify_core.TemporalDateTime? updatedAt, String? userId, amplify_core.TemporalDate? date, String? muscle, String? exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
+  Exercise copyWith({String? userId, amplify_core.TemporalDate? date, String? muscle, String? exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
     return Exercise._internal(
       id: id,
-      updatedAt: updatedAt ?? this.updatedAt,
       userId: userId ?? this.userId,
       date: date ?? this.date,
       muscle: muscle ?? this.muscle,
@@ -211,7 +199,6 @@ class Exercise extends amplify_core.Model {
   }
   
   Exercise copyWithModelFieldValues({
-    ModelFieldValue<amplify_core.TemporalDateTime>? updatedAt,
     ModelFieldValue<String>? userId,
     ModelFieldValue<amplify_core.TemporalDate>? date,
     ModelFieldValue<String>? muscle,
@@ -223,7 +210,6 @@ class Exercise extends amplify_core.Model {
   }) {
     return Exercise._internal(
       id: id,
-      updatedAt: updatedAt == null ? this.updatedAt : updatedAt.value,
       userId: userId == null ? this.userId : userId.value,
       date: date == null ? this.date : date.value,
       muscle: muscle == null ? this.muscle : muscle.value,
@@ -237,7 +223,6 @@ class Exercise extends amplify_core.Model {
   
   Exercise.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null,
       _userId = json['userId'],
       _date = json['date'] != null ? amplify_core.TemporalDate.fromString(json['date']) : null,
       _muscle = json['muscle'],
@@ -246,15 +231,15 @@ class Exercise extends amplify_core.Model {
       _minWeight = (json['minWeight'] as num?)?.toDouble(),
       _maxReps = (json['maxReps'] as num?)?.toInt(),
       _minReps = (json['minReps'] as num?)?.toInt(),
-      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null;
+      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
+      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'updatedAt': _updatedAt?.format(), 'userId': _userId, 'date': _date?.format(), 'muscle': _muscle, 'exercise': _exercise, 'maxWeight': _maxWeight, 'minWeight': _minWeight, 'maxReps': _maxReps, 'minReps': _minReps, 'createdAt': _createdAt?.format()
+    'id': id, 'userId': _userId, 'date': _date?.format(), 'muscle': _muscle, 'exercise': _exercise, 'maxWeight': _maxWeight, 'minWeight': _minWeight, 'maxReps': _maxReps, 'minReps': _minReps, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'updatedAt': _updatedAt,
     'userId': _userId,
     'date': _date,
     'muscle': _muscle,
@@ -263,12 +248,12 @@ class Exercise extends amplify_core.Model {
     'minWeight': _minWeight,
     'maxReps': _maxReps,
     'minReps': _minReps,
-    'createdAt': _createdAt
+    'createdAt': _createdAt,
+    'updatedAt': _updatedAt
   };
 
   static final amplify_core.QueryModelIdentifier<ExerciseModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<ExerciseModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final UPDATEDAT = amplify_core.QueryField(fieldName: "updatedAt");
   static final USERID = amplify_core.QueryField(fieldName: "userId");
   static final DATE = amplify_core.QueryField(fieldName: "date");
   static final MUSCLE = amplify_core.QueryField(fieldName: "muscle");
@@ -296,12 +281,6 @@ class Exercise extends amplify_core.Model {
     ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.UPDATEDAT,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
-    ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Exercise.USERID,
@@ -353,6 +332,13 @@ class Exercise extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
+      isRequired: false,
+      isReadOnly: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
+      fieldName: 'updatedAt',
       isRequired: false,
       isReadOnly: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)

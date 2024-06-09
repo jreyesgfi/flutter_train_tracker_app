@@ -2,10 +2,10 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
-import 'package:flutter_application_test1/screens/main_screen.dart';
-import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
-import 'package:flutter_application_test1/theme/components/DateSelectorFormField.dart';
-import 'package:flutter_application_test1/theme/components/NextButton.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/CustomDropdownFormField.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/DateSelectorFormField.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/NextButton.dart';
 
 import 'package:provider/provider.dart';
 

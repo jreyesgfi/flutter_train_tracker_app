@@ -1,0 +1,4 @@
+
+// After initialize a device in Android Studio
+// or in vs Ctrl+Shift+P, type "Flutter: Launch Emulator"
+flutter run -d emulator-5554

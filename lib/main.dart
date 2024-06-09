@@ -1,10 +1,11 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/theme/custom_colors.dart';
-import 'amplifyconfiguration.dart';
-import 'package:flutter_application_test1/screens/login_screen.dart';
-import 'package:flutter_application_test1/screens/main_screen.dart'; // Make sure you have this import for MainScreen
+import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
+import 'infrastructure_layer/config/amplifyconfiguration.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/login_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart'; // Make sure you have this import for MainScreen
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter_application_test1/models/ModelProvider.dart';
 
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
               // User is logged in
-              return MainScreen(); // Navigate to the MainScreen if the user is logged in
+              return WidgetTestingScreen(); // Navigate to the MainScreen if the user is logged in
             } else {
               // User is not logged in or error in fetching session
               return LoginScreen(); // Navigate to the LoginScreen if the user is not logged in

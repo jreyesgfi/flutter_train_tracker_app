@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_test1/functions/comparison/is_same_day.dart';
+import 'package:flutter_application_test1/common_layer/utils/is_same_day.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
-import 'package:flutter_application_test1/screens/main_screen.dart';
-import 'package:flutter_application_test1/theme/components/CustomDropdownFormField.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/CustomDropdownFormField.dart';
 import 'package:flutter_application_test1/theme/components/nextButton.dart';
-import 'package:flutter_application_test1/theme/custom_colors.dart';
+import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/theme/components/roulette_numeric_input.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/roulette_numeric_input.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -155,7 +155,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
 
     // Assuming you have a method to create or update the exercise
     final newExercise = Exercise(
-      updatedAt: TemporalDateTime.now(),
+      // updatedAt: TemporalDateTime.now(),
       userId: widget.userId,
       date: TemporalDate(selectedDate),
       muscle: selectedMuscle,
