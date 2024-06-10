@@ -15,21 +15,45 @@ class HeaderWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-      color: theme.primaryColorDark, // Using the primary color from the theme
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.onPrimary), // Adjusted to use headline6 style
-          ),
-          Text(
-            date,
-            style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onPrimary), // Adjusted to use subtitle1 style
-          ),
-        ],
-      ),
-    );
+        margin: const EdgeInsets.all(10.0), // Add margin around the container
+        decoration: BoxDecoration(
+          color: theme.primaryColorDark, // Set the background color
+          borderRadius: BorderRadius.circular(10.0), // Rounded corners
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              right:-20,
+              top:0,
+              bottom:-20,
+              child:Align(
+                alignment: Alignment.centerRight,
+                child:Image.asset('assets/images/3dpack/Dumbell_03.png',
+                  width: 200,
+                  fit:BoxFit.cover,
+                ),
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0), // Only apply padding to the text
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                        color: theme.colorScheme.onPrimary), // Use titleLarge with custom color
+                  ),
+                  SizedBox(height: 8), // Space between the texts
+                  Text(
+                    date,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                        color: theme.colorScheme.onPrimary), // Use titleSmall with custom color
+                  ),
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }

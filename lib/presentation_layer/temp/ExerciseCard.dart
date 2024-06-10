@@ -4,8 +4,9 @@ import 'package:flutter_application_test1/common_layer/utils/is_same_day.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/CustomDropdownFormField.dart';
-import 'package:flutter_application_test1/theme/components/nextButton.dart';
+
 import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/NextButton.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';

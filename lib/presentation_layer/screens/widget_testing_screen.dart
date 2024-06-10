@@ -5,9 +5,6 @@ class WidgetTestingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Widget Testing Screen'),
-      ),
       body: ListView(
         children: const [
           // Add HeaderWidget for testing

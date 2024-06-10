@@ -15,6 +15,7 @@ class AppTheme {
       textSelectionTheme: TextSelectionThemeData(cursorColor: AppColors.accentColor),
 
       // TextStyle setup
+      fontFamily: 'Poppins',
       textTheme: const TextTheme(
         titleLarge: AppTextStyles.mainTitle, // Typically used for large text in displays
         bodySmall: AppTextStyles.body, // Standard body text
