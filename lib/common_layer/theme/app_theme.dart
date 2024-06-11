@@ -18,9 +18,10 @@ class AppTheme {
       fontFamily: 'Poppins',
       textTheme: const TextTheme(
         titleLarge: AppTextStyles.mainTitle, // Typically used for large text in displays
-        bodySmall: AppTextStyles.body, // Standard body text
         titleMedium: AppTextStyles.subtitle, // Smaller than headline but larger than body text
         titleSmall: AppTextStyles.miniTitle,
+        bodyMedium: AppTextStyles.body,
+        bodySmall: AppTextStyles.comment, // Standard body text
       ),
 
       // AppBar theme
