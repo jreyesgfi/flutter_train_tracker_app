@@ -1,61 +1,91 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class MuscleTile extends StatelessWidget {
+class MuscleTileSchema {
   final String label;
   final int timeSinceExercise; //days
   final String imagePath;
+
+  MuscleTileSchema({
+    required this.label,
+    required this.timeSinceExercise,
+    required this.imagePath,
+  });
+}
+
+class MuscleTile extends StatefulWidget {
+  final MuscleTileSchema muscle;
   final bool isSelected;
 
   const MuscleTile({
     super.key,
-    required this.label,
-    required this.timeSinceExercise,
-    required this.imagePath,
+    required this.muscle,
     this.isSelected = false,
   });
+
+  @override
+  _MuscleTileState createState() => _MuscleTileState();
+}
+
+class _MuscleTileState extends State<MuscleTile> {
+  bool isHovering = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Align(
-      child:Container(
-        width: 120,
-        height: 100,
-
-        decoration: BoxDecoration(
-          color: isSelected ? theme.shadowColor : theme.primaryColorLight,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              right:10,
-              child:Align(
-                alignment: Alignment.centerRight,
-                child:SvgPicture.asset(imagePath,
-                  height: 80,
-                  fit:BoxFit.fitHeight,
-                ),
-              )
+    return MouseRegion(
+        onEnter: (_) => _handleHover(true),
+        onExit: (_) => _handleHover(false),
+        child: Align(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.bounceInOut,
+            width: widget.isSelected ? 140 : 120,
+            height: widget.isSelected ? 140 : 120,
+            decoration: BoxDecoration(
+              color: widget.isSelected ? theme.shadowColor : theme.primaryColorLight,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                  color: isHovering ? theme.primaryColorDark : Colors.transparent,
+                  width: 2),
             ),
-            Padding( // Use Padding instead of Positioned for the text
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white, // Use a white background for the text container
-                  borderRadius: BorderRadius.circular(10.0),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  right: 10,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(
+                      widget.muscle.imagePath,
+                      height: 100,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
                 ),
-                child: Text(
-                  '${timeSinceExercise.toString()} días',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.primaryColor),
-                ),
-              ),
-            )
-          ],
-        )));
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(isHovering ? 0.3 : 1.0), // Adjust opacity based on hovering
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      '${widget.muscle.timeSinceExercise.toString()} días',
+                      style: theme.textTheme.bodySmall?.copyWith(color: theme.primaryColor),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
+  }
+
+  void _handleHover(bool hovering) {
+    setState(() {
+      isHovering = hovering;
+    });
   }
 }
