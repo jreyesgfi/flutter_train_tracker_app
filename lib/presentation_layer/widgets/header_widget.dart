@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
   final String title;
@@ -13,12 +14,13 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final customTheme = theme.extension<CustomTheme>();
 
     return Container(
         margin: const EdgeInsets.all(10.0), // Add margin around the container
         decoration: BoxDecoration(
           color: theme.primaryColorDark, // Set the background color
-          borderRadius: BorderRadius.circular(10.0), // Rounded corners
+          borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0), // Rounded corners
         ),
         child: Stack(
           children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MuscleTileSchema {
@@ -33,6 +34,7 @@ class _MuscleTileState extends State<MuscleTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final customTheme = theme.extension<CustomTheme>();
 
     return MouseRegion(
         onEnter: (_) => _handleHover(true),
@@ -45,7 +47,7 @@ class _MuscleTileState extends State<MuscleTile> {
             height: widget.isSelected ? 140 : 120,
             decoration: BoxDecoration(
               color: widget.isSelected ? theme.shadowColor : theme.primaryColorLight,
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
               border: Border.all(
                   color: isHovering ? theme.primaryColorDark : Colors.transparent,
                   width: 2),
@@ -69,7 +71,7 @@ class _MuscleTileState extends State<MuscleTile> {
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(isHovering ? 0.3 : 1.0), // Adjust opacity based on hovering
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
                     ),
                     child: Text(
                       '${widget.muscle.timeSinceExercise.toString()} días',

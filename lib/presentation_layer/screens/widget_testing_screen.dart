@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
@@ -10,6 +11,10 @@ final muscles = [
   MuscleTileSchema(label: "Dorsales", timeSinceExercise: 7, imagePath: "assets/images/muscles/dorsales.svg"),
   MuscleTileSchema(label: "pectorales", timeSinceExercise: 7, imagePath: "assets/images/muscles/pectorales.svg"),
   MuscleTileSchema(label: "hombros", timeSinceExercise: 11, imagePath: "assets/images/muscles/hombros.svg"),
+];
+
+final exercises = [
+  ExerciseTileSchema(label: "Press Banca", timeSinceExercise: 7, imagePath: "assets/images/muscles/pectorales.svg"),
 ];
 
 class WidgetTestingScreen extends StatelessWidget {
@@ -37,6 +42,8 @@ class WidgetTestingScreen extends StatelessWidget {
           MuscleCarouselSelector(
             muscles:muscles
           ),
+
+          ExerciseTile(exercise: exercises[0], isSelected: false,)
 
         ],
       ),

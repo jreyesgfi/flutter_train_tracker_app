@@ -1,6 +1,41 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_text_styles.dart';
+import 'dart:ui';
+
+// Custom properties class
+class CustomThemeProperties {
+  final double borderRadius;
+
+  const CustomThemeProperties({
+    required this.borderRadius,
+  });
+}
+
+// Extension
+class CustomTheme extends ThemeExtension<CustomTheme> {
+  final CustomThemeProperties properties;
+
+  const CustomTheme({required this.properties});
+
+  @override
+  CustomTheme copyWith({CustomThemeProperties? properties}) {
+    return CustomTheme(
+      properties: properties ?? this.properties,
+    );
+  }
+
+  @override
+  CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
+    if (other is CustomTheme) {
+      var lerpedBorderRadius = lerpDouble(this.properties.borderRadius, other.properties.borderRadius, t)!;
+      return CustomTheme(
+        properties: CustomThemeProperties(borderRadius: lerpedBorderRadius),
+      );
+    }
+    return this;
+  }
+}
 
 class AppTheme {
   static ThemeData get theme {
@@ -43,6 +78,17 @@ class AppTheme {
         labelStyle: TextStyle(color: AppColors.greyColor),
         hintStyle: TextStyle(color: AppColors.lightColor),
       ),
+
+      // extensions
+      extensions: const <ThemeExtension<dynamic>>[
+        CustomTheme(
+          properties: CustomThemeProperties(
+            borderRadius: 16.0,
+          ),
+        ),
+      ]
     );
   }
 }
+
+
