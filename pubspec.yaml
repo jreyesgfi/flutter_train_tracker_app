@@ -69,6 +69,13 @@ flutter:
   assets:
     - assets/images/3dpack/
     - assets/images/muscles/
+    - assets/images/exercises/pectoral/
+    - assets/images/exercises/back/
+    - assets/images/exercises/legs/
+    - assets/images/exercises/biceps/
+    - assets/images/exercises/gluteus/
+    - assets/images/exercises/shoulder/
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

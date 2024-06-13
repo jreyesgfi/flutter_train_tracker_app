@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ExerciseTileSchema {
   final String label;
@@ -17,11 +16,13 @@ class ExerciseTileSchema {
 class ExerciseTile extends StatelessWidget {
   final ExerciseTileSchema exercise;
   final bool isSelected;
+  final bool isCompleted;
 
   const ExerciseTile({
     super.key,
     required this.exercise,
     this.isSelected = false,
+    this.isCompleted = false,
   });
 
   @override
@@ -31,38 +32,42 @@ class ExerciseTile extends StatelessWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      curve: Curves.bounceInOut,
+      curve: Curves.easeInOut,
       height: isSelected ? 80 : 60,
-      margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: isSelected ? theme.shadowColor : theme.primaryColorLight,
+        color: theme.primaryColorLight,
         borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
       ),
       child: Stack(
         children: [
-          Positioned.fill(
-            left: 0,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset(
-                exercise.imagePath,
-                fit: BoxFit.fitHeight,
-              ),
+          Positioned(
+            left: 10,
+            top: 5,
+            bottom: 5,
+            child: Image.asset(
+              exercise.imagePath,
+              width: 48,  // Specify a width for the SVG image
+              fit: BoxFit.fitHeight,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:100),
+            padding: const EdgeInsets.only(left: 75),  // Adjust left padding to give space for the image
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,  // Align text to the left
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   exercise.label,
-                  style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColor),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: isCompleted ? theme.shadowColor : theme.primaryColorDark,
+                    decoration: isCompleted ? TextDecoration.lineThrough : null,
+                  ),
                 ),
                 Text(
                   '${exercise.timeSinceExercise} días',
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.primaryColor),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: isCompleted ? theme.shadowColor : theme.primaryColor,
+                  ),
                 ),
               ],
             ),

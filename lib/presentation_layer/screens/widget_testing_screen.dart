@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
@@ -14,7 +15,8 @@ final muscles = [
 ];
 
 final exercises = [
-  ExerciseTileSchema(label: "Press Banca", timeSinceExercise: 7, imagePath: "assets/images/muscles/pectorales.svg"),
+  ExerciseTileSchema(label: "Press Banca", timeSinceExercise: 7, imagePath: "assets/images/exercises/pectoral/Bench-press-1.png"),
+  ExerciseTileSchema(label: "Máquina pecho", timeSinceExercise: 7, imagePath: "assets/images/exercises/pectoral/Incline-chest-press-1.png"),
 ];
 
 class WidgetTestingScreen extends StatelessWidget {
@@ -31,7 +33,7 @@ class WidgetTestingScreen extends StatelessWidget {
           ),
 
           Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(left:10.0, right:10.0, bottom: 0.0, top:30),
             child:Text(
               "¿Qué vamos a entrenar hoy?",
               style: theme.textTheme.titleMedium?.copyWith(
@@ -43,8 +45,19 @@ class WidgetTestingScreen extends StatelessWidget {
             muscles:muscles
           ),
 
-          ExerciseTile(exercise: exercises[0], isSelected: false,)
+          Container(
+            margin: const EdgeInsets.only(left:10.0, right:10.0, bottom: 0.0, top:30),
+            child:Text(
+              "Escoge un ejercicio",
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.primaryColorDark),
+            )
+          ),
 
+
+          ExerciseListSelector(
+            exercises: exercises
+          ),
         ],
       ),
     );
