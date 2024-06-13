@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
               // User is logged in
-              return WidgetTestingScreen(); // Navigate to the MainScreen if the user is logged in
+              return TestingScreen(); // Navigate to the MainScreen if the user is logged in
             } else {
               // User is not logged in or error in fetching session
               return LoginScreen(); // Navigate to the LoginScreen if the user is not logged in

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/footer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
@@ -19,7 +20,25 @@ final exercises = [
   ExerciseTileSchema(label: "Máquina pecho", timeSinceExercise: 7, imagePath: "assets/images/exercises/pectoral/Incline-chest-press-1.png"),
 ];
 
-class WidgetTestingScreen extends StatelessWidget {
+class TestingScreen extends StatefulWidget{
+  @override
+  TestingScreenState createState() => TestingScreenState();
+}
+
+
+class TestingScreenState extends State<TestingScreen> {
+  
+  // Footer manage the screen
+  int selectedIndex = 0;
+  
+  void onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+  
+  
+  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -58,7 +77,13 @@ class WidgetTestingScreen extends StatelessWidget {
           ExerciseListSelector(
             exercises: exercises
           ),
+
         ],
+      ),
+
+      bottomNavigationBar: FooterNavigation(
+        selectedIndex: selectedIndex,
+        onTabTapped: onTabTapped,
       ),
     );
   }
