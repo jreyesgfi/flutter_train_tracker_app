@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/training_selection_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'infrastructure_layer/config/amplifyconfiguration.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/login_screen.dart';
