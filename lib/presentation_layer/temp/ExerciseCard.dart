@@ -6,7 +6,7 @@ import 'package:flutter_application_test1/presentation_layer/screens/main_screen
 import 'package:flutter_application_test1/presentation_layer/widgets/CustomDropdownFormField.dart';
 
 import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/NextButton.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -313,7 +313,7 @@ class _EditableExerciseCardState extends State<EditableExerciseCard> {
             ),
             Builder(
               builder: (context) {
-                return NextButton(
+                return NextIconButton(
                   onTap: () => _publishEntry(context),
                 );
               },

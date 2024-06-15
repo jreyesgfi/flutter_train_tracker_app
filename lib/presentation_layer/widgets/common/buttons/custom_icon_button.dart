@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+
+class CustomIconButton extends StatefulWidget {
+  final VoidCallback onTap;
+  final IconData icon;
+  final Color backgroundColor;
+  final Color iconColor;
+  final double size;
+
+  const CustomIconButton({
+    super.key,
+    required this.onTap,
+    required this.icon,
+    required this.backgroundColor,
+    this.iconColor = Colors.white,
+    this.size = 50, // Default size
+  });
+
+  @override
+  _CustomIconButtonState createState() => _CustomIconButtonState();
+}
+
+class _CustomIconButtonState extends State<CustomIconButton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTap() {
+    _controller.forward().then((value) {
+      _controller.reverse();
+    });
+    widget.onTap();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: GestureDetector(
+          onTap: _handleTap,
+          child: AnimatedBuilder(
+            animation: _scaleAnimation,
+            builder: (context, child) => Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.backgroundColor,
+                  borderRadius: BorderRadius.circular(10), // Rounded square
+                ),
+                child: Icon(
+                  widget.icon,
+                  color: widget.iconColor,
+                  size: widget.size*0.7, // Icon size proportional to the button
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

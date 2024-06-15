@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/back_button.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/stop_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
@@ -49,7 +52,11 @@ class TestingScreenState extends State<TestingScreen> {
 
           SessionInfoWidget(
             sessionInfo: lastTrainingData
-          )
+          ),
+
+          NextIconButton(onTap: ()=>{}),
+          BackIconButton(onTap: () =>{}),
+          StopIconButton(onTap: () =>{})
 
           
 
