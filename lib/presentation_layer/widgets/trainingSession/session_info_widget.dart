@@ -29,8 +29,10 @@ class SessionInfoWidget extends StatelessWidget {
     required this.sessionInfo
   });
 
-    @override
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -42,53 +44,36 @@ class SessionInfoWidget extends StatelessWidget {
         children: [
           Text(
             sessionInfo.exerciseName,
-            style: Theme.of(context).textTheme.titleSmall,
+            style: theme.textTheme.titleSmall,
           ),
           SizedBox(height: 4),
           Text(
             sessionInfo.muscleGroup,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: theme.textTheme.titleMedium,
           ),
           Text(
             '${sessionInfo.timeSinceLastSession} days ago',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.shadowColor),
           ),
-          CustomSlider(min: sessionInfo.minReps, max: sessionInfo.maxReps),
-          SizedBox(height: 8),
-          SizedBox(height: 16),
+          // Weights
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text('Min Weight'),
-                  Text('${sessionInfo.minWeight} kg'),
-                ],
+              Text('Pesos', style: theme.textTheme.bodyMedium),
+              Align(
+                alignment: Alignment.centerRight,
+                child: CustomSlider(min: sessionInfo.minWeight, max: sessionInfo.maxWeight),
               ),
-              Column(
-                children: [
-                  Text('Max Weight'),
-                  Text('${sessionInfo.maxWeight} kg'),
-                ],
-              ),
-              CustomSlider(min: sessionInfo.minWeight, max: sessionInfo.maxWeight)
             ],
           ),
-          SizedBox(height: 8),
+          // Reps
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text('Min Reps'),
-                  Text('${sessionInfo.minReps}'),
-                ],
-              ),
-              Column(
-                children: [
-                  Text('Max Reps'),
-                  Text('${sessionInfo.maxReps}'),
-                ],
+              Text('Reps', style: theme.textTheme.bodyMedium),
+              Align(
+                alignment: Alignment.centerRight,
+                child:  CustomSlider(min: sessionInfo.minReps, max: sessionInfo.maxReps),
               ),
             ],
           ),
