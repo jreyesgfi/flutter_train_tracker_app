@@ -9,59 +9,63 @@ import 'package:flutter_application_test1/presentation_layer/widgets/common/head
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_step_widget.dart';
 
 final lastTrainingData = PreviousSessionInfoSchema(
-  exerciseName: "Elevaciones Frontales",
-  muscleGroup: "Hombro",
-  timeSinceLastSession: 6,
-  minWeight: 12,
-  maxWeight: 12,
-  minReps: 12,
-  maxReps: 14);
+    exerciseName: "Elevaciones Frontales",
+    muscleGroup: "Hombro",
+    timeSinceLastSession: 6,
+    minWeight: 12,
+    maxWeight: 12,
+    minReps: 12,
+    maxReps: 14);
 
-class TestingScreen extends StatefulWidget{
+class TestingScreen extends StatefulWidget {
   @override
   TestingScreenState createState() => TestingScreenState();
 }
 
-
 class TestingScreenState extends State<TestingScreen> {
-  
   // Footer manage the screen
   int selectedIndex = 0;
-  
+
   void onTabTapped(int index) {
     setState(() {
       selectedIndex = index;
     });
   }
-  
-  
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+
+
       body: ListView(
         children: [
-
           const HeaderWidget(
             title: "Nuevo Entrenamiento",
             date: "09/06/2024",
           ),
 
-          SessionInfoWidget(
-            sessionInfo: lastTrainingData
-          ),
-
-          NextIconButton(onTap: ()=>{}),
-          BackIconButton(onTap: () =>{}),
-          StopIconButton(onTap: () =>{})
-
+          SessionInfoWidget(sessionInfo: lastTrainingData),
           
+          const SessionStepWidget(currentStep: 0, totalSteps: 4),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StopIconButton(onTap: () => {}),
+              const SizedBox(width: 10), // Adjust width for desired spacing
+              BackIconButton(onTap: () => {}),
+              const SizedBox(width: 10), // Adjust width for desired spacing
+              NextIconButton(onTap: () => {}),
+            ],
+          )
 
         ],
       ),
+
 
       bottomNavigationBar: FooterNavigation(
         selectedIndex: selectedIndex,

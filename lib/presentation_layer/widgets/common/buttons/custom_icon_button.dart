@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class CustomIconButton extends StatefulWidget {
   final VoidCallback onTap;
@@ -49,6 +50,9 @@ class _CustomIconButtonState extends State<CustomIconButton> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final customTheme = theme.extension<CustomTheme>();
+
     return Center(
       child: SizedBox(
         width: widget.size,
@@ -62,7 +66,7 @@ class _CustomIconButtonState extends State<CustomIconButton> with SingleTickerPr
               child: Container(
                 decoration: BoxDecoration(
                   color: widget.backgroundColor,
-                  borderRadius: BorderRadius.circular(10), // Rounded square
+                  borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
                 ),
                 child: Icon(
                   widget.icon,
