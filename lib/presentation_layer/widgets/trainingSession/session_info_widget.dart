@@ -62,7 +62,9 @@ class SessionInfoWidget extends StatelessWidget {
               Text('Pesos', style: theme.textTheme.bodyMedium),
               Align(
                 alignment: Alignment.centerRight,
-                child: CustomSlider(min: sessionInfo.minWeight, max: sessionInfo.maxWeight),
+                child: InfoChartLastTrain(
+                  minVal: sessionInfo.minWeight,
+                  maxVal: sessionInfo.maxWeight),
               ),
             ],
           ),
@@ -73,7 +75,11 @@ class SessionInfoWidget extends StatelessWidget {
               Text('Reps', style: theme.textTheme.bodyMedium),
               Align(
                 alignment: Alignment.centerRight,
-                child:  CustomSlider(min: sessionInfo.minReps, max: sessionInfo.maxReps),
+                child:  InfoChartLastTrain(
+                  minVal: sessionInfo.minReps,
+                  maxVal: sessionInfo.maxReps,
+                  right: false,
+                  ),
               ),
             ],
           ),
