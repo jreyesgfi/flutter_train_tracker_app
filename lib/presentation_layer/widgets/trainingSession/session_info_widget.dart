@@ -34,7 +34,6 @@ class SessionInfoWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -42,19 +41,6 @@ class SessionInfoWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            sessionInfo.exerciseName,
-            style: theme.textTheme.titleSmall,
-          ),
-          SizedBox(height: 4),
-          Text(
-            sessionInfo.muscleGroup,
-            style: theme.textTheme.titleMedium,
-          ),
-          Text(
-            '${sessionInfo.timeSinceLastSession} days ago',
-            style: theme.textTheme.bodySmall?.copyWith(color: theme.shadowColor),
-          ),
           // Weights
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

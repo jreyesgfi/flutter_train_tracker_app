@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'infrastructure_layer/config/amplifyconfiguration.dart';
@@ -86,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
               // User is logged in
-              return TestingScreen(); // Navigate to the MainScreen if the user is logged in
+              return ScreenWrapper(); // Navigate to the MainScreen if the user is logged in
             } else {
               // User is not logged in or error in fetching session
               return LoginScreen(); // Navigate to the LoginScreen if the user is not logged in

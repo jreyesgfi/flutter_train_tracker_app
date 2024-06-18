@@ -17,7 +17,7 @@ class HeaderWidget extends StatelessWidget {
     final customTheme = theme.extension<CustomTheme>();
 
     return Container(
-        margin: const EdgeInsets.all(10.0), // Add margin around the container
+        margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical:10.0), // Add margin around the container
         decoration: BoxDecoration(
           color: theme.primaryColorDark, // Set the background color
           borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0), // Rounded corners
@@ -30,7 +30,7 @@ class HeaderWidget extends StatelessWidget {
               bottom:-20,
               child:Align(
                 alignment: Alignment.centerRight,
-                child:Image.asset('assets/images/3dpack/Dumbell_03.png',
+              child:Image.asset('assets/images/3dpack/Dumbell_03.png',
                   width: 200,
                   fit:BoxFit.cover,
                 ),
@@ -41,7 +41,7 @@ class HeaderWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                    Text(
                     title,
                     style: theme.textTheme.titleLarge?.copyWith(
                         color: theme.colorScheme.onPrimary), // Use titleLarge with custom color

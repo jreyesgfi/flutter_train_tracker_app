@@ -29,9 +29,6 @@ class InfoChartLastTrain extends StatelessWidget {
     final int initialIndex = (right == true ? 3 : 2) - (range == 2 ? 1 : 0);
     final double scaledMinPos = positions[initialIndex];
     final double scaledMaxPos = positions[initialIndex + range];
-    debugPrint('${right ? 3 : 2 }');
-    debugPrint('${(range == 2 ? 1 : 0)}');
-    debugPrint('${(right ? 3 : 2) - (range == 2 ? 1 : 0)}\n');
     List<Widget> dots = List.generate(dotsNum, (j) {
       return Positioned(
         left: positions[j],
