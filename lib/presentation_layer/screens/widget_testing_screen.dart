@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/back_button.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/custom_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/stop_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/common/head
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_step_widget.dart';
 
@@ -28,11 +30,11 @@ class TestingScreen extends StatefulWidget {
 
 class TestingScreenState extends State<TestingScreen> {
   // Footer manage the screen
-  int selectedIndex = 0;
+  int currentStage = 0;
 
-  void onTabTapped(int index) {
+  void onTabTapped() {
     setState(() {
-      selectedIndex = index;
+      currentStage--;
     });
   }
 
@@ -74,16 +76,50 @@ class TestingScreenState extends State<TestingScreen> {
           ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
           SessionInfoWidget(sessionInfo: lastTrainingData),
           const SizedBox(height: 50),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     StopIconButton(onTap: () => {}),
+          //     const SizedBox(width: 10), // Adjust width for desired spacing
+          //     BackIconButton(onTap: () => {}),
+          //     const SizedBox(width: 10), // Adjust width for desired spacing
+          //     NextIconButton(onTap: () => {}),
+          //   ],
+          // ),
+          const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              StopIconButton(onTap: () => {}),
+              const SizedBox(width: 10),
+              SessionButton(
+                onTap: onTabTapped,
+                stage: currentStage,
+                color: theme.primaryColor,
+                label: "¡Entrena!",
+              ),
               const SizedBox(width: 10), // Adjust width for desired spacing
-              BackIconButton(onTap: () => {}),
+              SessionButton(
+                onTap: onTabTapped,
+                stage: currentStage +1,
+                color: theme.primaryColorDark,
+                label: "Descansa",
+              ),
               const SizedBox(width: 10), // Adjust width for desired spacing
-              NextIconButton(onTap: () => {}),
+              SessionButton(
+                onTap: onTabTapped,
+                stage: currentStage+2,
+                color: theme.primaryColor,
+                label: "¡Entrena!",
+              ),
+              const SizedBox(width: 10), // Adjust width for desired spacing
+              SessionButton(
+                onTap: onTabTapped,
+                stage: currentStage +3,
+                color: theme.primaryColorDark,
+                label: "Descansa",
+              ),
             ],
-          )
+          ),
         ],
       ),
     ]

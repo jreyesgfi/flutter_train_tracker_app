@@ -11,7 +11,7 @@ class ExerciseImageExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height:300,
+        height:250,
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
         child: Row(children: [
           Expanded(
