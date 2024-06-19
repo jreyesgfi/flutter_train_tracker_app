@@ -21,8 +21,8 @@ class SessionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     
 
-    bool isOutlined = stage > 0;
-    bool isCollapsed = stage < 0;
+    bool isOutlined = stage == 1;
+    bool isCollapsed = stage < 0 || stage > 1;
 
     // Determine the properties based on the stage
     String? effectiveLabel = isCollapsed ? null : label;

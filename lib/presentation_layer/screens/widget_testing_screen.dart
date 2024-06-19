@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/back_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/custom_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/stop_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/header_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_button.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_step_widget.dart';
 
@@ -32,9 +22,9 @@ class TestingScreenState extends State<TestingScreen> {
   // Footer manage the screen
   int currentStage = 0;
 
-  void onTabTapped() {
+  void onButtonClicked(int index) {
     setState(() {
-      currentStage--;
+      currentStage = index;
     });
   }
 
@@ -51,10 +41,10 @@ class TestingScreenState extends State<TestingScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       child: Stack(
       children: [
-        const Positioned(
+        Positioned(
               top: 0,
               right: 0,
-              child: SessionStepWidget(currentStep: 0, totalSteps: 4)),
+              child: SessionStepWidget(currentStep: (currentStage/2).abs().round(), totalSteps: 4)),
         ListView(
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -87,38 +77,9 @@ class TestingScreenState extends State<TestingScreen> {
           //   ],
           // ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 10),
-              SessionButton(
-                onTap: onTabTapped,
-                stage: currentStage,
-                color: theme.primaryColor,
-                label: "¡Entrena!",
-              ),
-              const SizedBox(width: 10), // Adjust width for desired spacing
-              SessionButton(
-                onTap: onTabTapped,
-                stage: currentStage +1,
-                color: theme.primaryColorDark,
-                label: "Descansa",
-              ),
-              const SizedBox(width: 10), // Adjust width for desired spacing
-              SessionButton(
-                onTap: onTabTapped,
-                stage: currentStage+2,
-                color: theme.primaryColor,
-                label: "¡Entrena!",
-              ),
-              const SizedBox(width: 10), // Adjust width for desired spacing
-              SessionButton(
-                onTap: onTabTapped,
-                stage: currentStage +3,
-                color: theme.primaryColorDark,
-                label: "Descansa",
-              ),
-            ],
+          SessionButtonsWrapper(
+            currentStage: currentStage,
+            onButtonClicked: onButtonClicked,
           ),
         ],
       ),
