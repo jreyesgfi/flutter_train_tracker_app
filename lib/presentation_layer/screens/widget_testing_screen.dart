@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/custom_chrono.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
@@ -65,18 +66,12 @@ class TestingScreenState extends State<TestingScreen> {
           ]),
           ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
           SessionInfoWidget(sessionInfo: lastTrainingData),
+          
+          const CustomChrono(duration: Duration(minutes: 2)),
           const SizedBox(height: 50),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     StopIconButton(onTap: () => {}),
-          //     const SizedBox(width: 10), // Adjust width for desired spacing
-          //     BackIconButton(onTap: () => {}),
-          //     const SizedBox(width: 10), // Adjust width for desired spacing
-          //     NextIconButton(onTap: () => {}),
-          //   ],
-          // ),
           const SizedBox(height: 10),
+          
+          
           SessionButtonsWrapper(
             currentStage: currentStage,
             onButtonClicked: onButtonClicked,
