@@ -97,10 +97,10 @@ class _SessionFormState extends State<SessionForm> {
           maxValue: 100,
           step: 1,
         ),
-        ElevatedButton(
-          onPressed: _handleFormSubmit,
-          child: Text('Submit'),
-        ),
+        // ElevatedButton(
+        //   onPressed: _handleFormSubmit,
+        //   child: Text('Submit'),
+        // ),
       ],
     );
   }

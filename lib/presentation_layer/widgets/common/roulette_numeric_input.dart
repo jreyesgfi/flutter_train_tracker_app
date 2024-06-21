@@ -72,6 +72,7 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final PageScrollPhysics physics = widget.allowDecimal
         ? _EnhancedPageScrollPhysics()
         : const PageScrollPhysics();
@@ -81,17 +82,17 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
           child: Stack(
             alignment: Alignment.centerRight,
             children: [
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.center,
+              //   child: Container(
+              //     width: 40,
+              //     height: 40,
+              //     decoration: BoxDecoration(
+              //       color: theme.primaryColor,
+              //       borderRadius: BorderRadius.circular(8),
+              //     ),
+              //   ),
+              // ),
               Container(
                 height: 60,
                 child: PageView.builder(
@@ -115,11 +116,13 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
                           (index * step)
                               .toStringAsFixed(widget.allowDecimal ? 1 : 0),
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontSize: index == _currentPage
+                                ? 24
+                                : 14,
+                            fontWeight: FontWeight.normal,
                             color: index == _currentPage
-                                ? Colors.white
-                                : Theme.of(context).hintColor,
+                                ? theme.primaryColor
+                                : theme.primaryColorLight,
                           ),
                         ),
                       ),
@@ -135,11 +138,9 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
             alignment: Alignment.centerRight,
             child: Text(
               widget.label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-                color: Theme.of(context).hintColor,
-              ),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.shadowColor
+              )
             ),
           ),
         ),

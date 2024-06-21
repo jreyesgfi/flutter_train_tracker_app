@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/session_info.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/SessionForm.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/custom_chrono.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_form.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/custom_chrono.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
@@ -40,49 +40,57 @@ class TestingScreenState extends State<TestingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    bool isOddStage = currentStage % 2 != 0;
+    bool isLastEvenStage = currentStage == 8;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-      child: Stack(
-      children: [
-        Positioned(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        child: Stack(children: [
+          Positioned(
               top: 0,
               right: 0,
-              child: SessionStepWidget(currentStep: (currentStage/2).abs().round(), totalSteps: 4)),
-        ListView(
-        children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              lastTrainingData.exerciseName,
-              style: theme.textTheme.titleSmall,
-            ),
-            SizedBox(height: 4),
-            Text(
-              lastTrainingData.muscleGroup,
-              style: theme.textTheme.titleMedium,
-            ),
-            Text(
-              '${lastTrainingData.timeSinceLastSession} days ago',
-              style:
-                  theme.textTheme.bodySmall?.copyWith(color: theme.shadowColor),
-            ),
-          ]),
-          ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
-          const CustomChrono(duration: Duration(minutes: 2)),
-          SessionForm(initialData: lastTrainingData, onResultsChanged: (SessionInfoSchema)=>{}),
-          SessionInfoWidget(sessionInfo: lastTrainingData),
-          
-          
-          const SizedBox(height: 50),
-          const SizedBox(height: 10),
-          
-          
-          SessionButtonsWrapper(
-            currentStage: currentStage,
-            onButtonClicked: onButtonClicked,
+              child: SessionStepWidget(
+                  currentStep: (currentStage / 2).abs().round(),
+                  totalSteps: 4)),
+          ListView(
+            children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  lastTrainingData.exerciseName,
+                  style: theme.textTheme.titleSmall,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  lastTrainingData.muscleGroup,
+                  style: theme.textTheme.titleMedium,
+                ),
+                Text(
+                  '${lastTrainingData.timeSinceLastSession} days ago',
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.shadowColor),
+                ),
+              ]),
+              if (currentStage == 0 || isOddStage) ...[
+                ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
+                SessionInfoWidget(sessionInfo: lastTrainingData),
+              ]
+              else ...[
+                if (!isLastEvenStage)
+                  CustomChrono(
+                    key: ValueKey(currentStage),
+                    duration: const Duration(minutes: 2)),
+                  SessionForm(
+                      initialData: lastTrainingData,
+                      onResultsChanged: (results) {}),
+              ],
+              const SizedBox(height: 50),
+              const SizedBox(height: 10),
+              SessionButtonsWrapper(
+                currentStage: currentStage,
+                onButtonClicked: onButtonClicked,
+              ),
+            ],
           ),
-        ],
-      ),
-    ]
-    ));
+        ]));
   }
 }

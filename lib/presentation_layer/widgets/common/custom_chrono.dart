@@ -23,19 +23,21 @@ class CustomChronoState extends State<CustomChrono> {
   void initState() {
     super.initState();
     _duration = widget.duration;
-    _loadTimer();
+    _resetTimer(false);
   }
 
-  // persist the time
-  void _loadTimer() async {
-    final prefs = await SharedPreferences.getInstance();
-    int? savedTick = prefs.getInt('chrono_tick');
-    DateTime? endTime = savedTick != null
-        ? DateTime.fromMillisecondsSinceEpoch(savedTick)
-        : null;
 
-    if (endTime != null && DateTime.now().isBefore(endTime)) {
-      _duration = endTime.difference(DateTime.now());
+  void _resetTimer(bool loadFromStorage) async {
+     if (loadFromStorage) {
+      final prefs = await SharedPreferences.getInstance();
+      int? savedTick = prefs.getInt('chrono_tick');
+      DateTime? endTime = savedTick != null ? DateTime.fromMillisecondsSinceEpoch(savedTick) : null;
+
+      if (endTime != null && DateTime.now().isBefore(endTime)) {
+        _duration = endTime.difference(DateTime.now());
+      } else {
+        _duration = widget.duration;
+      }
     } else {
       _duration = widget.duration;
     }
@@ -43,6 +45,7 @@ class CustomChronoState extends State<CustomChrono> {
   }
 
   void _startTimer() {
+    _timer.cancel();
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_duration.inSeconds == 0) {
         _isPositive = false;
