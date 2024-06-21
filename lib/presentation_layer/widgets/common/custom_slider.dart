@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class InfoChartLastTrain extends StatelessWidget {
-  final int minVal;
-  final int maxVal;
+  final double minVal;
+  final double maxVal;
   final bool right;
 
   const InfoChartLastTrain({
@@ -21,7 +21,7 @@ class InfoChartLastTrain extends StatelessWidget {
     const int dotsNum = 6;
 
     const width = (gap + height) * dotsNum;
-    final int range = math.min(maxVal - minVal, 2);
+    final int range = math.min(maxVal - minVal, 2).toInt();
     final double rangeBarWidth = range * (height + gap) + height;
 
     List<double> positions = List.generate(dotsNum, (i) => i * (height + gap) + gap);

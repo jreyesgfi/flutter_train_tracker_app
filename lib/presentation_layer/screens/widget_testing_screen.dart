@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/models/session_info.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/SessionForm.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/custom_chrono.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_step_widget.dart';
 
-final lastTrainingData = PreviousSessionInfoSchema(
+final lastTrainingData = SessionInfoSchema(
     exerciseName: "Elevaciones Frontales",
     muscleGroup: "Hombro",
     timeSinceLastSession: 6,
@@ -65,9 +67,11 @@ class TestingScreenState extends State<TestingScreen> {
             ),
           ]),
           ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
+          const CustomChrono(duration: Duration(minutes: 2)),
+          SessionForm(initialData: lastTrainingData, onResultsChanged: (SessionInfoSchema)=>{}),
           SessionInfoWidget(sessionInfo: lastTrainingData),
           
-          const CustomChrono(duration: Duration(minutes: 2)),
+          
           const SizedBox(height: 50),
           const SizedBox(height: 10),
           

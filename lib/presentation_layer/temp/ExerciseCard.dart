@@ -10,7 +10,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/common/butt
 import 'package:intl/intl.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/roulette_numeric_input.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/roulette_numeric_input.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatelessWidget {

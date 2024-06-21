@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/models/session_info.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/custom_slider.dart';
 
-class PreviousSessionInfoSchema {
-  final String exerciseName;
-  final String muscleGroup;
-  final int timeSinceLastSession; // in days
-  final int minWeight;
-  final int maxWeight;
-  final int minReps;
-  final int maxReps;
 
-  PreviousSessionInfoSchema({
-    required this.exerciseName,
-    required this.muscleGroup,
-    required this.timeSinceLastSession,
-    required this.minWeight,
-    required this.maxWeight,
-    required this.minReps,
-    required this.maxReps,
-  });
-}
 
 class SessionInfoWidget extends StatelessWidget {
-  final PreviousSessionInfoSchema sessionInfo;
+  final SessionInfoSchema sessionInfo;
 
   const SessionInfoWidget({
     super.key,
@@ -62,8 +45,8 @@ class SessionInfoWidget extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child:  InfoChartLastTrain(
-                  minVal: sessionInfo.minReps,
-                  maxVal: sessionInfo.maxReps,
+                  minVal: sessionInfo.minReps.toDouble(),
+                  maxVal: sessionInfo.maxReps.toDouble(),
                   right: false,
                   ),
               ),

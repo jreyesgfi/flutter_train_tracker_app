@@ -57,6 +57,7 @@ class AppTheme {
         titleSmall: AppTextStyles.miniTitle,
         bodyMedium: AppTextStyles.body,
         bodySmall: AppTextStyles.comment, // Standard body text
+        headlineLarge: AppTextStyles.clock,
       ),
 
       // AppBar theme

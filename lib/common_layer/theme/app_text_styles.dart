@@ -51,10 +51,10 @@ class AppTextStyles {
   );
 
   static const clock = TextStyle(
-    fontSize: 48.0,
-    letterSpacing: 0.48,
+    fontSize: 28.0,
+    letterSpacing: 4,
     height: 1.0,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.normal,
     color: AppColors.textColor,
   );
 }

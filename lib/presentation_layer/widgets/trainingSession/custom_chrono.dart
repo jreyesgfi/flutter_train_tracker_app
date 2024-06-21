@@ -14,7 +14,8 @@ class CustomChrono extends StatefulWidget {
 class CustomChronoState extends State<CustomChrono> {
   Duration _duration;
   late Timer _timer;
-  bool _isActive = true;
+  bool _isPositive = true;
+  bool _isRunning = true;
 
   CustomChronoState() : _duration = Duration.zero;
 
@@ -25,6 +26,7 @@ class CustomChronoState extends State<CustomChrono> {
     _loadTimer();
   }
 
+  // persist the time
   void _loadTimer() async {
     final prefs = await SharedPreferences.getInstance();
     int? savedTick = prefs.getInt('chrono_tick');
@@ -37,20 +39,22 @@ class CustomChronoState extends State<CustomChrono> {
     } else {
       _duration = widget.duration;
     }
-
     _startTimer();
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_duration.inSeconds == 0) {
-        _isActive = false;
+        _isPositive = false;
       }
-      setState(() {
-        _duration -= const Duration(milliseconds: 200);
-      });
-      if(_duration.inMilliseconds %1000==0){
-        _saveEndTime();
+
+      if (_isRunning) {
+        setState(() {
+          _duration -= const Duration(milliseconds: 100);
+        });
+        if (_duration.inMilliseconds % 1000 == 0) {
+          _saveEndTime();
+        }
       }
     });
   }
@@ -59,6 +63,15 @@ class CustomChronoState extends State<CustomChrono> {
     final prefs = await SharedPreferences.getInstance();
     DateTime endTime = DateTime.now().add(_duration);
     await prefs.setInt('chrono_tick', endTime.millisecondsSinceEpoch);
+  }
+
+  void _toggleTimer() {
+    setState(() {
+      _isRunning = !_isRunning;
+      if (_isRunning && !_timer.isActive) {
+        _startTimer();
+      }
+    });
   }
 
   @override
@@ -80,18 +93,31 @@ class CustomChronoState extends State<CustomChrono> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 200,
-            height: 200,
+            width: 180,
+            height: 180,
             child: CircularProgressIndicator(
-              value: _isActive
-                  ? 1 - _duration.inMilliseconds / widget.duration.inMilliseconds
+              strokeWidth: 5,
+              strokeCap: StrokeCap.round,
+              value: _isPositive
+                  ? 1 -
+                      _duration.inMilliseconds / widget.duration.inMilliseconds
                   : 1,
-              backgroundColor: _isActive ? theme.primaryColorLight : theme.primaryColor,
+              backgroundColor:
+                  _isPositive ? theme.primaryColorLight : theme.primaryColor,
               valueColor: AlwaysStoppedAnimation<Color>(
-                  _isActive ? theme.primaryColorDark : theme.primaryColor),
+                  _isPositive ? theme.primaryColorDark : theme.primaryColor),
             ),
           ),
-          Text("$minutes:$seconds", style: theme.textTheme.titleMedium),
+          Text("$minutes:$seconds", style: theme.textTheme.headlineLarge),
+          Positioned(
+            bottom: 10,
+            child: IconButton(
+              icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
+              onPressed: _toggleTimer,
+              color: theme.primaryColor,
+              iconSize: 40,
+            ),
+          )
         ],
       ),
     );
