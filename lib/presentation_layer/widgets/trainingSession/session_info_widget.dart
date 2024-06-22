@@ -16,6 +16,16 @@ class SessionInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    List<double> values = [
+      sessionInfo.minReps.toDouble(),
+      sessionInfo.maxReps.toDouble(),
+      sessionInfo.minWeight,
+      sessionInfo.maxWeight
+    ];
+
+    List<double> valuesSorted = List.from(
+      values.toSet())..sort();
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -33,7 +43,9 @@ class SessionInfoWidget extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: InfoChartLastTrain(
                   minVal: sessionInfo.minWeight,
-                  maxVal: sessionInfo.maxWeight),
+                  maxVal: sessionInfo.maxWeight,
+                  initialIndex: valuesSorted.indexOf(sessionInfo.minWeight),
+                  lastIndex: valuesSorted.indexOf(sessionInfo.maxWeight)),   
               ),
             ],
           ),
@@ -47,7 +59,9 @@ class SessionInfoWidget extends StatelessWidget {
                 child:  InfoChartLastTrain(
                   minVal: sessionInfo.minReps.toDouble(),
                   maxVal: sessionInfo.maxReps.toDouble(),
-                  right: false,
+                  initialIndex: valuesSorted.indexOf(sessionInfo.minReps.toDouble()),
+                  lastIndex: valuesSorted.indexOf(sessionInfo.maxReps.toDouble()),
+                  decimal: false,
                   ),
               ),
             ],

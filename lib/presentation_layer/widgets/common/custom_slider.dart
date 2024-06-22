@@ -4,31 +4,34 @@ import 'dart:math' as math;
 class InfoChartLastTrain extends StatelessWidget {
   final double minVal;
   final double maxVal;
-  final bool right;
+  final int initialIndex;
+  final int lastIndex;
+  final bool decimal; 
 
   const InfoChartLastTrain({
     super.key,
     required this.minVal,
     required this.maxVal,
-    this.right = true,
+    this.initialIndex = 0,
+    this.lastIndex = 4,
+    this.decimal = true,
   }) : assert(minVal <= maxVal, 'minVal should not be greater than maxVal');
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const double height = 32.0;
-    const double gap = 16.0;
-    const int dotsNum = 6;
+    const double height = 40.0;
+    const double gap = 15.0;
+    const int dotsNum = 5;
 
-    const width = (gap + height) * dotsNum;
-    final int range = math.min(maxVal - minVal, 2).toInt();
-    final double rangeBarWidth = range * (height + gap) + height;
+    const totalWidth = (gap + height) * dotsNum;
 
     List<double> positions = List.generate(dotsNum, (i) => i * (height + gap) + gap);
 
-    final int initialIndex = (right == true ? 3 : 2) - (range == 2 ? 1 : 0);
     final double scaledMinPos = positions[initialIndex];
-    final double scaledMaxPos = positions[initialIndex + range];
+    final double scaledMaxPos = positions[lastIndex];
+    final double rangeBarWidth = maxVal == minVal ? height : scaledMaxPos - scaledMinPos + height;
+
     List<Widget> dots = List.generate(dotsNum, (j) {
       return Positioned(
         left: positions[j],
@@ -37,7 +40,7 @@ class InfoChartLastTrain extends StatelessWidget {
     });
 
     return Container(
-      width: width,
+      width: totalWidth,
       height: height,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Stack(
@@ -46,14 +49,14 @@ class InfoChartLastTrain extends StatelessWidget {
           ...dots,
           _buildRangeBar(theme, scaledMinPos, rangeBarWidth),
           Positioned(
-            left: 9+scaledMinPos,
-            top: 8,
-            child: _buildLabel(theme, minVal.toString(), minVal != maxVal),
+            left: 9 + scaledMinPos,
+            top: 13,
+            child: _buildLabel(theme, _formatNumber(minVal), true),
           ),
           Positioned(
-            left: 9+scaledMaxPos,
-            top: 8,
-            child: _buildLabel(theme, maxVal.toString(), true),
+            left: 9 + scaledMaxPos,
+            top: 13,
+            child: _buildLabel(theme, _formatNumber(maxVal), minVal != maxVal),
           ),
         ],
       ),
@@ -65,10 +68,10 @@ class InfoChartLastTrain extends StatelessWidget {
       left: start,
       width: width,
       child: Container(
-        height: 30,
+        height: 40,
         decoration: BoxDecoration(
           color: theme.primaryColorDark,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
     );
@@ -76,8 +79,8 @@ class InfoChartLastTrain extends StatelessWidget {
 
   Widget _buildDot(ThemeData theme) {
     return Container(
-      width: 30,
-      height: 30,
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
         color: theme.primaryColorLight,
         shape: BoxShape.circle,
@@ -91,5 +94,9 @@ class InfoChartLastTrain extends StatelessWidget {
       text,
       style: theme.textTheme.bodyMedium?.copyWith(color: theme.scaffoldBackgroundColor),
     );
+  }
+
+  String _formatNumber(double number) {
+    return decimal ? number.toStringAsFixed(1) : ' ${number.toInt().toString()}';
   }
 }

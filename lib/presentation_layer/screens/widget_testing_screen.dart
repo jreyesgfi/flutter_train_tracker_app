@@ -11,10 +11,10 @@ final lastTrainingData = SessionInfoSchema(
     exerciseName: "Elevaciones Frontales",
     muscleGroup: "Hombro",
     timeSinceLastSession: 6,
-    minWeight: 12,
-    maxWeight: 12,
+    minWeight: 16,
+    maxWeight: 19,
     minReps: 12,
-    maxReps: 14);
+    maxReps: 12);
 
 class TestingScreen extends StatefulWidget {
   @override
