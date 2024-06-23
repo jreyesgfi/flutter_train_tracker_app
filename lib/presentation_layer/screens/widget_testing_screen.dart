@@ -85,11 +85,16 @@ class TestingScreenState extends State<TestingScreen> {
               ],
               const SizedBox(height: 50),
               const SizedBox(height: 10),
-              SessionButtonsWrapper(
-                currentStage: currentStage,
-                onButtonClicked: onButtonClicked,
-              ),
             ],
+          ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: SessionButtonsWrapper(
+              currentStage: currentStage,
+              onButtonClicked: onButtonClicked,
+            ),
           ),
         ]));
   }

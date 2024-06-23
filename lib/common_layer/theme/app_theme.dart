@@ -55,6 +55,7 @@ class AppTheme {
         titleLarge: AppTextStyles.mainTitle, // Typically used for large text in displays
         titleMedium: AppTextStyles.subtitle, // Smaller than headline but larger than body text
         titleSmall: AppTextStyles.miniTitle,
+        bodyLarge: AppTextStyles.focus,
         bodyMedium: AppTextStyles.body,
         bodySmall: AppTextStyles.comment, // Standard body text
         headlineLarge: AppTextStyles.clock,

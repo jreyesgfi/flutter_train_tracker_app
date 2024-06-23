@@ -45,7 +45,7 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(8, (index) { // Assume you have 8 buttons
+        children: List.generate(9, (index) { // Assume you have 8 buttons
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
@@ -53,8 +53,10 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
                 index-widget.currentStage==0 ? widget.onButtonClicked(index+1):widget.onButtonClicked(index)
                 },
               stage: index - widget.currentStage, // Determine stage relative to currentStage
-              color: (index % 2 == 0) ? theme.primaryColor : theme.primaryColorDark,
-              label: (index % 2 == 0) ? "¡Entrena!" : "Descansa",
+              color: (index % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
+              label: 
+                (index == 0) ? "¿Comenzamos?" :
+                (index % 2 == 1) ? "¡Entrena!" : "Descansa",
             ),
           );
         }),

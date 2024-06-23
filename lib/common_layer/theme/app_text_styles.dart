@@ -11,7 +11,7 @@ class AppTextStyles {
   );
 
   static const subtitle = TextStyle(
-    fontSize: 18.0,
+    fontSize: 20.0,
     letterSpacing: 0.38,
     height: 1.0,
     fontWeight: FontWeight.normal,

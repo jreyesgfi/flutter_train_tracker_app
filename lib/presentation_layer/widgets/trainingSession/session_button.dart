@@ -21,7 +21,8 @@ class SessionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     
 
-    bool isOutlined = stage == 1;
+    // bool isOutlined = stage == 0;
+    bool isFlat = stage == 0;
     bool isCollapsed = stage < 0 || stage > 1;
 
     // Determine the properties based on the stage
@@ -34,7 +35,7 @@ class SessionButton extends StatelessWidget {
       label: effectiveLabel,
       icon: effectiveIcon,
       color: effectiveColor,
-      outlined: isOutlined,
+      flat: isFlat,
     );
   }
 }

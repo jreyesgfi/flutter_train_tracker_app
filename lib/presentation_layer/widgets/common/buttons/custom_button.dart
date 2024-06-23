@@ -7,6 +7,8 @@ class CustomButton extends StatefulWidget {
   final Color? color; // General color for background or stroke, can be null
   final double size; // Overall size of the button
   final bool outlined; // Whether the button is outlined
+  final bool flat;
+
 
   const CustomButton({
     super.key,
@@ -16,6 +18,7 @@ class CustomButton extends StatefulWidget {
     this.color,
     this.size = 40, // Default size
     this.outlined = false,
+    this.flat = false,
   });
   // : assert(icon != null || label != null, 'An icon or label must be provided.');
 
@@ -58,7 +61,7 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
     // outlined and compact
     final collided = (widget.icon == null && widget.label == null);
     Color effectiveColor = widget.color ?? Theme.of(context).scaffoldBackgroundColor;
-    effectiveColor = collided ? theme.primaryColorLight: effectiveColor;
+    effectiveColor = collided ? effectiveColor.withOpacity(0.15) : effectiveColor;
     //Color backgroundColor = widget.outlined ? theme.primaryColorLight : effectiveColor;
     //Color backgroundColor = (widget.icon == null && widget.label == null) ? effectiveColor.withOpacity(0.1) : effectiveColor;
 
@@ -71,21 +74,25 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
           builder: (context, child) => Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              width: widget.label != null ? widget.size * 3 : widget.size, // Wider if label is present
+              width: widget.label != null ? null : widget.size, // Wider if label is present
               height: widget.size,
               decoration: BoxDecoration(
-                color: widget.outlined ? Colors.transparent : effectiveColor,
+                color: 
+                  widget.outlined || widget.flat ? Colors.transparent : 
+                  effectiveColor,
                 border: widget.outlined ? Border.all(color: effectiveColor, width: 2) : null,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
               alignment: Alignment.center,
               child: widget.label != null
                   ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       widget.label!,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: widget.outlined ? effectiveColor : Colors.white),                    
+                      style: 
+                      widget.flat ? 
+                        theme.textTheme.bodyLarge?.copyWith(color:theme.primaryColorDark, fontWeight: FontWeight.bold)
+                        : theme.textTheme.titleSmall?.copyWith(color:widget.outlined ? effectiveColor : Colors.white),                    
                     )
                   )
                   : (widget.icon != null
