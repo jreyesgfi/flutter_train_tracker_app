@@ -91,7 +91,7 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
                       widget.label!,
                       style: 
                       widget.flat ? 
-                        theme.textTheme.bodyLarge?.copyWith(color:theme.primaryColorDark, fontWeight: FontWeight.bold)
+                        theme.textTheme.titleMedium?.copyWith(color:theme.primaryColorDark, fontWeight: FontWeight.bold)
                         : theme.textTheme.titleSmall?.copyWith(color:widget.outlined ? effectiveColor : Colors.white),                    
                     )
                   )

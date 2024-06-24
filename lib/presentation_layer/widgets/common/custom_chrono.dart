@@ -44,7 +44,6 @@ class CustomChronoState extends State<CustomChrono> {
     _timer?.cancel(); // Ensure any existing timer is cancelled before creating a new one
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_duration.inSeconds <= 0) {
-        _timer?.cancel();
         _isPositive = false;
       }
 
@@ -86,9 +85,10 @@ class CustomChronoState extends State<CustomChrono> {
             height: 180,
             child: CircularProgressIndicator(
               strokeWidth: 5,
+              strokeCap: StrokeCap.round,
               value: _isPositive ? 1 - _duration.inMilliseconds / widget.duration.inMilliseconds : 1,
               backgroundColor: theme.primaryColorLight,
-              valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColorDark),
+              valueColor: AlwaysStoppedAnimation<Color>(_isPositive ? theme.primaryColor : theme.primaryColorDark),
             ),
           ),
           Text("$minutes:$seconds", style: theme.textTheme.headlineLarge),

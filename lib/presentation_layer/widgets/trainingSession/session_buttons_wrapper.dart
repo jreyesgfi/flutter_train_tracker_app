@@ -50,13 +50,16 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
               onTap: () => {
-                index-widget.currentStage==0 ? widget.onButtonClicked(index+1):widget.onButtonClicked(index)
+                index-widget.currentStage==0 ? ()=>{}:widget.onButtonClicked(index)
                 },
-              stage: index - widget.currentStage, // Determine stage relative to currentStage
+              stage: index - widget.currentStage,
               color: (index % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
               label: 
+                index-widget.currentStage!=0 ? null :
                 (index == 0) ? "¿Comenzamos?" :
                 (index % 2 == 1) ? "¡Entrena!" : "Descansa",
+              icon:
+                (index % 2 == 1) ? Icons.arrow_forward : Icons.double_arrow
             ),
           );
         }),

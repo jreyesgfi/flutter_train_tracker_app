@@ -83,8 +83,6 @@ class TestingScreenState extends State<TestingScreen> {
                       initialData: lastTrainingData,
                       onResultsChanged: (results) {}),
               ],
-              const SizedBox(height: 50),
-              const SizedBox(height: 10),
             ],
           ),
           Positioned(
