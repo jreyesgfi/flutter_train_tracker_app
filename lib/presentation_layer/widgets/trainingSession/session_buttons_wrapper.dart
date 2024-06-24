@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_button.dart';
+import 'package:provider/provider.dart';
 
 class SessionButtonsWrapper extends StatefulWidget {
   final int currentStage;
@@ -39,24 +41,26 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final numberOfButtons = 10;
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(9, (index) { // Assume you have 8 buttons
+        children: List.generate(numberOfButtons, (index) { // Assume you have 8 buttons
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
               onTap: () => {
+                index == numberOfButtons-1 ?  Provider.of<TrainingSubScreenProvider>(context, listen: false).resetStage():
                 index-widget.currentStage==0 ? ()=>{}:widget.onButtonClicked(index)
                 },
               stage: index - widget.currentStage,
               color: (index % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
               label: 
-                index-widget.currentStage!=0 ? null :
+                (index == numberOfButtons-1) ? "¡Conseguido!": 
                 (index == 0) ? "¿Comenzamos?" :
+                index-widget.currentStage!=0 ? null :
                 (index % 2 == 1) ? "¡Entrena!" : "Descansa",
               icon:
                 (index % 2 == 1) ? Icons.arrow_forward : Icons.double_arrow

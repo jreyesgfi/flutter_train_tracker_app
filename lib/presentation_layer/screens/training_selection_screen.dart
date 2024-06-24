@@ -20,13 +20,13 @@ final exercises = [
   ExerciseTileSchema(label: "Máquina pecho", timeSinceExercise: 7, imagePath: "assets/images/exercises/pectoral/Incline-chest-press-1.png"),
 ];
 
-class TrainingSelectionScreen extends StatefulWidget{
+class TrainingSelectionSubscreen extends StatefulWidget{
   @override
   TrainingSelectionState createState() => TrainingSelectionState();
 }
 
 
-class TrainingSelectionState extends State<TrainingSelectionScreen> {
+class TrainingSelectionState extends State<TrainingSelectionSubscreen> {
   
   // Footer manage the screen
   int selectedIndex = 0;
@@ -45,11 +45,6 @@ class TrainingSelectionState extends State<TrainingSelectionScreen> {
     return Scaffold(
       body: ListView(
         children: [
-
-          const HeaderWidget(
-            title: "Nuevo Entrenamiento",
-            date: "09/06/2024",
-          ),
 
           Container(
             margin: const EdgeInsets.only(left:10.0, right:10.0, bottom: 0.0, top:30),
@@ -79,11 +74,6 @@ class TrainingSelectionState extends State<TrainingSelectionScreen> {
           ),
 
         ],
-      ),
-
-      bottomNavigationBar: FooterNavigation(
-        selectedIndex: selectedIndex,
-        onTabTapped: onTabTapped,
       ),
     );
   }

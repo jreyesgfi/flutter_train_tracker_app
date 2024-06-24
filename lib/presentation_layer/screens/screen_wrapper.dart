@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/training_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/back_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
@@ -36,12 +37,12 @@ class ScreenWrapperState extends State<ScreenWrapper>{
         ),
       ),
       
-      body: TestingScreen(),
+      body: TrainingScreen(),
 
       bottomNavigationBar: FooterNavigation(
         selectedIndex: currentScreen,
         onTabTapped: onTabTapped,
       ),
-    );;
+    );
   }
 }
