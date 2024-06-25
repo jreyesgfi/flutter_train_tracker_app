@@ -4,20 +4,20 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 class MockDataRepository {
   List<MuscleData> muscles = [
     MuscleData(id: "m1", name: "Chest"),
-    MuscleData(id: "m2", name: "Back"),
+    MuscleData(id: "m2", name: "Shoulders"),
     MuscleData(id: "m3", name: "Legs"),
   ];
 
   List<ExerciseData> exercises = [
     ExerciseData(id: "e1", name: "Bench Press", muscleId: "m1"),
     ExerciseData(id: "e2", name: "Flyes", muscleId: "m1"),
-    ExerciseData(id: "e3", name: "Lat Pulldown", muscleId: "m2"),
-    ExerciseData(id: "e4", name: "Deadlift", muscleId: "m2"),
-    ExerciseData(id: "e5", name: "Squats", muscleId: "m3"),
+    ExerciseData(id: "e3", name: "Dumbbell Front Raises", muscleId: "m2"),
+    ExerciseData(id: "e4", name: "Dumbbell Lateral Raises", muscleId: "m2"),
+    ExerciseData(id: "e5", name: "Seated Leg Curl", muscleId: "m3"),
     ExerciseData(id: "e6", name: "Leg Press", muscleId: "m3"),
     ExerciseData(id: "e7", name: "Push Up", muscleId: "m1"),
-    ExerciseData(id: "e8", name: "Rowing", muscleId: "m2"),
-    ExerciseData(id: "e9", name: "Calf Raises", muscleId: "m3"),
+    ExerciseData(id: "e8", name: "Seated Military Shoulder Press", muscleId: "m2"),
+    ExerciseData(id: "e9", name: "Standing Calf Raises", muscleId: "m3"),
   ];
 
   late List<SessionData> sessions;

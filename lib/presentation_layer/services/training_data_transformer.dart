@@ -7,14 +7,14 @@ class TrainingDataTransformer {
     return muscles.map((muscle) => MuscleTileSchema(
       label: muscle.name,
       timeSinceExercise: calculateDaysSinceLastExercise(muscle.id), // This needs to be implemented
-      imagePath: "assets/images/muscles/${muscle.id}.svg", // Example path
+      imagePath: "assets/images/test/muscles/${muscle.id}.svg", // Example path
     )).toList();
   }
 
   static List<ExerciseTileSchema> transformExercisesToTiles(List<ExerciseData> exercises) {
     return exercises.map((exercise) => ExerciseTileSchema(
-      label: exercise.name,
-      imagePath: "assets/images/exercises/${exercise.id}.svg", // Example path
+      label: exercise.name,                     //assets\images\test\exercises\m1\e1_1.png
+      imagePath: "assets/images/test/exercises/${exercise.muscleId}/${exercise.id}_1.png", // Example path
       timeSinceExercise: calculateDaysSinceLastExercise(exercise.id), // This needs to be implemented
     )).toList();
   }

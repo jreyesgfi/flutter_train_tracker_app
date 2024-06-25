@@ -79,6 +79,10 @@ flutter:
     - assets/images/exercises/biceps/
     - assets/images/exercises/gluteus/
     - assets/images/exercises/shoulder/
+    - assets/images/test/exercises/m1/
+    - assets/images/test/exercises/m2/
+    - assets/images/test/exercises/m3/
+    - assets/images/test/muscles/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

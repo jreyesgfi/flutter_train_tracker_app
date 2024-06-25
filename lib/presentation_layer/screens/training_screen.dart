@@ -3,67 +3,51 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/mock_data_repository.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/training_selection_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
 import 'package:provider/provider.dart';
 
-class TrainingScreen extends StatefulWidget {
-  @override
-  _TrainingScreenState createState() => _TrainingScreenState();
-}
-
-class _TrainingScreenState extends State<TrainingScreen> {
-  List<MuscleData> allMuscles = [];
-  List<ExerciseData> allExercises = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadInitialData();
-  }
-
-  void loadInitialData() async {
-    // Ideally, these would come from a service that fetches data from a repository
-    allMuscles = await MockDataRepository().fetchAllMuscles();
-    allExercises = await MockDataRepository().fetchAllExercises();
-    setState(() {});
-  }
-
-  void handleMuscleSelection(MuscleData muscle) {
-    Provider.of<TrainingScreenProvider>(context, listen: false).selectMuscle(muscle);
-  }
-
-  void handleExerciseSelection(ExerciseData exercise) {
-    Provider.of<TrainingScreenProvider>(context, listen: false).selectExercise(exercise);
-  }
+class TrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TrainingScreenProvider>(
-      create: (_) => TrainingScreenProvider(),
-      child: Scaffold(
-        body: Consumer<TrainingScreenProvider>(
-          builder: (context, provider, child) {
-            Widget content;
-            switch (provider.currentStage) {
-              case 0:
-                content = TrainingSelectionSubscreen(
-                  muscles: allMuscles,
-                  exercises: allExercises,
-                );
-                break;
-              case 1:
-                content = SessionSubscreen();
-                break;
-              default:
-                content = TrainingSelectionSubscreen(
-                  muscles: allMuscles,
-                  exercises: allExercises,
-                );
-            }
-            return content;
-          },
-        ),
-      ),
+    return FutureBuilder<List<List<dynamic>>>(
+      future: _loadInitialData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+          return ChangeNotifierProvider<TrainingScreenProvider>(
+            create: (_) => TrainingScreenProvider(snapshot.data![0] as List<MuscleData>, snapshot.data![1] as List<ExerciseData> ),
+            child: _buildTrainingScreen(),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Future<List<List<dynamic>>> _loadInitialData() async {
+    var repo = MockDataRepository();
+    List<MuscleData> allMuscles = await repo.fetchAllMuscles();
+    List<ExerciseData> allExercises = await repo.fetchAllExercises();
+    return [allMuscles, allExercises];
+  }
+
+  Widget _buildTrainingScreen() {
+    return Consumer<TrainingScreenProvider>(
+      builder: (context, provider, child) {
+        Widget content;
+        switch (provider.currentStage) {
+          case 0:
+            content = TrainingSelectionSubscreen();
+            break;
+          case 1:
+            content = SessionSubscreen();
+            break;
+          default:
+            content = TrainingSelectionSubscreen();
+        }
+        return Scaffold(body: content);
+      },
     );
   }
 }
