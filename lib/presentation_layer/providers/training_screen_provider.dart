@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 
 class TrainingScreenProvider extends ChangeNotifier {
+  
+  /* DATA SECTION */
   // INTERNAL STATE
-  int _currentStage = 0;
   MuscleData? _selectedMuscle;
   ExerciseData? _selectedExercise;
 
@@ -14,7 +15,6 @@ class TrainingScreenProvider extends ChangeNotifier {
   TrainingScreenProvider(this._allMuscles, this._allExercises);
 
   // GETTERS
-  int get currentStage => _currentStage;
   MuscleData? get selectedMuscle => _selectedMuscle;
   ExerciseData? get selectedExercise => _selectedExercise;
   List<MuscleData> get allMuscles => _allMuscles;
@@ -43,8 +43,12 @@ class TrainingScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectExercise(ExerciseData exercise) {
-    _selectedExercise = exercise;
+  void selectExerciseById(String exerciseId) {
+    try {
+      _selectedExercise = _allExercises.firstWhere((e) => e.id == exerciseId);
+    } catch (e) {
+      _selectedExercise = null;
+    }
     notifyListeners();
   }
 
@@ -57,4 +61,40 @@ class TrainingScreenProvider extends ChangeNotifier {
     _allExercises = exercises;
     notifyListeners();
   }
+
+  /* PAGE SECTION */
+  // Internal State
+  int _currentStage = 0;
+
+  // Getters
+  int get currentStage => _currentStage;
+
+  // Setters
+  void nextStage() {
+    _currentStage++;
+    notifyListeners();
+  }
+
+  void previousStage() {
+    if (_currentStage > 0) {
+      _currentStage--;
+      notifyListeners();
+    }
+  }
+
+  void resetStage() {
+    _currentStage = 0;
+    notifyListeners();
+  }
+
+  void setStage(int stage, {bool reset = false}) {
+    if (reset) {
+      _currentStage = 0;
+    } else {
+      _currentStage = stage;
+    }
+    notifyListeners();
+  }
+
+
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'exercise_tile.dart';
 
@@ -38,7 +38,9 @@ class _ExerciseListSelectorState extends State<ExerciseListSelector> {
                     completionStatus[index] = !isCompleted;
                   });
 
-                  Provider.of<TrainingSubScreenProvider>(context, listen: false).nextStage();
+                  final exercise = widget.exercises[index];
+                  Provider.of<TrainingScreenProvider>(context, listen:false).selectExerciseById(exercise.exerciseId);
+                  Provider.of<TrainingScreenProvider>(context, listen: false).nextStage();
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: index == 0 ? 10 : 0, bottom: 10),

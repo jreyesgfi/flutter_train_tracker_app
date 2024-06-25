@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class ExerciseTileSchema {
+  final String exerciseId;
   final String label;
   final String imagePath;
   final int timeSinceExercise; // Days since last performed
 
   ExerciseTileSchema({
+    required this.exerciseId,
     required this.label,
     required this.imagePath,
     required this.timeSinceExercise,

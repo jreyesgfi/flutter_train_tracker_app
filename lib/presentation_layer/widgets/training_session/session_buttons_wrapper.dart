@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +52,7 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
               onTap: () => {
-                index == numberOfButtons-1 ?  Provider.of<TrainingSubScreenProvider>(context, listen: false).resetStage():
+                index == numberOfButtons-1 ?  Provider.of<TrainingScreenProvider>(context, listen: false).resetStage():
                 index-widget.currentStage==0 ? ()=>{}:widget.onButtonClicked(index)
                 },
               stage: index - widget.currentStage,

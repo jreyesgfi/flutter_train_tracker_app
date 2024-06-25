@@ -14,6 +14,7 @@ class TrainingDataTransformer {
 
   static List<ExerciseTileSchema> transformExercisesToTiles(List<ExerciseData> exercises) {
     return exercises.map((exercise) => ExerciseTileSchema(
+      exerciseId: exercise.id,
       label: exercise.name,                     //assets\images\test\exercises\m1\e1_1.png
       imagePath: "assets/images/test/exercises/${exercise.muscleId}/${exercise.id}_1.png", // Example path
       timeSinceExercise: calculateDaysSinceLastExercise(exercise.id), // This needs to be implemented
