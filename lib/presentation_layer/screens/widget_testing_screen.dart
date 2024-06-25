@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/session_info.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_form.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/custom_chrono.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_buttons_wrapper.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_step_widget.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
 
 final lastTrainingData = SessionInfoSchema(
     exerciseName: "Elevaciones Frontales",

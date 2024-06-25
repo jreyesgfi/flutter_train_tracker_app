@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_button.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:provider/provider.dart';
 
 class SessionButtonsWrapper extends StatefulWidget {

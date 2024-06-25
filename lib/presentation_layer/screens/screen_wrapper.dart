@@ -6,8 +6,8 @@ import 'package:flutter_application_test1/presentation_layer/widgets/common/butt
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/stop_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/header_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/trainingSession/session_info_widget.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
 
 class ScreenWrapper extends StatefulWidget {
   @override

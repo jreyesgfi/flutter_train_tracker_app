@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './exercise_tile.dart';
+import 'exercise_tile.dart';
 
 class ExerciseListSelector extends StatefulWidget {
   final List<ExerciseTileSchema> exercises;

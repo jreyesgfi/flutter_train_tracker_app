@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/exercise_list_selector.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/exercise_tile.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/header_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/muscle_carousel_selector.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/muscle_tile.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
 
 final muscles = [
   MuscleTileSchema(label: "Triceps", timeSinceExercise: 3, imagePath: "assets/images/muscles/triceps.svg"),

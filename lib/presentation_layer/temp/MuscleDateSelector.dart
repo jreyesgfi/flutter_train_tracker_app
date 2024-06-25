@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/models/Exercise.dart';
 import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/CustomDropdownFormField.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/DateSelectorFormField.dart';
+import 'package:flutter_application_test1/presentation_layer/temp/custom_drowdown_form_field.dart';
+import 'package:flutter_application_test1/presentation_layer/temp/date_selector_form_field.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
 
 import 'package:provider/provider.dart';
