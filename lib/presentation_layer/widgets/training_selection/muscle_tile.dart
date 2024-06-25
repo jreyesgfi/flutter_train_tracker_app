@@ -3,11 +3,13 @@ import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MuscleTileSchema {
+  final String muscleId;
   final String label;
   final int timeSinceExercise; //days
   final String imagePath;
 
   MuscleTileSchema({
+    required this.muscleId,
     required this.label,
     required this.timeSinceExercise,
     required this.imagePath,

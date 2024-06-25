@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
+import 'package:provider/provider.dart';
 import 'muscle_tile.dart';
 
 class MuscleCarouselSelector extends StatefulWidget {
@@ -29,6 +31,8 @@ class _MuscleCarouselSelectorState extends State<MuscleCarouselSelector> {
             onTap: () {
               setState(() {
                 selectedIndex = index;
+                final muscle = widget.muscles[index];
+                Provider.of<TrainingScreenProvider>(context, listen: false).selectMuscleById(muscle.muscleId);
               });
             },
             child: Container(

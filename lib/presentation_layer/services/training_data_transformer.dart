@@ -5,6 +5,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 class TrainingDataTransformer {
   static List<MuscleTileSchema> transformMusclesToTiles(List<MuscleData> muscles) {
     return muscles.map((muscle) => MuscleTileSchema(
+      muscleId: muscle.id,
       label: muscle.name,
       timeSinceExercise: calculateDaysSinceLastExercise(muscle.id), // This needs to be implemented
       imagePath: "assets/images/test/muscles/${muscle.id}.svg", // Example path
