@@ -41,6 +41,10 @@ class MockDataRepository {
     return muscles;
   }
 
+  Future<List<ExerciseData>> fetchAllExercises() async {
+    return exercises;
+  }
+
   Future<List<ExerciseData>> fetchExercisesByMuscleId(String muscleId) async {
     return exercises.where((e) => e.muscleId == muscleId).toList();
   }
