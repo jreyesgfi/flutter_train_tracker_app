@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
+import 'package:provider/provider.dart';
 import 'exercise_tile.dart';
 
 class ExerciseListSelector extends StatefulWidget {
@@ -33,9 +35,10 @@ class _ExerciseListSelectorState extends State<ExerciseListSelector> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    // Optionally toggle completion on tap or handle differently
                     completionStatus[index] = !isCompleted;
                   });
+
+                  Provider.of<TrainingSubScreenProvider>(context, listen: false).nextStage();
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: index == 0 ? 10 : 0, bottom: 10),

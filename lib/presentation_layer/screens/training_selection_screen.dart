@@ -47,7 +47,7 @@ class TrainingSelectionState extends State<TrainingSelectionSubscreen> {
         children: [
 
           Container(
-            margin: const EdgeInsets.only(left:10.0, right:10.0, bottom: 0.0, top:30),
+            margin: const EdgeInsets.only(left:20.0, right:10.0, bottom: 0.0, top:30),
             child:Text(
               "¿Qué vamos a entrenar hoy?",
               style: theme.textTheme.titleMedium?.copyWith(
@@ -60,7 +60,7 @@ class TrainingSelectionState extends State<TrainingSelectionSubscreen> {
           ),
 
           Container(
-            margin: const EdgeInsets.only(left:10.0, right:10.0, bottom: 0.0, top:30),
+            margin: const EdgeInsets.only(left:20.0, right:10.0, bottom: 0.0, top:30),
             child:Text(
               "Escoge un ejercicio",
               style: theme.textTheme.titleMedium?.copyWith(

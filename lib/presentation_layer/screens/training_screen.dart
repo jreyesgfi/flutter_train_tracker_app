@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_subscreen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/new_session_subscreen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_test1/models/session_info.dart';
