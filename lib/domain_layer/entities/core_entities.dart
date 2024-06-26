@@ -16,6 +16,7 @@ class ExerciseData {
 class SessionData {
   final String id;
   final String exerciseId;
+  final String muscleId;
   final DateTime timeStamp;
   final double maxWeight;
   final double minWeight;
@@ -25,6 +26,7 @@ class SessionData {
   SessionData({
     required this.id,
     required this.exerciseId,
+    required this.muscleId,
     required this.timeStamp,
     required this.maxWeight,
     required this.minWeight,

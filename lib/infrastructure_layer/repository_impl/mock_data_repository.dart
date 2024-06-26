@@ -1,4 +1,3 @@
-// File: infrastructure_layer/repository_impl/mock_data_repository.dart
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 
 class MockDataRepository {
@@ -24,10 +23,14 @@ class MockDataRepository {
 
   MockDataRepository() {
     sessions = List.generate(27, (index) {
-      int exerciseIndex = index % 9; // each exercise gets 3 sessions
+      int exerciseIndex = index % exercises.length; // each exercise gets 3 sessions
+      var exercise = exercises[exerciseIndex];
+      var muscle = muscles.firstWhere((m) => m.id == exercise.muscleId);
+
       return SessionData(
         id: "s${index + 1}",
-        exerciseId: exercises[exerciseIndex].id,
+        exerciseId: exercise.id,
+        muscleId: muscle.id,
         timeStamp: DateTime.now().subtract(Duration(days: index * 2)), // different days
         maxWeight: 100 + index * 5.0, // increasing weight
         minWeight: 80 + index * 5.0,
@@ -45,11 +48,17 @@ class MockDataRepository {
     return exercises;
   }
 
-  Future<List<ExerciseData>> fetchExercisesByMuscleId(String muscleId) async {
-    return exercises.where((e) => e.muscleId == muscleId).toList();
-  }
-
   Future<SessionData> fetchLastSessionForExercise(String exerciseId) async {
     return sessions.where((s) => s.exerciseId == exerciseId).reduce((a, b) => a.timeStamp.isAfter(b.timeStamp) ? a : b);
+  }
+
+  Future<List<SessionData>> fetchLastSessions() async {
+    Map<String, SessionData> latestSessions = {};
+    for (var session in sessions) {
+      if (!latestSessions.containsKey(session.exerciseId) || latestSessions[session.exerciseId]!.timeStamp.isBefore(session.timeStamp)) {
+        latestSessions[session.exerciseId] = session;
+      }
+    }
+    return latestSessions.values.toList();
   }
 }
