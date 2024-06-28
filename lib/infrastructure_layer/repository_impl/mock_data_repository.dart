@@ -32,9 +32,9 @@ class MockDataRepository {
         exerciseId: exercise.id,
         muscleId: muscle.id,
         timeStamp: DateTime.now().subtract(Duration(days: index * 2)), // different days
-        maxWeight: 100 + index * 5.0, // increasing weight
-        minWeight: 80 + index * 5.0,
-        maxReps: 10 + index % 5,
+        maxWeight: 12 + index * 1, // increasing weight
+        minWeight: 12 + index * 0.5,
+        maxReps: 12 + index % 5,
         minReps: 8 + index % 3,
       );
     });
