@@ -10,7 +10,6 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:provider/provider.dart';
 
-
 class SessionSubscreen extends StatefulWidget {
   @override
   SessionSubscreenState createState() => SessionSubscreenState();
@@ -28,14 +27,16 @@ class SessionSubscreenState extends State<SessionSubscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider =  Provider.of<TrainingScreenProvider>(context);
+    final provider = Provider.of<TrainingScreenProvider>(context);
     final lastSession = provider.lastSessionSummary;
     final selectedExercise = provider.selectedExercise;
-    final exerciseImagePaths = selectedExercise != null ?
-      TrainingDataTransformer.exerciseImagePaths(selectedExercise):
-      // default images
-      ["assets/images/exercises/shoulder/Dumbbell-lateral-raises-1.png",
-      "assets/images/exercises/shoulder/Dumbbell-lateral-raises-2.png"];
+    final exerciseImagePaths = selectedExercise != null
+        ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
+        : // default images
+        [
+            "assets/images/exercises/shoulder/Dumbbell-lateral-raises-1.png",
+            "assets/images/exercises/shoulder/Dumbbell-lateral-raises-2.png"
+          ];
 
     final theme = Theme.of(context);
     bool isOddStage = currentStage % 2 != 0;
@@ -71,15 +72,13 @@ class SessionSubscreenState extends State<SessionSubscreen> {
               if (currentStage == 0 || isOddStage) ...[
                 ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
                 SessionInfoWidget(sessionInfo: lastSession),
-              ]
-              else ...[
+              ] else ...[
                 if (!isLastEvenStage)
                   CustomChrono(
-                    key: ValueKey(currentStage),
-                    duration: const Duration(minutes: 2)),
-                  SessionForm(
-                      initialData: lastSession,
-                      onResultsChanged: (results) {}),
+                      key: ValueKey(currentStage),
+                      duration: const Duration(minutes: 2)),
+                SessionForm(
+                    initialData: lastSession, onResultsChanged: (results) {}),
               ],
             ],
           ),
