@@ -1,4 +1,5 @@
 import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/signup_screen.dart';
 import 'package:flutter_application_test1/common_layer/utils/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class LoginScreen extends StatelessWidget {
           // This could be a main screen or dashboard for authenticated users
           // Implement your own navigation method or screen transition
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (_) => MainScreen()));
+              MaterialPageRoute(builder: (_) => ScreenWrapper()));
         } else {
           // Could provide generic message or action for non-completed login,
           // e.g., request more login methods or perform a 2FA step if required

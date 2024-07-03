@@ -2,9 +2,9 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 
 class MockDataRepository {
   List<MuscleData> muscles = [
-    MuscleData(id: "m1", name: "Chest"),
-    MuscleData(id: "m2", name: "Shoulders"),
-    MuscleData(id: "m3", name: "Legs"),
+    MuscleData(id: "m1", name: "Pecho"),
+    MuscleData(id: "m2", name: "Hombros"),
+    MuscleData(id: "m3", name: "Piernas"),
   ];
 
   List<ExerciseData> exercises = [
@@ -32,7 +32,7 @@ class MockDataRepository {
         exerciseId: exercise.id,
         muscleId: muscle.id,
         timeStamp: DateTime.now().subtract(Duration(days: index * 2)), // different days
-        maxWeight: 12 + index * 1, // increasing weight
+        maxWeight: 12 + index * 1,
         minWeight: 12 + index * 0.5,
         maxReps: 12 + index % 5,
         minReps: 8 + index % 3,
@@ -50,6 +50,18 @@ class MockDataRepository {
 
   Future<SessionData> fetchLastSessionForExercise(String exerciseId) async {
     return sessions.where((s) => s.exerciseId == exerciseId).reduce((a, b) => a.timeStamp.isAfter(b.timeStamp) ? a : b);
+  }
+
+  Future<List<SessionData>> fetchFilteredSessions({String? muscleId, String? exerciseId}) async {
+    return sessions.where((session) {
+      if (muscleId != null && session.muscleId != muscleId) {
+        return false;
+      }
+      if (exerciseId != null && session.exerciseId != exerciseId) {
+        return false;
+      }
+      return true;
+    }).toList();
   }
 
   Future<List<SessionData>> fetchLastSessions() async {
