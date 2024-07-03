@@ -56,7 +56,7 @@ class ReportScreenProvider extends ChangeNotifier {
   }
 
 
-  void _filterSessions() async {
+  void filterSessions() async {
     String? muscleId = _selectedMuscle?.id;
     String? exerciseId = _selectedExercise?.id;
 

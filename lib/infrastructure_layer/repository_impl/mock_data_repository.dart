@@ -1,4 +1,5 @@
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
+import 'dart:math';
 
 class MockDataRepository {
   List<MuscleData> muscles = [
@@ -22,6 +23,8 @@ class MockDataRepository {
   late List<SessionData> sessions;
 
   MockDataRepository() {
+    Random random = Random();
+
     sessions = List.generate(27, (index) {
       int exerciseIndex = index % exercises.length; // each exercise gets 3 sessions
       var exercise = exercises[exerciseIndex];
@@ -31,13 +34,42 @@ class MockDataRepository {
         id: "s${index + 1}",
         exerciseId: exercise.id,
         muscleId: muscle.id,
-        timeStamp: DateTime.now().subtract(Duration(days: index * 2)), // different days
-        maxWeight: 12 + index * 1,
-        minWeight: 12 + index * 0.5,
-        maxReps: 12 + index % 5,
-        minReps: 8 + index % 3,
+        timeStamp: DateTime.now().subtract(Duration(days: 1)), 
+        maxWeight: 10 + random.nextDouble()*5,
+        minWeight: 5 + random.nextDouble()*5,
+        maxReps: 10,
+        minReps: 10,
       );
     });
+
+    // Quintuplicate the sessions with increased randomness
+    List<SessionData> newSessions = [];
+    for (var session in sessions) {
+      double lastMaxWeight = session.maxWeight;
+      double lastMinWeight = session.minWeight;
+      int lastMaxReps = session.maxReps;
+      int lastMinReps = session.minReps;
+
+      for (int i = 0; i < 15; i++) {
+        lastMaxWeight -= random.nextDouble()*0.2;
+        lastMinWeight -= random.nextDouble()*0.2;
+        lastMaxReps = 12;
+        lastMinReps = 10;
+
+        newSessions.add(SessionData(
+          id: "${session.id}_q$i",
+          exerciseId: session.exerciseId,
+          muscleId: session.muscleId,
+          timeStamp: session.timeStamp.subtract(Duration(days: i*3+random.nextInt(3))),
+          maxWeight: lastMaxWeight,
+          minWeight: lastMinWeight,
+          maxReps: lastMaxReps,
+          minReps: lastMinReps,
+        ));
+      }
+    }
+
+    sessions = newSessions;
   }
 
   Future<List<MuscleData>> fetchAllMuscles() async {
