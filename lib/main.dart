@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (!_amplifyConfigured) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           } else {
             // Waiting for future to complete (i.e., checking login state)
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),

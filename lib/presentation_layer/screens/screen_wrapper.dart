@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/report_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/back_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/stop_button.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/header_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
 
 class ScreenWrapper extends StatefulWidget {
   @override
   ScreenWrapperState createState() => ScreenWrapperState();
 }
 
-class ScreenWrapperState extends State<ScreenWrapper>{
-  int currentScreen = 1;
+class ScreenWrapperState extends State<ScreenWrapper> {
+  int currentScreen = 0;
 
   void onTabTapped(int index) {
     setState(() {
@@ -23,12 +18,24 @@ class ScreenWrapperState extends State<ScreenWrapper>{
     });
   }
 
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
+  Widget _getScreen() {
+    switch (currentScreen) {
+      case 0:
+        return TrainingScreen();
+      case 1:
+        return TrainingScreen();
+      case 2:
+        return ReportScreen();
+      default:
+        return TrainingScreen();
+    }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(112.0),  // Adjust the height as necessary
+        preferredSize: Size.fromHeight(112.0), // Adjust the height as necessary
         child: SafeArea( // Ensures content is below the status bar
           child: HeaderWidget(
             title: "Nuevo Entrenamiento",
@@ -36,9 +43,7 @@ class ScreenWrapperState extends State<ScreenWrapper>{
           ),
         ),
       ),
-      
-      body: TrainingScreen(),
-
+      body: _getScreen(),
       bottomNavigationBar: FooterNavigation(
         selectedIndex: currentScreen,
         onTabTapped: onTabTapped,
