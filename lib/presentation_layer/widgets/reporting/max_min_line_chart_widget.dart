@@ -2,11 +2,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 class MaxMinLineChart extends StatelessWidget {
-  final List<SessionData> sessions;
-
-  MaxMinLineChart({required this.sessions});
+  MaxMinLineChart({super.key});
 
   Map<DateTime, List<SessionData>> _groupSessionsByDate(List<SessionData> sessions) {
     final Map<DateTime, List<SessionData>> groupedSessions = {};
@@ -55,10 +55,11 @@ class MaxMinLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final groupedSessions = _groupSessionsByDate(sessions);
+    final provider = Provider.of<ReportScreenProvider>(context);
+    final groupedSessions = _groupSessionsByDate(provider.filteredSessions);
 
     return Padding(
-      padding: const EdgeInsets.only(right:16.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: LineChart(
         LineChartData(
           minX: _getMinX(groupedSessions),

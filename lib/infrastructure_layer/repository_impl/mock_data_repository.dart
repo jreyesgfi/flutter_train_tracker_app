@@ -85,6 +85,9 @@ class MockDataRepository {
   }
 
   Future<List<SessionData>> fetchFilteredSessions({String? muscleId, String? exerciseId}) async {
+    if (muscleId == null && exerciseId == null){
+      return sessions;
+    }
     return sessions.where((session) {
       if (muscleId != null && session.muscleId != muscleId) {
         return false;

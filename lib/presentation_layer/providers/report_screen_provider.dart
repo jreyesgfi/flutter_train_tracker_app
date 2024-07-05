@@ -20,6 +20,7 @@ class ReportScreenProvider extends ChangeNotifier {
     List<ExerciseData> allExercises,
   ) {
     _setData(allMuscles, allExercises);
+    filterSessions();
   }
 
   void _setData(
@@ -54,7 +55,6 @@ class ReportScreenProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   void filterSessions() async {
     String? muscleId = _selectedMuscle?.id;
