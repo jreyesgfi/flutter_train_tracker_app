@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 final iconPaths = [
-      "assets/icons/chart.svg",
+      "assets/icons/profile.svg",
       "assets/icons/chrono.svg",
-      "assets/icons/profile.svg"
+      "assets/icons/chart.svg"
     ];
-final iconLabels = ["Chart", "Chrono", "Profile"];
+final iconLabels = ["Profile", "Chrono", "Chart" ];
 
 class FooterNavigation extends StatelessWidget {
   final int selectedIndex;

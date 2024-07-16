@@ -7,6 +7,8 @@ import 'package:flutter_application_test1/presentation_layer/screens/training_se
 import 'package:provider/provider.dart';
 
 class TrainingScreen extends StatelessWidget {
+  const TrainingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
