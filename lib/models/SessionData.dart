@@ -23,14 +23,14 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the Exercise type in your schema. */
-class Exercise extends amplify_core.Model {
-  static const classType = const _ExerciseModelType();
-  final String id;
+/** This is an auto generated class representing the SessionData type in your schema. */
+class SessionData extends amplify_core.Model {
+  static const classType = const _SessionDataModelType();
+  final String? _sessionId;
+  final String? _exerciseId;
+  final String? _muscleId;
   final String? _userId;
-  final amplify_core.TemporalDate? _date;
-  final String? _muscle;
-  final String? _exercise;
+  final amplify_core.TemporalDateTime? _timeStamp;
   final double? _maxWeight;
   final double? _minWeight;
   final int? _maxReps;
@@ -43,12 +43,61 @@ class Exercise extends amplify_core.Model {
   
   @Deprecated('[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
   @override
-  String getId() => id;
+  String getId() => modelIdentifier.serializeAsString();
   
-  ExerciseModelIdentifier get modelIdentifier {
-      return ExerciseModelIdentifier(
-        id: id
+  SessionDataModelIdentifier get modelIdentifier {
+    try {
+      return SessionDataModelIdentifier(
+        sessionId: _sessionId!,
+        timeStamp: _timeStamp!
       );
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get sessionId {
+    try {
+      return _sessionId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get exerciseId {
+    try {
+      return _exerciseId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get muscleId {
+    try {
+      return _muscleId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   String get userId {
@@ -64,35 +113,9 @@ class Exercise extends amplify_core.Model {
     }
   }
   
-  amplify_core.TemporalDate get date {
+  amplify_core.TemporalDateTime get timeStamp {
     try {
-      return _date!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
-  
-  String get muscle {
-    try {
-      return _muscle!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
-  
-  String get exercise {
-    try {
-      return _exercise!;
+      return _timeStamp!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -127,15 +150,15 @@ class Exercise extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Exercise._internal({required this.id, required userId, required date, required muscle, required exercise, maxWeight, minWeight, maxReps, minReps, createdAt, updatedAt}): _userId = userId, _date = date, _muscle = muscle, _exercise = exercise, _maxWeight = maxWeight, _minWeight = minWeight, _maxReps = maxReps, _minReps = minReps, _createdAt = createdAt, _updatedAt = updatedAt;
+  const SessionData._internal({required sessionId, required exerciseId, required muscleId, required userId, required timeStamp, maxWeight, minWeight, maxReps, minReps, createdAt, updatedAt}): _sessionId = sessionId, _exerciseId = exerciseId, _muscleId = muscleId, _userId = userId, _timeStamp = timeStamp, _maxWeight = maxWeight, _minWeight = minWeight, _maxReps = maxReps, _minReps = minReps, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Exercise({String? id, required String userId, required amplify_core.TemporalDate date, required String muscle, required String exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
-    return Exercise._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
+  factory SessionData({required String sessionId, required String exerciseId, required String muscleId, required String userId, required amplify_core.TemporalDateTime timeStamp, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
+    return SessionData._internal(
+      sessionId: sessionId,
+      exerciseId: exerciseId,
+      muscleId: muscleId,
       userId: userId,
-      date: date,
-      muscle: muscle,
-      exercise: exercise,
+      timeStamp: timeStamp,
       maxWeight: maxWeight,
       minWeight: minWeight,
       maxReps: maxReps,
@@ -149,12 +172,12 @@ class Exercise extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Exercise &&
-      id == other.id &&
+    return other is SessionData &&
+      _sessionId == other._sessionId &&
+      _exerciseId == other._exerciseId &&
+      _muscleId == other._muscleId &&
       _userId == other._userId &&
-      _date == other._date &&
-      _muscle == other._muscle &&
-      _exercise == other._exercise &&
+      _timeStamp == other._timeStamp &&
       _maxWeight == other._maxWeight &&
       _minWeight == other._minWeight &&
       _maxReps == other._maxReps &&
@@ -168,12 +191,12 @@ class Exercise extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Exercise {");
-    buffer.write("id=" + "$id" + ", ");
+    buffer.write("SessionData {");
+    buffer.write("sessionId=" + "$_sessionId" + ", ");
+    buffer.write("exerciseId=" + "$_exerciseId" + ", ");
+    buffer.write("muscleId=" + "$_muscleId" + ", ");
     buffer.write("userId=" + "$_userId" + ", ");
-    buffer.write("date=" + (_date != null ? _date!.format() : "null") + ", ");
-    buffer.write("muscle=" + "$_muscle" + ", ");
-    buffer.write("exercise=" + "$_exercise" + ", ");
+    buffer.write("timeStamp=" + (_timeStamp != null ? _timeStamp!.format() : "null") + ", ");
     buffer.write("maxWeight=" + (_maxWeight != null ? _maxWeight!.toString() : "null") + ", ");
     buffer.write("minWeight=" + (_minWeight != null ? _minWeight!.toString() : "null") + ", ");
     buffer.write("maxReps=" + (_maxReps != null ? _maxReps!.toString() : "null") + ", ");
@@ -185,35 +208,34 @@ class Exercise extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Exercise copyWith({String? userId, amplify_core.TemporalDate? date, String? muscle, String? exercise, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
-    return Exercise._internal(
-      id: id,
+  SessionData copyWith({String? exerciseId, String? muscleId, String? userId, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
+    return SessionData._internal(
+      sessionId: sessionId,
+      exerciseId: exerciseId ?? this.exerciseId,
+      muscleId: muscleId ?? this.muscleId,
       userId: userId ?? this.userId,
-      date: date ?? this.date,
-      muscle: muscle ?? this.muscle,
-      exercise: exercise ?? this.exercise,
+      timeStamp: timeStamp,
       maxWeight: maxWeight ?? this.maxWeight,
       minWeight: minWeight ?? this.minWeight,
       maxReps: maxReps ?? this.maxReps,
       minReps: minReps ?? this.minReps);
   }
   
-  Exercise copyWithModelFieldValues({
+  SessionData copyWithModelFieldValues({
+    ModelFieldValue<String>? exerciseId,
+    ModelFieldValue<String>? muscleId,
     ModelFieldValue<String>? userId,
-    ModelFieldValue<amplify_core.TemporalDate>? date,
-    ModelFieldValue<String>? muscle,
-    ModelFieldValue<String>? exercise,
     ModelFieldValue<double?>? maxWeight,
     ModelFieldValue<double?>? minWeight,
     ModelFieldValue<int?>? maxReps,
     ModelFieldValue<int?>? minReps
   }) {
-    return Exercise._internal(
-      id: id,
+    return SessionData._internal(
+      sessionId: sessionId,
+      exerciseId: exerciseId == null ? this.exerciseId : exerciseId.value,
+      muscleId: muscleId == null ? this.muscleId : muscleId.value,
       userId: userId == null ? this.userId : userId.value,
-      date: date == null ? this.date : date.value,
-      muscle: muscle == null ? this.muscle : muscle.value,
-      exercise: exercise == null ? this.exercise : exercise.value,
+      timeStamp: timeStamp,
       maxWeight: maxWeight == null ? this.maxWeight : maxWeight.value,
       minWeight: minWeight == null ? this.minWeight : minWeight.value,
       maxReps: maxReps == null ? this.maxReps : maxReps.value,
@@ -221,12 +243,12 @@ class Exercise extends amplify_core.Model {
     );
   }
   
-  Exercise.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
+  SessionData.fromJson(Map<String, dynamic> json)  
+    : _sessionId = json['sessionId'],
+      _exerciseId = json['exerciseId'],
+      _muscleId = json['muscleId'],
       _userId = json['userId'],
-      _date = json['date'] != null ? amplify_core.TemporalDate.fromString(json['date']) : null,
-      _muscle = json['muscle'],
-      _exercise = json['exercise'],
+      _timeStamp = json['timeStamp'] != null ? amplify_core.TemporalDateTime.fromString(json['timeStamp']) : null,
       _maxWeight = (json['maxWeight'] as num?)?.toDouble(),
       _minWeight = (json['minWeight'] as num?)?.toDouble(),
       _maxReps = (json['maxReps'] as num?)?.toInt(),
@@ -235,15 +257,15 @@ class Exercise extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'userId': _userId, 'date': _date?.format(), 'muscle': _muscle, 'exercise': _exercise, 'maxWeight': _maxWeight, 'minWeight': _minWeight, 'maxReps': _maxReps, 'minReps': _minReps, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'sessionId': _sessionId, 'exerciseId': _exerciseId, 'muscleId': _muscleId, 'userId': _userId, 'timeStamp': _timeStamp?.format(), 'maxWeight': _maxWeight, 'minWeight': _minWeight, 'maxReps': _maxReps, 'minReps': _minReps, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id,
+    'sessionId': _sessionId,
+    'exerciseId': _exerciseId,
+    'muscleId': _muscleId,
     'userId': _userId,
-    'date': _date,
-    'muscle': _muscle,
-    'exercise': _exercise,
+    'timeStamp': _timeStamp,
     'maxWeight': _maxWeight,
     'minWeight': _minWeight,
     'maxReps': _maxReps,
@@ -252,19 +274,19 @@ class Exercise extends amplify_core.Model {
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<ExerciseModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<ExerciseModelIdentifier>();
-  static final ID = amplify_core.QueryField(fieldName: "id");
+  static final amplify_core.QueryModelIdentifier<SessionDataModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<SessionDataModelIdentifier>();
+  static final SESSIONID = amplify_core.QueryField(fieldName: "sessionId");
+  static final EXERCISEID = amplify_core.QueryField(fieldName: "exerciseId");
+  static final MUSCLEID = amplify_core.QueryField(fieldName: "muscleId");
   static final USERID = amplify_core.QueryField(fieldName: "userId");
-  static final DATE = amplify_core.QueryField(fieldName: "date");
-  static final MUSCLE = amplify_core.QueryField(fieldName: "muscle");
-  static final EXERCISE = amplify_core.QueryField(fieldName: "exercise");
+  static final TIMESTAMP = amplify_core.QueryField(fieldName: "timeStamp");
   static final MAXWEIGHT = amplify_core.QueryField(fieldName: "maxWeight");
   static final MINWEIGHT = amplify_core.QueryField(fieldName: "minWeight");
   static final MAXREPS = amplify_core.QueryField(fieldName: "maxReps");
   static final MINREPS = amplify_core.QueryField(fieldName: "minReps");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Exercise";
-    modelSchemaDefinition.pluralName = "Exercises";
+    modelSchemaDefinition.name = "SessionData";
+    modelSchemaDefinition.pluralName = "SessionData";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -280,52 +302,60 @@ class Exercise extends amplify_core.Model {
         ])
     ];
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+    modelSchemaDefinition.indexes = [
+      amplify_core.ModelIndex(fields: const ["sessionId", "timeStamp"], name: null)
+    ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.USERID,
+      key: SessionData.SESSIONID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.DATE,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.date)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.MUSCLE,
+      key: SessionData.EXERCISEID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.EXERCISE,
+      key: SessionData.MUSCLEID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.MAXWEIGHT,
+      key: SessionData.USERID,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: SessionData.TIMESTAMP,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: SessionData.MAXWEIGHT,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.double)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.MINWEIGHT,
+      key: SessionData.MINWEIGHT,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.double)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.MAXREPS,
+      key: SessionData.MAXREPS,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Exercise.MINREPS,
+      key: SessionData.MINREPS,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
@@ -346,34 +376,40 @@ class Exercise extends amplify_core.Model {
   });
 }
 
-class _ExerciseModelType extends amplify_core.ModelType<Exercise> {
-  const _ExerciseModelType();
+class _SessionDataModelType extends amplify_core.ModelType<SessionData> {
+  const _SessionDataModelType();
   
   @override
-  Exercise fromJson(Map<String, dynamic> jsonData) {
-    return Exercise.fromJson(jsonData);
+  SessionData fromJson(Map<String, dynamic> jsonData) {
+    return SessionData.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Exercise';
+    return 'SessionData';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Exercise] in your schema.
+ * of [SessionData] in your schema.
  */
-class ExerciseModelIdentifier implements amplify_core.ModelIdentifier<Exercise> {
-  final String id;
+class SessionDataModelIdentifier implements amplify_core.ModelIdentifier<SessionData> {
+  final String sessionId;
+  final amplify_core.TemporalDateTime timeStamp;
 
-  /** Create an instance of ExerciseModelIdentifier using [id] the primary key. */
-  const ExerciseModelIdentifier({
-    required this.id});
+  /**
+   * Create an instance of SessionDataModelIdentifier using [sessionId] the primary key.
+   * And [timeStamp] the sort key.
+   */
+  const SessionDataModelIdentifier({
+    required this.sessionId,
+    required this.timeStamp});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'id': id
+    'sessionId': sessionId,
+    'timeStamp': timeStamp
   });
   
   @override
@@ -386,7 +422,7 @@ class ExerciseModelIdentifier implements amplify_core.ModelIdentifier<Exercise> 
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'ExerciseModelIdentifier(id: $id)';
+  String toString() => 'SessionDataModelIdentifier(sessionId: $sessionId, timeStamp: $timeStamp)';
   
   @override
   bool operator ==(Object other) {
@@ -394,11 +430,13 @@ class ExerciseModelIdentifier implements amplify_core.ModelIdentifier<Exercise> 
       return true;
     }
     
-    return other is ExerciseModelIdentifier &&
-      id == other.id;
+    return other is SessionDataModelIdentifier &&
+      sessionId == other.sessionId &&
+      timeStamp == other.timeStamp;
   }
   
   @override
   int get hashCode =>
-    id.hashCode;
+    sessionId.hashCode ^
+    timeStamp.hashCode;
 }

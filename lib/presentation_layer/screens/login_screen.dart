@@ -1,4 +1,3 @@
-import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/signup_screen.dart';
 import 'package:flutter_application_test1/common_layer/utils/email_validator.dart';

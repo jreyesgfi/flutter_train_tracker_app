@@ -3,6 +3,13 @@ class MuscleData {
   final String name;
 
   MuscleData({required this.id, required this.name});
+
+  factory MuscleData.fromJson(Map<String, dynamic> json) {
+    return MuscleData(
+      id: json['muscleId'] as String,
+      name: json['name'] as String,
+    );
+  }
 }
 
 class ExerciseData {
@@ -11,6 +18,14 @@ class ExerciseData {
   final String muscleId;
 
   ExerciseData({required this.id, required this.name, required this.muscleId});
+  factory ExerciseData.fromJson(Map<String, dynamic> json) {
+    return ExerciseData(
+      id: json['exerciseId'] as String,
+      name: json['name'] as String,
+      muscleId: json['muscleId'] as String
+    );
+  }
+
 }
 
 class SessionData {
