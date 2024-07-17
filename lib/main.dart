@@ -46,16 +46,22 @@ class _MyHomePageState extends State<MyHomePage> {
   void _configureAmplify() async {
     
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    // AmplifyDataStore datastorePlugin =
-    //     AmplifyDataStore(modelProvider: ModelProvider.instance);
+    AmplifyDataStore datastorePlugin =
+        AmplifyDataStore(modelProvider: ModelProvider.instance);
     AmplifyAPI apiPlugin = AmplifyAPI(options: APIPluginOptions(modelProvider: ModelProvider.instance));
     try {
-      await Amplify.addPlugins([authPlugin, apiPlugin]);
-      //await Amplify.addPlugins([authPlugin, datastorePlugin, apiPlugin]);
+      // await Amplify.addPlugins([authPlugin, apiPlugin]);
+      await Amplify.addPlugins([authPlugin, datastorePlugin, apiPlugin]);
       await Amplify.configure(amplifyconfig);
       setState(() {
         _amplifyConfigured = true;
       });
+      try {
+      var user = await Amplify.Auth.getCurrentUser();
+      print("User is logged in: ${user.username}");
+    } on AuthException catch (e) {
+      print("User is not logged in");
+    }
     } on AmplifyAlreadyConfiguredException {
       // Amplify was already configured. This is fine since we're likely in hot reload/restart.
     } catch (e) {
