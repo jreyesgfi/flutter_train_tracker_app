@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/models/session_info.dart';
+import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';

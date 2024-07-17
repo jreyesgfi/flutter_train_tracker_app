@@ -4,7 +4,7 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
-import 'package:flutter_application_test1/models/session_info.dart'; // Assuming this is where SessionInfoSchema is defined
+import 'package:flutter_application_test1/domain_layer/entities/session_info.dart'; // Assuming this is where SessionInfoSchema is defined
 
 class TrainingScreenProvider extends ChangeNotifier {
   /* DATA SECTION */

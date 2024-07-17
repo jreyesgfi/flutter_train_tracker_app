@@ -2,14 +2,13 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/models/ModelProvider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/widget_testing_screen.dart';
 import 'infrastructure_layer/config/amplifyconfiguration.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/login_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart'; // Make sure you have this import for MainScreen
 import 'package:amplify_datastore/amplify_datastore.dart';
-import 'package:flutter_application_test1/models/ModelProvider.dart';
+import 'package:amplify_api/amplify_api.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -45,16 +44,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _configureAmplify() async {
+    
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     AmplifyDataStore datastorePlugin =
         AmplifyDataStore(modelProvider: ModelProvider.instance);
-
+    AmplifyAPI apiPlugin = AmplifyAPI(options: APIPluginOptions(modelProvider: ModelProvider.instance));
     try {
-      await Amplify.addPlugins([authPlugin, datastorePlugin]);
+      // await Amplify.addPlugins([authPlugin, apiPlugin]);
+      await Amplify.addPlugins([authPlugin, datastorePlugin, apiPlugin]);
       await Amplify.configure(amplifyconfig);
       setState(() {
         _amplifyConfigured = true;
       });
+      try {
+      var user = await Amplify.Auth.getCurrentUser();
+      print("User is logged in: ${user.username}");
+    } on AuthException catch (e) {
+      print("User is not logged in");
+    }
     } on AmplifyAlreadyConfiguredException {
       // Amplify was already configured. This is fine since we're likely in hot reload/restart.
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/profile_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/report_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
@@ -10,7 +11,7 @@ class ScreenWrapper extends StatefulWidget {
 }
 
 class ScreenWrapperState extends State<ScreenWrapper> {
-  int currentScreen = 0;
+  int currentScreen = 1;
 
   void onTabTapped(int index) {
     setState(() {
@@ -21,7 +22,7 @@ class ScreenWrapperState extends State<ScreenWrapper> {
   Widget _getScreen() {
     switch (currentScreen) {
       case 0:
-        return TrainingScreen();
+        return ProfileScreen();
       case 1:
         return TrainingScreen();
       case 2:

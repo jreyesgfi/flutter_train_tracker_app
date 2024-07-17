@@ -1,6 +1,6 @@
 {
   "api": {
-    "loginflutertest": {
+    "gymAppApi": {
       "dependsOn": [
         {
           "attributes": [
@@ -14,17 +14,19 @@
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authloginflutertest87750405"
-              }
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2024-07-24T10:53:17.963Z",
+                "apiKeyExpirationDays": 7,
+                "description": ""
+              },
+              "authenticationType": "API_KEY"
             }
           ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authloginflutertest87750405"
+            }
           }
         }
       },
