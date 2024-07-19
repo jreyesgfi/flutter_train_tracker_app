@@ -8,15 +8,16 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
 
-class SessionSubscreen extends StatefulWidget {
+class SessionSubscreen extends ConsumerStatefulWidget {
   @override
-  SessionSubscreenState createState() => SessionSubscreenState();
+  ConsumerState<SessionSubscreen> createState() => SessionSubscreenState();
 }
 
-class SessionSubscreenState extends State<SessionSubscreen> {
+class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
   // Footer manage the screen
   int currentStage = 0;
 
@@ -28,7 +29,7 @@ class SessionSubscreenState extends State<SessionSubscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider =  Provider.of<TrainingScreenProvider>(context);
+    final provider =  ref.read(trainingScreenProvider.notifier);
     final lastSession = provider.lastSessionSummary;
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null ?
