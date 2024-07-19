@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-gymini-dev-94158-authRole",
+      "UnauthRoleArn": "arn:aws:iam::905418211943:role/amplify-gymini-dev-94158-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::905418211943:role/amplify-gymini-dev-94158-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-gymini-dev-94158-deployment",
+      "UnauthRoleName": "amplify-gymini-dev-94158-unauthRole",
+      "StackName": "amplify-gymini-dev-94158",
+      "StackId": "arn:aws:cloudformation:eu-north-1:905418211943:stack/amplify-gymini-dev-94158/ffdc99b0-45b1-11ef-8a12-0af4d38b04d1",
+      "AmplifyAppId": "dg9de35937a1f"
+    },
+    "categories": {
+      "auth": {
+        "gymini9dfaca9d": {}
+      }
+    }
+  }
+}
