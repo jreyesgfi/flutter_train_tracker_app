@@ -14,7 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // muscles = RealDataRepository().fetchAllMuscles();
+    muscles = RealDataRepository().fetchAllMuscles();
   }
 
   @override

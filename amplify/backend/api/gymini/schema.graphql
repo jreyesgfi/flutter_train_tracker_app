@@ -1,0 +1,37 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+# Structure focus in cascading searchs starting from the parent
+
+type MuscleData @model
+@auth(rules: [
+    { allow: groups, groups: ["Public"], provider: userPools, operations: [read] },  # Public read access through a Cognito group
+    { allow: groups, groups: ["dev"], operations: [read, create, update, delete] }  # Restricted write access
+]) {
+  muscleId: ID! @primaryKey(sortKeyFields: ["name"])
+  name: String!
+  exercises: [ExerciseData] @hasMany
+}
+
+type ExerciseData @model
+@auth(rules: [
+    { allow: groups, groups: ["Public"], provider: userPools, operations: [read] },  # Public read access through a Cognito group
+    { allow: groups, groups: ["dev"], operations: [read, create, update, delete] }  # Restricted write access
+]) {
+  exerciseId: ID! @primaryKey(sortKeyFields: ["name"])
+  name: String!
+  muscleId: ID!
+}
+
+type SessionData @model @auth(rules: [
+    { allow: owner, operations: [create, update, delete, read] }
+  ]) {
+  sessionId: ID! @primaryKey(sortKeyFields: ["timeStamp"])
+  exerciseId: ID!
+  muscleId: ID!
+  timeStamp: AWSDateTime!
+  maxWeight: Float
+  minWeight: Float
+  maxReps: Int
+  minReps: Int
+}
+ 
