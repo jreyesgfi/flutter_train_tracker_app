@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'exercise_tile.dart';
 
-class ExerciseListSelector extends StatefulWidget {
+class ExerciseListSelector extends ConsumerStatefulWidget {
   final List<ExerciseTileSchema> exercises;
 
   const ExerciseListSelector({
@@ -12,10 +13,10 @@ class ExerciseListSelector extends StatefulWidget {
   });
 
   @override
-  _ExerciseListSelectorState createState() => _ExerciseListSelectorState();
+  ConsumerState<ExerciseListSelector> createState() => _ExerciseListSelectorState();
 }
 
-class _ExerciseListSelectorState extends State<ExerciseListSelector> {
+class _ExerciseListSelectorState extends ConsumerState<ExerciseListSelector> {
   int? selectedIndex;
   Map<int, bool> completionStatus =
       {}; // Tracks completion status by exercise index
@@ -39,8 +40,8 @@ class _ExerciseListSelectorState extends State<ExerciseListSelector> {
                   });
 
                   final exercise = widget.exercises[index];
-                  Provider.of<TrainingScreenProvider>(context, listen:false).selectExerciseById(exercise.exerciseId);
-                  Provider.of<TrainingScreenProvider>(context, listen: false).nextStage();
+                  ref.read(trainingScreenProvider.notifier).selectExerciseById(exercise.exerciseId);
+                  ref.read(trainingScreenProvider.notifier).nextStage(); // Provider.of<TrainingScreenProvider>(context, listen: false).nextStage();
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: index == 0 ? 10 : 0, bottom: 10),

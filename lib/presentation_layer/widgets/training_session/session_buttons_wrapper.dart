@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
-class SessionButtonsWrapper extends StatefulWidget {
+class SessionButtonsWrapper extends ConsumerStatefulWidget {
   final int currentStage;
   final Function(int) onButtonClicked; // Accepts an index
 
@@ -14,10 +15,10 @@ class SessionButtonsWrapper extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SessionButtonsWrapperState createState() => _SessionButtonsWrapperState();
+  ConsumerState<SessionButtonsWrapper> createState() => _SessionButtonsWrapperState();
 }
 
-class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
+class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -52,8 +53,8 @@ class _SessionButtonsWrapperState extends State<SessionButtonsWrapper> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
               onTap: () => {
-                index == numberOfButtons-1 ?  Provider.of<TrainingScreenProvider>(context, listen: false).resetStage():
-                index-widget.currentStage==0 ? ()=>{}:widget.onButtonClicked(index)
+                index == numberOfButtons-1 ?  ref.read(trainingScreenProvider.notifier).resetStage()//Provider.of<TrainingScreenProvider>(context, listen: false).resetStage():
+                :index-widget.currentStage==0 ? ()=>{}:widget.onButtonClicked(index)
                 },
               stage: index - widget.currentStage,
               color: (index % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,

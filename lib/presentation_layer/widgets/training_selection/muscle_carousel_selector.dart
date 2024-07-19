@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:provider/provider.dart';
-import 'muscle_tile.dart';
-
-class MuscleCarouselSelector extends StatefulWidget {
+ import 'package:flutter/material.dart';
+ import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:provider/provider.dart';
+ import 'muscle_tile.dart';
+ 
+ class MuscleCarouselSelector extends ConsumerStatefulWidget {
   final List<MuscleTileSchema> muscles;
 
   const MuscleCarouselSelector({
@@ -12,10 +13,10 @@ class MuscleCarouselSelector extends StatefulWidget {
   });
 
   @override
-  _MuscleCarouselSelectorState createState() => _MuscleCarouselSelectorState();
+  ConsumerState<MuscleCarouselSelector> createState() => _MuscleCarouselSelectorState();
 }
 
-class _MuscleCarouselSelectorState extends State<MuscleCarouselSelector> {
+class _MuscleCarouselSelectorState extends ConsumerState<MuscleCarouselSelector> {
   int? selectedIndex;
 
   @override
@@ -31,8 +32,9 @@ class _MuscleCarouselSelectorState extends State<MuscleCarouselSelector> {
             onTap: () {
               setState(() {
                 selectedIndex = index;
-                final muscle = widget.muscles[index];
-                Provider.of<TrainingScreenProvider>(context, listen: false).selectMuscleById(muscle.muscleId);
+                final muscleId = widget.muscles[index].muscleId;
+                // Using ref.read to trigger actions without causing this widget to rebuild
+                ref.read(trainingScreenProvider.notifier).selectMuscleById(muscleId);
               });
             },
             child: Container(

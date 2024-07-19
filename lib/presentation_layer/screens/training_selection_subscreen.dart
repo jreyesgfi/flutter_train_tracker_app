@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
 
-class TrainingSelectionSubscreen extends StatelessWidget {
+class TrainingSelectionSubscreen extends ConsumerWidget {
   TrainingSelectionSubscreen({Key? super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     
-    final muscles = Provider.of<TrainingScreenProvider>(context).muscleTiles;
-    final exercises = Provider.of<TrainingScreenProvider>(context).exerciseTiles;
+    final muscles = ref.read(trainingScreenProvider.notifier).muscleTiles;
+    final exercises = ref.read(trainingScreenProvider.notifier).exerciseTiles;
 
     return Scaffold(
       body: ListView(
