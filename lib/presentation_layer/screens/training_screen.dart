@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
-import 'package:flutter_application_test1/infrastructure_layer/repository_impl/mock_data_repository.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
-class TrainingScreen extends ConsumerWidget {
+// Main TrainingScreen widget that wraps content in ProviderScope
+class TrainingScreen extends StatelessWidget {
   const TrainingScreen({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      // Local ProviderScope to scope the provider to this screen and its descendants
+      overrides: [], // Optional: Add provider overrides if necessary
+      child: _TrainingScreenContent(),
+    );
+  }
+}
+
+// The actual content of the TrainingScreen, where we consume the provider
+class _TrainingScreenContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(trainingScreenProvider);
     
-    // Load completed and data is available
+    // Depending on the state of `allMuscles`, show either the content or a loading indicator
     if (state.allMuscles.isNotEmpty) {
+      // IndexedStack is used to switch between different subscreens based on `currentStage`
       return IndexedStack(
         index: state.currentStage,
         children: [
@@ -24,7 +35,7 @@ class TrainingScreen extends ConsumerWidget {
         ],
       );
     } else {
-      // Loading state
+      // Show a loading spinner while the data is being fetched
       return Center(child: CircularProgressIndicator());
     }
   }

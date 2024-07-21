@@ -1,5 +1,8 @@
+import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_tile.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/domain_layer/repositories/repository_interfaces.dart';
@@ -16,9 +19,13 @@ class TrainingScreenState {
   final Map<String, DateTime> lastTrainingTimes;
   final Map<String, DateTime> lastMuscleTrainingTimes;
 
+  final List<MuscleTileSchema> muscleTiles;
+  final List<ExerciseTileSchema> exerciseTiles;
+
   MuscleData? selectedMuscle;
   ExerciseData? selectedExercise;
   SessionData? lastSession;
+  SessionInfoSchema? lastSessionSummary;
 
   int currentStage;
 
@@ -30,9 +37,14 @@ class TrainingScreenState {
     this.lastTrainingTimes = const {},
     this.lastMuscleTrainingTimes = const {},
 
+    this.muscleTiles = const [],
+    this.exerciseTiles = const [],
+
     this.selectedMuscle,
     this.selectedExercise,
     this.lastSession,
+    this.lastSessionSummary,
+
 
     this.currentStage = 0,
   });
@@ -49,9 +61,13 @@ class TrainingScreenState {
     Map<String, DateTime>? lastTrainingTimes,
     Map<String, DateTime>? lastMuscleTrainingTimes,
 
+    List<MuscleTileSchema>? muscleTiles,
+    List<ExerciseTileSchema>? exerciseTiles,
+
     MuscleData? selectedMuscle,
     ExerciseData? selectedExercise,
     SessionData? lastSession,
+    SessionInfoSchema? lastSessionSummary,
 
     int? currentStage,
   }) {
@@ -63,9 +79,13 @@ class TrainingScreenState {
       lastTrainingTimes: lastTrainingTimes ?? this.lastTrainingTimes,
       lastMuscleTrainingTimes: lastMuscleTrainingTimes ?? this.lastMuscleTrainingTimes,
     
+      muscleTiles: muscleTiles ?? this.muscleTiles,
+      exerciseTiles: exerciseTiles ?? this.exerciseTiles,
+
       selectedMuscle: selectedMuscle ?? this.selectedMuscle,
       selectedExercise: selectedExercise ?? this.selectedExercise,
       lastSession: lastSession ?? this.lastSession,
+      lastSessionSummary: lastSessionSummary ?? this.lastSessionSummary,
 
       currentStage: currentStage ?? this.currentStage,
     );
@@ -108,10 +128,16 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     try {
       final selectedExercise = state.allExercises.firstWhere((e) => e.id == exerciseId);
       final lastSession = state.allLastSessions.firstWhere((s) => s.exerciseId == exerciseId);
+      final lastSessionSummary = TrainingDataTransformer.transformSessionToSummary(
+        lastSession,
+        selectedExercise.name,
+        state.selectedMuscle!.name,
+      );
 
       state = state.copyWith(
         selectedExercise: selectedExercise,
         lastSession: lastSession,
+        lastSessionSummary: lastSessionSummary,
       );
     
     } catch (e) {
@@ -119,21 +145,27 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
         selectedExercise: null,
         lastSession: null,
       );
+      } 
     }
 
-      
-    }
+    ExerciseData? get selectedExercise => state.selectedExercise;
+    List<MuscleTileSchema> get muscleTiles => state.muscleTiles;
+    List<ExerciseTileSchema> get exerciseTiles => state.exerciseTiles;
+    SessionInfoSchema? get lastSessionSummary => state.lastSessionSummary;
 
+  // VIEW MODEL
   void _updateTiles() {
-    // Logic to update tiles based on the current state
-    // When updating the state, you assign a new state like this:
-    // state = state.copyWith(
-    //   muscleTiles: TrainingDataTransformer.transformMusclesToTiles(state.allMuscles, state.lastMuscleTrainingTimes),
-    //   exerciseTiles: TrainingDataTransformer.transformExercisesToTiles(state.filteredExercises, state.lastTrainingTimes),
-    // );
+    var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(state.allMuscles, state.lastMuscleTrainingTimes);
+    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(state.filteredExercises, state.lastTrainingTimes);
+
+    state = state.copyWith(
+      muscleTiles: newMuscleTiles,
+      exerciseTiles: newExerciseTiles,
+    );
   }
 
 
+  // STAGES
   void nextStage() {
     state = state.copyWith(currentStage: state.currentStage + 1);
   }
