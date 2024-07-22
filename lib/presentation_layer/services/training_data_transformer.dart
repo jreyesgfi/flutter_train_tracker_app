@@ -5,7 +5,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 
 class TrainingDataTransformer {
   static List<MuscleTileSchema> transformMusclesToTiles(
-      List<MuscleData> muscles, Map<String, DateTime> lastTrainingTimes) {
+      List<MuscleEntity> muscles, Map<String, DateTime> lastTrainingTimes) {
     return muscles
         .map((muscle) => MuscleTileSchema(
               muscleId: muscle.id,
@@ -18,7 +18,7 @@ class TrainingDataTransformer {
   }
 
   static List<ExerciseTileSchema> transformExercisesToTiles(
-      List<ExerciseData> exercises, Map<String, DateTime> lastTrainingTimes) {
+    List<ExerciseEntity> exercises, Map<String, DateTime> lastTrainingTimes) {
     return exercises
         .map((exercise) => ExerciseTileSchema(
               exerciseId: exercise.id,
@@ -31,7 +31,7 @@ class TrainingDataTransformer {
   }
 
   static SessionInfoSchema transformSessionToSummary(
-      SessionData? session, exerciseName, muscleName) {
+      SessionEntity? session, exerciseName, muscleName) {
     if (session == null) {
       return SessionInfoSchema(
         exerciseName: '',
@@ -59,13 +59,13 @@ class TrainingDataTransformer {
   static int calculateDaysSinceLastExercise(DateTime? lastExerciseDate) {
     return DateTime.now().difference(lastExerciseDate ?? DateTime.now()).inDays;
   }
-  static List<String> exerciseImagePaths(ExerciseData exercise) {
+  static List<String> exerciseImagePaths(ExerciseEntity exercise) {
     final commonPath = "assets/images/test/exercises/${exercise.muscleId}/${exercise.id}_";
     return 
     ["${commonPath}1.png",
     "${commonPath}2.png"];
   }
-  static String muscleImagePath(MuscleData muscle) {
+  static String muscleImagePath(MuscleEntity muscle) {
     return "assets/images/test/muscles/${muscle.id}.svg";
   }
 }

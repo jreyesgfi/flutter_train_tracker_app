@@ -2,25 +2,25 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 import 'dart:math';
 
 class MockDataRepository {
-  List<MuscleData> muscles = [
-    MuscleData(id: "m1", name: "Pecho"),
-    MuscleData(id: "m2", name: "Hombros"),
-    MuscleData(id: "m3", name: "Piernas"),
+  List<MuscleEntity> muscles = [
+    MuscleEntity(id: "m1", name: "Pecho"),
+    MuscleEntity(id: "m2", name: "Hombros"),
+    MuscleEntity(id: "m3", name: "Piernas"),
   ];
 
-  List<ExerciseData> exercises = [
-    ExerciseData(id: "e1", name: "Bench Press", muscleId: "m1"),
-    ExerciseData(id: "e2", name: "Flyes", muscleId: "m1"),
-    ExerciseData(id: "e3", name: "Dumbbell Front Raises", muscleId: "m2"),
-    ExerciseData(id: "e4", name: "Dumbbell Lateral Raises", muscleId: "m2"),
-    ExerciseData(id: "e5", name: "Seated Leg Curl", muscleId: "m3"),
-    ExerciseData(id: "e6", name: "Leg Press", muscleId: "m3"),
-    ExerciseData(id: "e7", name: "Push Up", muscleId: "m1"),
-    ExerciseData(id: "e8", name: "Seated Military Shoulder Press", muscleId: "m2"),
-    ExerciseData(id: "e9", name: "Standing Calf Raises", muscleId: "m3"),
+  List<ExerciseEntity> exercises = [
+    ExerciseEntity(id: "e1", name: "Bench Press", muscleId: "m1"),
+    ExerciseEntity(id: "e2", name: "Flyes", muscleId: "m1"),
+    ExerciseEntity(id: "e3", name: "Dumbbell Front Raises", muscleId: "m2"),
+    ExerciseEntity(id: "e4", name: "Dumbbell Lateral Raises", muscleId: "m2"),
+    ExerciseEntity(id: "e5", name: "Seated Leg Curl", muscleId: "m3"),
+    ExerciseEntity(id: "e6", name: "Leg Press", muscleId: "m3"),
+    ExerciseEntity(id: "e7", name: "Push Up", muscleId: "m1"),
+    ExerciseEntity(id: "e8", name: "Seated Military Shoulder Press", muscleId: "m2"),
+    ExerciseEntity(id: "e9", name: "Standing Calf Raises", muscleId: "m3"),
   ];
 
-  late List<SessionData> sessions;
+  late List<SessionEntity> sessions;
 
   MockDataRepository() {
     Random random = Random();
@@ -30,7 +30,7 @@ class MockDataRepository {
       var exercise = exercises[exerciseIndex];
       var muscle = muscles.firstWhere((m) => m.id == exercise.muscleId);
 
-      return SessionData(
+      return SessionEntity(
         id: "s${index + 1}",
         exerciseId: exercise.id,
         muscleId: muscle.id,
@@ -43,7 +43,7 @@ class MockDataRepository {
     });
 
     // Quintuplicate the sessions with increased randomness
-    List<SessionData> newSessions = [];
+    List<SessionEntity> newSessions = [];
     for (var session in sessions) {
       double lastMaxWeight = session.maxWeight;
       double lastMinWeight = session.minWeight;
@@ -56,7 +56,7 @@ class MockDataRepository {
         lastMaxReps = 12;
         lastMinReps = 10;
 
-        newSessions.add(SessionData(
+        newSessions.add(SessionEntity(
           id: "${session.id}_q$i",
           exerciseId: session.exerciseId,
           muscleId: session.muscleId,
@@ -72,19 +72,19 @@ class MockDataRepository {
     sessions = newSessions;
   }
 
-  Future<List<MuscleData>> fetchAllMuscles() async {
+  Future<List<MuscleEntity>> fetchAllMuscles() async {
     return muscles;
   }
 
-  Future<List<ExerciseData>> fetchAllExercises() async {
+  Future<List<ExerciseEntity>> fetchAllExercises() async {
     return exercises;
   }
 
-  Future<SessionData> fetchLastSessionForExercise(String exerciseId) async {
+  Future<SessionEntity> fetchLastSessionForExercise(String exerciseId) async {
     return sessions.where((s) => s.exerciseId == exerciseId).reduce((a, b) => a.timeStamp.isAfter(b.timeStamp) ? a : b);
   }
 
-  Future<List<SessionData>> fetchFilteredSessions({String? muscleId, String? exerciseId}) async {
+  Future<List<SessionEntity>> fetchFilteredSessions({String? muscleId, String? exerciseId}) async {
     if (muscleId == null && exerciseId == null){
       return sessions;
     }
@@ -99,8 +99,8 @@ class MockDataRepository {
     }).toList();
   }
 
-  Future<List<SessionData>> fetchLastSessions() async {
-    Map<String, SessionData> latestSessions = {};
+  Future<List<SessionEntity>> fetchLastSessions() async {
+    Map<String, SessionEntity> latestSessions = {};
     for (var session in sessions) {
       if (!latestSessions.containsKey(session.exerciseId) || latestSessions[session.exerciseId]!.timeStamp.isBefore(session.timeStamp)) {
         latestSessions[session.exerciseId] = session;

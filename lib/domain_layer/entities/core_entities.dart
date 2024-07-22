@@ -1,25 +1,25 @@
-class MuscleData {
+class MuscleEntity {
   final String id;
   final String name;
 
-  MuscleData({required this.id, required this.name});
+  MuscleEntity({required this.id, required this.name});
 
-  factory MuscleData.fromJson(Map<String, dynamic> json) {
-    return MuscleData(
+  factory MuscleEntity.fromJson(Map<String, dynamic> json) {
+    return MuscleEntity(
       id: json['muscleId'] as String,
       name: json['name'] as String,
     );
   }
 }
 
-class ExerciseData {
+class ExerciseEntity {
   final String id;
   final String name;
   final String muscleId;
 
-  ExerciseData({required this.id, required this.name, required this.muscleId});
-  factory ExerciseData.fromJson(Map<String, dynamic> json) {
-    return ExerciseData(
+  ExerciseEntity({required this.id, required this.name, required this.muscleId});
+  factory ExerciseEntity.fromJson(Map<String, dynamic> json) {
+    return ExerciseEntity(
       id: json['exerciseId'] as String,
       name: json['name'] as String,
       muscleId: json['muscleId'] as String
@@ -28,7 +28,7 @@ class ExerciseData {
 
 }
 
-class SessionData {
+class SessionEntity {
   final String id;
   final String exerciseId;
   final String muscleId;
@@ -38,7 +38,7 @@ class SessionData {
   final int maxReps;
   final int minReps;
 
-  SessionData({
+  SessionEntity({
     required this.id,
     required this.exerciseId,
     required this.muscleId,

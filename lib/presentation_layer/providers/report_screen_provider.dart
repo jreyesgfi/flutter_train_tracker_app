@@ -5,38 +5,38 @@ import 'package:flutter_application_test1/infrastructure_layer/repository_impl/m
 class ReportScreenProvider extends ChangeNotifier {
   /* DATA SECTION */
   // Internal State
-  List<MuscleData> _allMuscles = [];
-  List<ExerciseData> _allExercises = [];
-  List<SessionData> _filteredSessions = [];
+  List<MuscleEntity> _allMuscles = [];
+  List<ExerciseEntity> _allExercises = [];
+  List<SessionEntity> _filteredSessions = [];
 
   // Currently selected data
-  MuscleData? _selectedMuscle;
-  ExerciseData? _selectedExercise;
+  MuscleEntity? _selectedMuscle;
+  ExerciseEntity? _selectedExercise;
 
   final MockDataRepository _repository = MockDataRepository();
 
   ReportScreenProvider(
-    List<MuscleData> allMuscles,
-    List<ExerciseData> allExercises,
+    List<MuscleEntity> allMuscles,
+    List<ExerciseEntity> allExercises,
   ) {
     _setData(allMuscles, allExercises);
     filterSessions();
   }
 
   void _setData(
-    List<MuscleData> allMuscles,
-    List<ExerciseData> allExercises,
+    List<MuscleEntity> allMuscles,
+    List<ExerciseEntity> allExercises,
   ) {
     _allMuscles = allMuscles;
     _allExercises = allExercises;
   }
 
-  List<MuscleData> get allMuscles => _allMuscles;
-  List<ExerciseData> get allExercises => _allExercises;
-  List<SessionData> get filteredSessions => _filteredSessions;
+  List<MuscleEntity> get allMuscles => _allMuscles;
+  List<ExerciseEntity> get allExercises => _allExercises;
+  List<SessionEntity> get filteredSessions => _filteredSessions;
 
-  MuscleData? get selectedMuscle => _selectedMuscle;
-  ExerciseData? get selectedExercise => _selectedExercise;
+  MuscleEntity? get selectedMuscle => _selectedMuscle;
+  ExerciseEntity? get selectedExercise => _selectedExercise;
 
   void selectMuscleById(String? muscleId) {
     try {

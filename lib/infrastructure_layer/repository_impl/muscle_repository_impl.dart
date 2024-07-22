@@ -15,11 +15,11 @@ class MuscleRepositoryImpl implements MuscleRepository {
   MuscleRepositoryImpl(this.muscleService);
 
   @override
-  Future<List<domain.MuscleData>> fetchAllMuscles() async {
+  Future<List<domain.MuscleEntity>> fetchAllMuscles() async {
     List<MuscleData> muscleDataList = await muscleService.fetchAllMuscles();
     return muscleDataList.map((muscleData) {
       // Convert MuscleData from API to domain entity MuscleData
-      return domain.MuscleData(
+      return domain.MuscleEntity(
         id: muscleData.muscleId, // Ensure these field names match your domain model
         name: muscleData.name,
       );

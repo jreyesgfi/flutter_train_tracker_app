@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 class MaxMinLineChart extends StatelessWidget {
   MaxMinLineChart({super.key});
 
-  Map<DateTime, List<SessionData>> _groupSessionsByDate(List<SessionData> sessions) {
-    final Map<DateTime, List<SessionData>> groupedSessions = {};
+  Map<DateTime, List<SessionEntity>> _groupSessionsByDate(List<SessionEntity> sessions) {
+    final Map<DateTime, List<SessionEntity>> groupedSessions = {};
     for (var session in sessions) {
       final date = DateTime(session.timeStamp.year, session.timeStamp.month, session.timeStamp.day);
       if (groupedSessions[date] == null) {
@@ -20,7 +20,7 @@ class MaxMinLineChart extends StatelessWidget {
     return groupedSessions;
   }
 
-  List<FlSpot> _generateSpots(Map<DateTime, List<SessionData>> groupedSessions, bool isMaxWeight) {
+  List<FlSpot> _generateSpots(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
     final List<FlSpot> spots = [];
     groupedSessions.forEach((date, sessions) {
       final averageWeight = sessions.map((s) => isMaxWeight ? s.maxWeight : s.minWeight).reduce((a, b) => a + b) / sessions.length;
@@ -30,22 +30,22 @@ class MaxMinLineChart extends StatelessWidget {
     return spots;
   }
 
-  double _getMinX(Map<DateTime, List<SessionData>> groupedSessions) {
+  double _getMinX(Map<DateTime, List<SessionEntity>> groupedSessions) {
     return groupedSessions.keys.map((date) => date.millisecondsSinceEpoch.toDouble()).reduce((a, b) => a < b ? a : b) - Duration(days: 1).inMilliseconds;
   }
 
-  double _getMaxX(Map<DateTime, List<SessionData>> groupedSessions) {
+  double _getMaxX(Map<DateTime, List<SessionEntity>> groupedSessions) {
     return groupedSessions.keys.map((date) => date.millisecondsSinceEpoch.toDouble()).reduce((a, b) => a > b ? a : b) + Duration(days: 1).inMilliseconds;
   }
 
-  double _getMinY(Map<DateTime, List<SessionData>> groupedSessions, bool isMaxWeight) {
+  double _getMinY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
     return groupedSessions.values
         .expand((sessions) => sessions)
         .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)
         .reduce((a, b) => a < b ? a : b) - 1;
   }
 
-  double _getMaxY(Map<DateTime, List<SessionData>> groupedSessions, bool isMaxWeight) {
+  double _getMaxY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
     return groupedSessions.values
         .expand((sessions) => sessions)
         .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)

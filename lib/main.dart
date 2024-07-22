@@ -21,5 +21,7 @@ Future<void> _configureAmplify() async {
     await Amplify.configure(amplifyconfig);
   } on AmplifyAlreadyConfiguredException {
     debugPrint('Amplify was already configured.');
+  } catch (e) {
+    debugPrint("Failed to configure Amplify: $e");
   }
 }

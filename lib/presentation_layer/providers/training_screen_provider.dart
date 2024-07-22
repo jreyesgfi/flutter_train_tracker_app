@@ -1,30 +1,31 @@
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
+import 'package:flutter_application_test1/infrastructure_layer/network/exercise_data_service.dart';
+import 'package:flutter_application_test1/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
-import 'package:flutter_application_test1/domain_layer/repositories/repository_interfaces.dart';
 
 // Define a provider for the notifier
 final trainingScreenProvider = StateNotifierProvider<TrainingScreenNotifier, TrainingScreenState>((ref) {
   return TrainingScreenNotifier(ref);
 });
 class TrainingScreenState {
-  final List<MuscleData> allMuscles;
-  final List<ExerciseData> allExercises;
-  final List<ExerciseData> filteredExercises;
-  final List<SessionData> allLastSessions;
+  final List<MuscleEntity> allMuscles;
+  final List<ExerciseEntity> allExercises;
+  final List<ExerciseEntity> filteredExercises;
+  final List<SessionEntity> allLastSessions;
   final Map<String, DateTime> lastTrainingTimes;
   final Map<String, DateTime> lastMuscleTrainingTimes;
 
   final List<MuscleTileSchema> muscleTiles;
   final List<ExerciseTileSchema> exerciseTiles;
 
-  MuscleData? selectedMuscle;
-  ExerciseData? selectedExercise;
-  SessionData? lastSession;
+  MuscleEntity? selectedMuscle;
+  ExerciseEntity? selectedExercise;
+  SessionEntity? lastSession;
   SessionInfoSchema? lastSessionSummary;
 
   int currentStage;
@@ -54,19 +55,19 @@ class TrainingScreenState {
   }
 
   TrainingScreenState copyWith({
-    List<MuscleData>? allMuscles,
-    List<ExerciseData>? allExercises,
-    List<ExerciseData>? filteredExercises,
-    List<SessionData>? allLastSessions,
+    List<MuscleEntity>? allMuscles,
+    List<ExerciseEntity>? allExercises,
+    List<ExerciseEntity>? filteredExercises,
+    List<SessionEntity>? allLastSessions,
     Map<String, DateTime>? lastTrainingTimes,
     Map<String, DateTime>? lastMuscleTrainingTimes,
 
     List<MuscleTileSchema>? muscleTiles,
     List<ExerciseTileSchema>? exerciseTiles,
 
-    MuscleData? selectedMuscle,
-    ExerciseData? selectedExercise,
-    SessionData? lastSession,
+    MuscleEntity? selectedMuscle,
+    ExerciseEntity? selectedExercise,
+    SessionEntity? lastSession,
     SessionInfoSchema? lastSessionSummary,
 
     int? currentStage,
@@ -102,7 +103,11 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   // DATA CLOUD RETRIVAL
   Future<void> _fetchAllData() async {
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
-    state = state.copyWith(allMuscles: muscles);
+    final exercises = await ref.read(exerciseRepositoryProvider).fetchAllExercises();
+    state = state.copyWith(
+      allMuscles: muscles,
+      allExercises: exercises,
+    );
     _updateTiles();
   }
 
@@ -111,7 +116,6 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     try {
       final selectedMuscle = state.allMuscles.firstWhere((m) => m.id == muscleId);
       final filteredExercises = state.allExercises.where((e) => e.muscleId == selectedMuscle.id).toList();
-
       state = state.copyWith(
         selectedMuscle: selectedMuscle,
         filteredExercises: filteredExercises,
@@ -148,7 +152,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       } 
     }
 
-    ExerciseData? get selectedExercise => state.selectedExercise;
+    ExerciseEntity? get selectedExercise => state.selectedExercise;
     List<MuscleTileSchema> get muscleTiles => state.muscleTiles;
     List<ExerciseTileSchema> get exerciseTiles => state.exerciseTiles;
     SessionInfoSchema? get lastSessionSummary => state.lastSessionSummary;
@@ -156,7 +160,9 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   // VIEW MODEL
   void _updateTiles() {
     var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(state.allMuscles, state.lastMuscleTrainingTimes);
-    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(state.filteredExercises, state.lastTrainingTimes);
+    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(state.allExercises, state.lastTrainingTimes);
+    print("The Number of filteredExercises are: ${state.filteredExercises.length}");
+    print("The Number of exercises are: ${newExerciseTiles.length}");
 
     state = state.copyWith(
       muscleTiles: newMuscleTiles,

@@ -4,7 +4,7 @@ import 'package:flutter_application_test1/models/MuscleData.dart'; // Generated 
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart' as domain;
 
 class RealDataRepository {
-  Future<List<domain.MuscleData>> fetchAllMuscles() async {
+  Future<List<domain.MuscleEntity>> fetchAllMuscles() async {
     try {
       // Create a GraphQL List query for MuscleData
       final request = ModelQueries.list(MuscleData.classType);
@@ -19,7 +19,7 @@ class RealDataRepository {
 
       // Map the fetched models to the domain entities
       return muscleDataList.map((muscleData) {
-        return domain.MuscleData(
+        return domain.MuscleEntity(
           id: muscleData!.muscleId,
           name: muscleData.name,
         );

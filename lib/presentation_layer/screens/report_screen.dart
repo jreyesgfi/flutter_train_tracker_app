@@ -55,8 +55,8 @@ class _ReportScreenState extends State<ReportScreen> with SingleTickerProviderSt
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
-          var allMuscles = snapshot.data![0] as List<MuscleData>;
-          var allExercises = snapshot.data![1] as List<ExerciseData>;
+          var allMuscles = snapshot.data![0] as List<MuscleEntity>;
+          var allExercises = snapshot.data![1] as List<ExerciseEntity>;
 
           return ChangeNotifierProvider<ReportScreenProvider>(
             create: (_) => ReportScreenProvider(allMuscles, allExercises),
@@ -120,8 +120,8 @@ class _ReportScreenState extends State<ReportScreen> with SingleTickerProviderSt
 
   Future<List<dynamic>> _loadInitialData() async {
     var repo = MockDataRepository();
-    List<MuscleData> allMuscles = await repo.fetchAllMuscles();
-    List<ExerciseData> allExercises = await repo.fetchAllExercises();
+    List<MuscleEntity> allMuscles = await repo.fetchAllMuscles();
+    List<ExerciseEntity> allExercises = await repo.fetchAllExercises();
     return [allMuscles, allExercises];
   }
 }
