@@ -9,7 +9,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
+
 
 
 class SessionSubscreen extends ConsumerStatefulWidget {
@@ -30,7 +30,16 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
   @override
   Widget build(BuildContext context) {
     final provider =  ref.read(trainingScreenProvider.notifier);
-    final lastSession = provider.lastSessionSummary;
+    final lastSession = provider.lastSessionSummary ?? 
+      SessionInfoSchema(
+        exerciseName: provider.selectedExercise!.name,
+        muscleGroup: provider.selectedMuscle!.name,
+        timeSinceLastSession: 0,
+        minWeight: 5,
+        maxWeight: 5,
+        minReps: 10,
+        maxReps: 10
+    );
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null
         ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
@@ -44,6 +53,14 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     bool isOddStage = currentStage % 2 != 0;
     bool isLastEvenStage = currentStage == 8;
 
+    void updateNewSession(SessionInfoSchema sessionInfo) {
+      ref.read(trainingScreenProvider.notifier).updateNewSession(
+        sessionInfo.maxWeight,
+        sessionInfo.minWeight,
+        sessionInfo.maxReps,
+        sessionInfo.minReps         
+      );
+    }
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         child: Stack(children: [
@@ -71,16 +88,21 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
                       ?.copyWith(color: theme.shadowColor),
                 ),
               ]),
+              // TRAINING
               if (currentStage == 0 || isOddStage) ...[
                 ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
                 SessionInfoWidget(sessionInfo: lastSession),
-              ] else ...[
+              ] 
+              // RESTING
+              else ...[
                 if (!isLastEvenStage)
                   CustomChrono(
                       key: ValueKey(currentStage),
                       duration: const Duration(minutes: 2)),
                 SessionForm(
-                    initialData: lastSession, onResultsChanged: (results) {}),
+                    initialData: provider.newSessionSchema ?? lastSession, onResultsChanged: (results) {
+                      updateNewSession(results);
+                    }),
               ],
             ],
           ),

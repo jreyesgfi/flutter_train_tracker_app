@@ -7,6 +7,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
+import 'package:uuid/uuid.dart';
 
 // Define a provider for the notifier
 final trainingScreenProvider = StateNotifierProvider<TrainingScreenNotifier, TrainingScreenState>((ref) {
@@ -28,6 +29,8 @@ class TrainingScreenState {
   SessionEntity? lastSession;
   SessionInfoSchema? lastSessionSummary;
 
+  SessionEntity? newSession;
+
   int currentStage;
 
   TrainingScreenState({
@@ -46,6 +49,7 @@ class TrainingScreenState {
     this.lastSession,
     this.lastSessionSummary,
 
+    this.newSession,
 
     this.currentStage = 0,
   });
@@ -70,6 +74,8 @@ class TrainingScreenState {
     SessionEntity? lastSession,
     SessionInfoSchema? lastSessionSummary,
 
+    SessionEntity? newSession,
+
     int? currentStage,
   }) {
     return TrainingScreenState(
@@ -87,6 +93,8 @@ class TrainingScreenState {
       selectedExercise: selectedExercise ?? this.selectedExercise,
       lastSession: lastSession ?? this.lastSession,
       lastSessionSummary: lastSessionSummary ?? this.lastSessionSummary,
+
+      newSession: newSession ?? this.newSession,
 
       currentStage: currentStage ?? this.currentStage,
     );
@@ -152,10 +160,19 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       } 
     }
 
+    ExerciseEntity? get selectedMuscle => state.selectedExercise;
     ExerciseEntity? get selectedExercise => state.selectedExercise;
     List<MuscleTileSchema> get muscleTiles => state.muscleTiles;
     List<ExerciseTileSchema> get exerciseTiles => state.exerciseTiles;
     SessionInfoSchema? get lastSessionSummary => state.lastSessionSummary;
+    SessionInfoSchema? get newSessionSchema => 
+      state.newSession != null ? 
+      TrainingDataTransformer.transformSessionToSummary(
+        state.newSession,
+        selectedExercise!.name,
+        state.selectedMuscle!.name,
+      )
+      :null;
 
   // VIEW MODEL
   void _updateTiles() {
@@ -168,6 +185,26 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       muscleTiles: newMuscleTiles,
       exerciseTiles: newExerciseTiles,
     );
+  }
+
+  void updateNewSession(maxWeight, minWeight, maxReps, minReps) {
+    //
+    final newSession = SessionEntity(
+      id: state.newSession?.id ?? const Uuid().v4(),//create a new session id that ensures it is unique for all users and sessions in aws
+      exerciseId: state.selectedExercise!.id,
+      muscleId: state.selectedMuscle!.id,
+      timeStamp: DateTime.now(),
+      maxWeight: maxWeight,
+      minWeight: minWeight,
+      maxReps: maxReps,
+      minReps: minReps
+    );
+
+    state = state.copyWith(newSession : newSession);
+  }
+
+  void commitNewSession() {
+    // call the repository method
   }
 
 
