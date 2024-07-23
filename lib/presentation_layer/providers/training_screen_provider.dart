@@ -10,9 +10,11 @@ import 'package:flutter_application_test1/domain_layer/entities/core_entities.da
 import 'package:uuid/uuid.dart';
 
 // Define a provider for the notifier
-final trainingScreenProvider = StateNotifierProvider<TrainingScreenNotifier, TrainingScreenState>((ref) {
+final trainingScreenProvider =
+    StateNotifierProvider<TrainingScreenNotifier, TrainingScreenState>((ref) {
   return TrainingScreenNotifier(ref);
 });
+
 class TrainingScreenState {
   final List<MuscleEntity> allMuscles;
   final List<ExerciseEntity> allExercises;
@@ -40,17 +42,13 @@ class TrainingScreenState {
     this.allLastSessions = const [],
     this.lastTrainingTimes = const {},
     this.lastMuscleTrainingTimes = const {},
-
     this.muscleTiles = const [],
     this.exerciseTiles = const [],
-
     this.selectedMuscle,
     this.selectedExercise,
     this.lastSession,
     this.lastSessionSummary,
-
     this.newSession,
-
     this.currentStage = 0,
   });
 
@@ -65,17 +63,13 @@ class TrainingScreenState {
     List<SessionEntity>? allLastSessions,
     Map<String, DateTime>? lastTrainingTimes,
     Map<String, DateTime>? lastMuscleTrainingTimes,
-
     List<MuscleTileSchema>? muscleTiles,
     List<ExerciseTileSchema>? exerciseTiles,
-
     MuscleEntity? selectedMuscle,
     ExerciseEntity? selectedExercise,
     SessionEntity? lastSession,
     SessionInfoSchema? lastSessionSummary,
-
     SessionEntity? newSession,
-
     int? currentStage,
   }) {
     return TrainingScreenState(
@@ -84,22 +78,35 @@ class TrainingScreenState {
       filteredExercises: filteredExercises ?? this.filteredExercises,
       allLastSessions: allLastSessions ?? this.allLastSessions,
       lastTrainingTimes: lastTrainingTimes ?? this.lastTrainingTimes,
-      lastMuscleTrainingTimes: lastMuscleTrainingTimes ?? this.lastMuscleTrainingTimes,
-    
+      lastMuscleTrainingTimes:
+          lastMuscleTrainingTimes ?? this.lastMuscleTrainingTimes,
       muscleTiles: muscleTiles ?? this.muscleTiles,
       exerciseTiles: exerciseTiles ?? this.exerciseTiles,
-
       selectedMuscle: selectedMuscle ?? this.selectedMuscle,
       selectedExercise: selectedExercise ?? this.selectedExercise,
       lastSession: lastSession ?? this.lastSession,
       lastSessionSummary: lastSessionSummary ?? this.lastSessionSummary,
-
       newSession: newSession ?? this.newSession,
-
       currentStage: currentStage ?? this.currentStage,
     );
   }
 }
+
+ExerciseEntity emptyExercise = ExerciseEntity(
+    id: Uuid().v4(),
+    muscleId: Uuid().v4(),
+    name: "Ningún ejercicio encontrado");
+
+SessionEntity emptySessionEntity = SessionEntity(
+  id: Uuid().v4(),
+  exerciseId: Uuid().v4(),
+  muscleId: Uuid().v4(),
+  timeStamp: DateTime.now(),
+  maxWeight: 10,
+  minWeight: 10,
+  maxReps: 10,
+  minReps: 10,
+);
 
 class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   final Ref ref;
@@ -110,8 +117,10 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
 
   // DATA CLOUD RETRIVAL
   Future<void> _fetchAllData() async {
+    print("Fetching all data");
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
-    final exercises = await ref.read(exerciseRepositoryProvider).fetchAllExercises();
+    final exercises =
+        await ref.read(exerciseRepositoryProvider).fetchAllExercises();
     state = state.copyWith(
       allMuscles: muscles,
       allExercises: exercises,
@@ -121,13 +130,18 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
 
   // DATA LOCAL FILTER
   void selectMuscleById(String muscleId) {
+    print("Select muscle");
     try {
-      final selectedMuscle = state.allMuscles.firstWhere((m) => m.id == muscleId);
-      final filteredExercises = state.allExercises.where((e) => e.muscleId == selectedMuscle.id).toList();
+      final selectedMuscle =
+          state.allMuscles.firstWhere((m) => m.id == muscleId);
+      final filteredExercises = state.allExercises
+          .where((e) => e.muscleId == selectedMuscle.id)
+          .toList();
       state = state.copyWith(
         selectedMuscle: selectedMuscle,
         filteredExercises: filteredExercises,
       );
+      _updateTiles();
     } catch (e) {
       // Handle the case where no muscle matches the ID
       state = state.copyWith(
@@ -136,50 +150,62 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       );
     }
   }
+
   void selectExerciseById(String exerciseId) {
+    print("Select exercise");
+    ExerciseEntity selectedExercise;
+    SessionEntity lastSession;
+    SessionInfoSchema lastSessionSummary;
     try {
-      final selectedExercise = state.allExercises.firstWhere((e) => e.id == exerciseId);
-      final lastSession = state.allLastSessions.firstWhere((s) => s.exerciseId == exerciseId);
-      final lastSessionSummary = TrainingDataTransformer.transformSessionToSummary(
-        lastSession,
-        selectedExercise.name,
-        state.selectedMuscle!.name,
-      );
-
-      state = state.copyWith(
-        selectedExercise: selectedExercise,
-        lastSession: lastSession,
-        lastSessionSummary: lastSessionSummary,
-      );
-    
+      selectedExercise =
+          state.allExercises.firstWhere((e) => e.id == exerciseId);
+      print("Selected exercise");
     } catch (e) {
-      state = state.copyWith(
-        selectedExercise: null,
-        lastSession: null,
-      );
-      } 
+      selectedExercise = emptyExercise;
     }
+    try {
+      lastSession =
+          state.allLastSessions.firstWhere((s) => s.exerciseId == exerciseId);
+      print("Last session");
+    } catch (e) {
+      lastSession = emptySessionEntity;
+    }
+    lastSessionSummary = TrainingDataTransformer.transformSessionToSummary(
+      lastSession,
+      selectedExercise.name,
+      state.selectedMuscle!.name,
+    );
+    print("Last session summary: ${lastSessionSummary.exerciseName}");
 
-    ExerciseEntity? get selectedMuscle => state.selectedExercise;
-    ExerciseEntity? get selectedExercise => state.selectedExercise;
-    List<MuscleTileSchema> get muscleTiles => state.muscleTiles;
-    List<ExerciseTileSchema> get exerciseTiles => state.exerciseTiles;
-    SessionInfoSchema? get lastSessionSummary => state.lastSessionSummary;
-    SessionInfoSchema? get newSessionSchema => 
-      state.newSession != null ? 
-      TrainingDataTransformer.transformSessionToSummary(
-        state.newSession,
-        selectedExercise!.name,
-        state.selectedMuscle!.name,
-      )
-      :null;
+    state = state.copyWith(
+      selectedExercise: selectedExercise,
+      lastSession: lastSession,
+      lastSessionSummary: lastSessionSummary,
+    );
+  }
+
+  ExerciseEntity? get selectedMuscle => state.selectedExercise;
+  ExerciseEntity? get selectedExercise => state.selectedExercise;
+  List<MuscleTileSchema> get muscleTiles => state.muscleTiles;
+  List<ExerciseTileSchema> get exerciseTiles => state.exerciseTiles;
+  SessionInfoSchema? get lastSessionSummary => state.lastSessionSummary;
+  SessionInfoSchema? get newSessionSchema => state.newSession != null
+      ? TrainingDataTransformer.transformSessionToSummary(
+          state.newSession,
+          selectedExercise!.name,
+          state.selectedMuscle!.name,
+        )
+      : null;
 
   // VIEW MODEL
   void _updateTiles() {
-    var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(state.allMuscles, state.lastMuscleTrainingTimes);
-    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(state.allExercises, state.lastTrainingTimes);
-    print("The Number of filteredExercises are: ${state.filteredExercises.length}");
-    print("The Number of exercises are: ${newExerciseTiles.length}");
+    print("Update Tiles");
+    var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(
+        state.allMuscles, state.lastMuscleTrainingTimes);
+    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
+        state.filteredExercises, state.lastTrainingTimes);
+    print(
+        "The Number of filteredExercises are: ${state.filteredExercises.length}");
 
     state = state.copyWith(
       muscleTiles: newMuscleTiles,
@@ -188,25 +214,25 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   }
 
   void updateNewSession(maxWeight, minWeight, maxReps, minReps) {
-    //
+    print("Update new session");
     final newSession = SessionEntity(
-      id: state.newSession?.id ?? const Uuid().v4(),//create a new session id that ensures it is unique for all users and sessions in aws
-      exerciseId: state.selectedExercise!.id,
-      muscleId: state.selectedMuscle!.id,
-      timeStamp: DateTime.now(),
-      maxWeight: maxWeight,
-      minWeight: minWeight,
-      maxReps: maxReps,
-      minReps: minReps
-    );
+        id: state.newSession?.id ??
+            const Uuid()
+                .v4(), //create a new session id that ensures it is unique for all users and sessions in aws
+        exerciseId: state.selectedExercise!.id,
+        muscleId: state.selectedMuscle!.id,
+        timeStamp: DateTime.now(),
+        maxWeight: maxWeight,
+        minWeight: minWeight,
+        maxReps: maxReps,
+        minReps: minReps);
 
-    state = state.copyWith(newSession : newSession);
+    state = state.copyWith(newSession: newSession);
   }
 
   void commitNewSession() {
     // call the repository method
   }
-
 
   // STAGES
   void nextStage() {
@@ -226,7 +252,6 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   void setStage(int stage, {bool reset = false}) {
     state = state.copyWith(currentStage: reset ? 0 : stage);
   }
-
 }
 
 

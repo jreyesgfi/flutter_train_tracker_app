@@ -40,6 +40,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
         minReps: 10,
         maxReps: 10
     );
+    print("The exercise is ${lastSession.exerciseName}");
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null
         ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
@@ -74,7 +75,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  lastSession!.exerciseName,
+                  lastSession.exerciseName,
                   style: theme.textTheme.titleSmall,
                 ),
                 SizedBox(height: 4),
