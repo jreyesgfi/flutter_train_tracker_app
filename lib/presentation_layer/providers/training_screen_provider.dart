@@ -213,7 +213,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     );
   }
 
-  void updateNewSession(maxWeight, minWeight, maxReps, minReps) {
+  void updateNewSession(SessionValues sessionValues) {
     print("Update new session");
     final newSession = SessionEntity(
         id: state.newSession?.id ??
@@ -222,10 +222,10 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
         exerciseId: state.selectedExercise!.id,
         muscleId: state.selectedMuscle!.id,
         timeStamp: DateTime.now(),
-        maxWeight: maxWeight,
-        minWeight: minWeight,
-        maxReps: maxReps,
-        minReps: minReps);
+        maxWeight: sessionValues.maxWeight,
+        minWeight: sessionValues.minWeight,
+        maxReps: sessionValues.maxReps,
+        minReps: sessionValues.minReps);
 
     state = state.copyWith(newSession: newSession);
   }

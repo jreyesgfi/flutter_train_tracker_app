@@ -5,19 +5,19 @@ import 'package:flutter_application_test1/presentation_layer/widgets/common/roul
 
 class SessionForm extends StatefulWidget {
   final SessionInfoSchema initialData;
-  final Function(SessionInfoSchema) onResultsChanged;
+  // final Function(SessionInfoSchema) onResultsChanged;
 
   const SessionForm({
     Key? key,
     required this.initialData,
-    required this.onResultsChanged,
+    // required this.onResultsChanged,
   }) : super(key: key);
 
   @override
-  _SessionFormState createState() => _SessionFormState();
+  SessionFormState createState() => SessionFormState();
 }
 
-class _SessionFormState extends State<SessionForm> {
+class SessionFormState extends State<SessionForm> {
   late TextEditingController _maxWeightController;
   late TextEditingController _minWeightController;
   late TextEditingController _maxRepsController;
@@ -41,19 +41,28 @@ class _SessionFormState extends State<SessionForm> {
     super.dispose();
   }
 
-  void _handleFormSubmit() {
-    final SessionInfoSchema results = SessionInfoSchema(
+  SessionValues getCurrentFormData() {
+    return SessionValues(
       maxWeight: double.parse(_maxWeightController.text),
       minWeight: double.parse(_minWeightController.text),
       maxReps: int.parse(_maxRepsController.text),
       minReps: int.parse(_minRepsController.text),
-
-      exerciseName:widget.initialData.exerciseName,
-      muscleGroup: widget.initialData.muscleGroup,
-      timeSinceLastSession: widget.initialData.timeSinceLastSession
     );
-    widget.onResultsChanged(results);
   }
+
+  // void _handleFormSubmit() {
+  //   final SessionInfoSchema results = SessionInfoSchema(
+  //     maxWeight: double.parse(_maxWeightController.text),
+  //     minWeight: double.parse(_minWeightController.text),
+  //     maxReps: int.parse(_maxRepsController.text),
+  //     minReps: int.parse(_minRepsController.text),
+
+  //     exerciseName:widget.initialData.exerciseName,
+  //     muscleGroup: widget.initialData.muscleGroup,
+  //     timeSinceLastSession: widget.initialData.timeSinceLastSession
+  //   );
+  //   widget.onResultsChanged(results);
+  // }
 
   @override
   Widget build(BuildContext context) {

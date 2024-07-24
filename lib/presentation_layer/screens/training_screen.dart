@@ -31,7 +31,7 @@ class _TrainingScreenContent extends ConsumerWidget {
         index: state.currentStage,
         children: [
           TrainingSelectionSubscreen(),
-          SessionSubscreen(),
+          SessionSubscreen(key:ValueKey(state.currentStage)),
         ],
       );
     } else {

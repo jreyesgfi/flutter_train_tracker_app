@@ -13,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class SessionSubscreen extends ConsumerStatefulWidget {
+  const SessionSubscreen({super.key});
+
   @override
   ConsumerState<SessionSubscreen> createState() => SessionSubscreenState();
 }
@@ -20,12 +22,8 @@ class SessionSubscreen extends ConsumerStatefulWidget {
 class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
   // Footer manage the screen
   int currentStage = 0;
+  final GlobalKey<SessionFormState> _formKey = GlobalKey<SessionFormState>();
 
-  void onButtonClicked(int index) {
-    setState(() {
-      currentStage = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +52,18 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     bool isOddStage = currentStage % 2 != 0;
     bool isLastEvenStage = currentStage == 8;
 
-    void updateNewSession(SessionInfoSchema sessionInfo) {
-      ref.read(trainingScreenProvider.notifier).updateNewSession(
-        sessionInfo.maxWeight,
-        sessionInfo.minWeight,
-        sessionInfo.maxReps,
-        sessionInfo.minReps         
-      );
+  void onButtonClicked(int index) {
+    // Retrieve data from form and update provider
+    if (_formKey.currentState != null) {
+      SessionValues sessionValues = _formKey.currentState!.getCurrentFormData();
+      provider.updateNewSession(sessionValues);
     }
+
+    // Change the session stage
+    setState(() {
+      currentStage = index;
+    });
+  }
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         child: Stack(children: [
@@ -101,9 +103,8 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
                       key: ValueKey(currentStage),
                       duration: const Duration(minutes: 2)),
                 SessionForm(
-                    initialData: provider.newSessionSchema ?? lastSession, onResultsChanged: (results) {
-                      updateNewSession(results);
-                    }),
+                    key: _formKey,
+                    initialData: provider.newSessionSchema ?? lastSession),
               ],
             ],
           ),
