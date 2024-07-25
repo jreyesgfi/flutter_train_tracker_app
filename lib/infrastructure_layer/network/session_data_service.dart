@@ -14,9 +14,9 @@ class SessionDataService {
 
   List<Future<SessionData?>> futures = exerciseIds.map((exerciseId) async {
     String getLastSessionQuery = '''
-    query GetLastSessionByExercise($exerciseId: ID!) {
-      getLastSessionByExercise(exerciseId: $exerciseId) {
-        id
+    query GetLastSessionByExercise(\$exerciseId: ID!) {
+      getLastSessionByExercise(exerciseId: \$exerciseId) {
+        sessionId
         exerciseId
         muscleId
         timeStamp
@@ -35,8 +35,10 @@ class SessionDataService {
 
       var operation = Amplify.API.query(request: request);
       var response = await operation.response;
+      print("$response");
       var data = jsonDecode(response.data ?? '');
 
+      print("\nData: $data");
       if (data['getLastSessionByExercise'] != null) {
         return SessionData.fromJson(data['getLastSessionByExercise']);
       } else {

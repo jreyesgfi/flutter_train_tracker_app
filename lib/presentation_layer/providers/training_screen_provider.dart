@@ -106,9 +106,13 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
+    final exerciseIds = exercises.map((ExerciseEntity exercise) => exercise.id).toList();
+    final sessions = await ref.read(sessionRepositoryProvider).fetchLastSessions(exerciseIds);
+    print("Last sessions: ${sessions}");
     state = state.copyWith(
       allMuscles: muscles,
       allExercises: exercises,
+      allLastSessions: sessions
     );
     _updateTiles();
   }
@@ -248,6 +252,8 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   Future<void> commitNewSession() async{
     if (state.newSession != null) {
       await ref.read(sessionRepositoryProvider).createNewSession(state.newSession!);
+      // add it locally
+      state.allLastSessions.add(state.newSession!);
     }
     print("New Session Committed");
   }
