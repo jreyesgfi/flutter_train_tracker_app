@@ -52,13 +52,7 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
             child: SessionButton(
-              onTap: () => {
-                if (index == numberOfButtons-1){
-                  ref.read(trainingScreenProvider.notifier).resetStage()
-                }
-                else {
-                  widget.onButtonClicked(index)
-                }},
+              onTap: () => widget.onButtonClicked(index),
               stage: index - widget.currentStage,
               color: (index % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
               label: 

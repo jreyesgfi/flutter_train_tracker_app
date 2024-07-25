@@ -2,6 +2,7 @@ import 'package:flutter_application_test1/domain_layer/entities/session_info.dar
 import 'package:flutter_application_test1/infrastructure_layer/network/exercise_data_service.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
+import 'package:flutter_application_test1/infrastructure_layer/repository_impl/session_repository_impl.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_tile.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
@@ -244,8 +245,11 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     state = state.copyWith(newSession: newSession);
   }
 
-  void commitNewSession() {
-    // call the repository method
+  Future<void> commitNewSession() async{
+    if (state.newSession != null) {
+      await ref.read(sessionRepositoryProvider).createNewSession(state.newSession!);
+    }
+    print("New Session Committed");
   }
 
   // STAGES

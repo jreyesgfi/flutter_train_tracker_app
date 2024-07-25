@@ -28,10 +28,13 @@ type SessionData @model @auth(rules: [
   sessionId: ID! @primaryKey(sortKeyFields: ["timeStamp"])
   exerciseId: ID!
   muscleId: ID!
-  timeStamp: AWSDateTime!
+  timeStamp: AWSDate!
   maxWeight: Float
   minWeight: Float
   maxReps: Int
   minReps: Int
 }
  
+type Query {
+  getLastSessionByExercise(exerciseId: ID!): SessionData
+}

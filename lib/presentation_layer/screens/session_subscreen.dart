@@ -10,8 +10,6 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-
 class SessionSubscreen extends ConsumerStatefulWidget {
   const SessionSubscreen({super.key});
 
@@ -24,20 +22,18 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
   int currentStage = 0;
   final GlobalKey<SessionFormState> _formKey = GlobalKey<SessionFormState>();
 
-
   @override
   Widget build(BuildContext context) {
-    final provider =  ref.read(trainingScreenProvider.notifier);
-    final lastSession = provider.lastSessionSummary ?? 
-      SessionInfoSchema(
-        exerciseName: provider.selectedExercise!.name,
-        muscleGroup: provider.selectedMuscle!.name,
-        timeSinceLastSession: 0,
-        minWeight: 5,
-        maxWeight: 5,
-        minReps: 10,
-        maxReps: 10
-    );
+    final provider = ref.read(trainingScreenProvider.notifier);
+    final lastSession = provider.lastSessionSummary ??
+        SessionInfoSchema(
+            exerciseName: provider.selectedExercise!.name,
+            muscleGroup: provider.selectedMuscle!.name,
+            timeSinceLastSession: 0,
+            minWeight: 5,
+            maxWeight: 5,
+            minReps: 10,
+            maxReps: 10);
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null
         ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
@@ -51,18 +47,26 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     bool isOddStage = currentStage % 2 != 0;
     bool isLastEvenStage = currentStage == 8;
 
-  void onButtonClicked(int index) {
-    // Retrieve data from form and update provider
-    if (_formKey.currentState != null) {
-      SessionValues sessionValues = _formKey.currentState!.getCurrentFormData();
-      provider.updateNewSession(sessionValues);
+    void onButtonClicked(int index) {
+      // Retrieve data from form and update provider
+      if (_formKey.currentState != null) {
+        SessionValues sessionValues =
+            _formKey.currentState!.getCurrentFormData();
+        provider.updateNewSession(sessionValues);
+      }
+
+      // Last stage
+      if (index == 9) {
+        provider.commitNewSession();
+        provider.resetStage();
+      }
+
+      // Change the session stage
+      setState(() {
+        currentStage = index;
+      });
     }
 
-    // Change the session stage
-    setState(() {
-      currentStage = index;
-    });
-  }
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         child: Stack(children: [
@@ -94,7 +98,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
               if (currentStage == 0 || isOddStage) ...[
                 ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
                 SessionInfoWidget(sessionInfo: lastSession),
-              ] 
+              ]
               // RESTING
               else ...[
                 if (!isLastEvenStage)

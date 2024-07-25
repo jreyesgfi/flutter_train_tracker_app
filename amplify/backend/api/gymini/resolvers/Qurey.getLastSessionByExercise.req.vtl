@@ -1,0 +1,15 @@
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "index": "exerciseId-timeStamp-index",
+    "query": {
+        "expression": "exerciseId = :exerciseId",
+        "expressionValues": {
+            ":exerciseId": {
+                "S": "$ctx.args.exerciseId"
+            }
+        }
+    },
+    "scanIndexForward": false,
+    "limit": 1
+}

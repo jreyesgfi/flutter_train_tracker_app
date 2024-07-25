@@ -29,7 +29,7 @@ class SessionData extends amplify_core.Model {
   final String? _sessionId;
   final String? _exerciseId;
   final String? _muscleId;
-  final amplify_core.TemporalDateTime? _timeStamp;
+  final amplify_core.TemporalDate? _timeStamp;
   final double? _maxWeight;
   final double? _minWeight;
   final int? _maxReps;
@@ -99,7 +99,7 @@ class SessionData extends amplify_core.Model {
     }
   }
   
-  amplify_core.TemporalDateTime get timeStamp {
+  amplify_core.TemporalDate get timeStamp {
     try {
       return _timeStamp!;
     } catch(e) {
@@ -138,7 +138,7 @@ class SessionData extends amplify_core.Model {
   
   const SessionData._internal({required sessionId, required exerciseId, required muscleId, required timeStamp, maxWeight, minWeight, maxReps, minReps, createdAt, updatedAt}): _sessionId = sessionId, _exerciseId = exerciseId, _muscleId = muscleId, _timeStamp = timeStamp, _maxWeight = maxWeight, _minWeight = minWeight, _maxReps = maxReps, _minReps = minReps, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory SessionData({required String sessionId, required String exerciseId, required String muscleId, required amplify_core.TemporalDateTime timeStamp, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
+  factory SessionData({required String sessionId, required String exerciseId, required String muscleId, required amplify_core.TemporalDate timeStamp, double? maxWeight, double? minWeight, int? maxReps, int? minReps}) {
     return SessionData._internal(
       sessionId: sessionId,
       exerciseId: exerciseId,
@@ -227,7 +227,7 @@ class SessionData extends amplify_core.Model {
     : _sessionId = json['sessionId'],
       _exerciseId = json['exerciseId'],
       _muscleId = json['muscleId'],
-      _timeStamp = json['timeStamp'] != null ? amplify_core.TemporalDateTime.fromString(json['timeStamp']) : null,
+      _timeStamp = json['timeStamp'] != null ? amplify_core.TemporalDate.fromString(json['timeStamp']) : null,
       _maxWeight = (json['maxWeight'] as num?)?.toDouble(),
       _minWeight = (json['minWeight'] as num?)?.toDouble(),
       _maxReps = (json['maxReps'] as num?)?.toInt(),
@@ -304,7 +304,7 @@ class SessionData extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: SessionData.TIMESTAMP,
       isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.date)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
@@ -367,7 +367,7 @@ class _SessionDataModelType extends amplify_core.ModelType<SessionData> {
  */
 class SessionDataModelIdentifier implements amplify_core.ModelIdentifier<SessionData> {
   final String sessionId;
-  final amplify_core.TemporalDateTime timeStamp;
+  final amplify_core.TemporalDate timeStamp;
 
   /**
    * Create an instance of SessionDataModelIdentifier using [sessionId] the primary key.

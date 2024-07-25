@@ -30,7 +30,7 @@ export 'SessionData.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "ba2e65544c716e8817de6178a3af9d16";
+  String version = "fe1041cd91202f8399e759e302ce468f";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [ExerciseData.schema, MuscleData.schema, SessionData.schema];
   @override
