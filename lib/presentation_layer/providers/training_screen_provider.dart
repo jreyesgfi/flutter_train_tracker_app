@@ -106,13 +106,38 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
-    final exerciseIds = exercises.map((ExerciseEntity exercise) => exercise.id).toList();
-    final sessions = await ref.read(sessionRepositoryProvider).fetchLastSessions(exerciseIds);
-    print("Last sessions: ${sessions}");
+    final exerciseIds =
+        exercises.map((ExerciseEntity exercise) => exercise.id).toList();
+    final lastSessions = await ref
+        .read(sessionRepositoryProvider)
+        .fetchLastSessions(exerciseIds);
+
+    Map<String, DateTime> lastMuscleTrainingTimes = {};
+    for (var session in lastSessions) {
+      // Check if the muscleId is already in the dictionary
+      if (!lastMuscleTrainingTimes.containsKey(session.muscleId)) {
+        // If not, add it with the current session's timestamp
+        lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
+      } else {
+        // If it exists, compare and save the later date
+        if (lastMuscleTrainingTimes[session.muscleId]!
+            .isBefore(session.timeStamp)) {
+          lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
+        }
+      }
+    }
+
+    Map<String, DateTime> lastTrainingTimes = {};
+    for (var session in lastSessions){
+      lastTrainingTimes[session.exerciseId] = session.timeStamp;
+    }
+
     state = state.copyWith(
-      allMuscles: muscles,
-      allExercises: exercises,
-      allLastSessions: sessions
+        allMuscles: muscles,
+        allExercises: exercises,
+        allLastSessions: lastSessions,
+        lastMuscleTrainingTimes: lastMuscleTrainingTimes,
+        lastTrainingTimes: lastTrainingTimes,
     );
     _updateTiles();
   }
@@ -176,7 +201,6 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     try {
       selectedExercise =
           state.allExercises.firstWhere((e) => e.id == exerciseId);
-      print("Selected exercise");
     } catch (e) {
       selectedExercise = emptyExercise();
     }
@@ -184,7 +208,6 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     try {
       lastSession =
           state.allLastSessions.firstWhere((s) => s.exerciseId == exerciseId);
-      print("Last session");
     } catch (e) {
       lastSession = emptySessionEntity(selectedExercise.id);
       print("Last session empty");
@@ -194,8 +217,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       selectedExercise.name,
       state.selectedMuscle!.name,
     );
-    SessionEntity newSession =
-        createNewSessionFromLast(lastSession);
+    SessionEntity newSession = createNewSessionFromLast(lastSession);
 
     state = state.copyWith(
       selectedExercise: selectedExercise,
@@ -249,11 +271,15 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     state = state.copyWith(newSession: newSession);
   }
 
-  Future<void> commitNewSession() async{
+  Future<void> commitNewSession() async {
     if (state.newSession != null) {
-      await ref.read(sessionRepositoryProvider).createNewSession(state.newSession!);
+      await ref
+          .read(sessionRepositoryProvider)
+          .createNewSession(state.newSession!);
       // add it locally
       state.allLastSessions.add(state.newSession!);
+      state.lastMuscleTrainingTimes[state.newSession!.muscleId] = state.newSession!.timeStamp;
+      state.lastTrainingTimes[state.newSession!.exerciseId] = state.newSession!.timeStamp;
     }
     print("New Session Committed");
   }

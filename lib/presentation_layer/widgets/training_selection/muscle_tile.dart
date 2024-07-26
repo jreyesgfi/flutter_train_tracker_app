@@ -76,7 +76,10 @@ class _MuscleTileState extends State<MuscleTile> {
                       borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
                     ),
                     child: Text(
-                      '${widget.muscle.timeSinceExercise.toString()} días',
+                      '${widget.muscle.timeSinceExercise <365 ?
+                          widget.muscle.timeSinceExercise.toString()
+                          : "ထ"
+                        } días',
                       style: theme.textTheme.bodySmall?.copyWith(color: theme.primaryColor),
                     ),
                   ),

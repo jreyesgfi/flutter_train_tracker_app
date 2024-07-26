@@ -57,7 +57,9 @@ class TrainingDataTransformer {
 
   // Placeholder for actual logic to determine days since last exercise
   static int calculateDaysSinceLastExercise(DateTime? lastExerciseDate) {
-    return DateTime.now().difference(lastExerciseDate ?? DateTime.now()).inDays;
+    return lastExerciseDate != null ? 
+      DateTime.now().difference(lastExerciseDate).inDays
+      : 365;
   }
   static List<String> exerciseImagePaths(ExerciseEntity exercise) {
     final commonPath = "assets/images/test/exercises/${exercise.muscleId}/${exercise.id}_";

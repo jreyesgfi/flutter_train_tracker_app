@@ -66,7 +66,11 @@ class ExerciseTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${exercise.timeSinceExercise} días',
+                  '${exercise.timeSinceExercise <365?
+                      exercise.timeSinceExercise
+                      : "ထ"   
+                  } días',
+                  
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: isCompleted ? theme.shadowColor : theme.primaryColor,
                   ),
