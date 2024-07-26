@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 
 final iconPaths = [
@@ -9,15 +11,32 @@ final iconPaths = [
     ];
 final iconLabels = ["Profile", "Chrono", "Chart" ];
 
-class FooterNavigation extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onTabTapped; 
+class FooterNavigation extends StatefulWidget {
+  const FooterNavigation({super.key});
 
-  const FooterNavigation({
-    super.key,
-    this.selectedIndex = 0,
-    required this.onTabTapped
-  });
+  @override
+  State<FooterNavigation> createState() => _FooterNavigationState();
+}
+
+class _FooterNavigationState extends State<FooterNavigation> {
+  int selectedIndex = 1; 
+
+  void onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    switch (index) {
+      case 0:
+        context.goNamed(AppRoute.profile.name);
+        break;
+      case 1:
+        context.goNamed(AppRoute.train.name);
+        break;
+      case 2:
+        context.goNamed(AppRoute.report.name);
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,32 +59,23 @@ class FooterNavigation extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(vertical: 10),
-        height: isSelected ? 60 : 45, // Animated height change
-        width: isSelected ? 60 : 45, // Animated width change
+        height: isSelected ? 60 : 45,
+        width: isSelected ? 60 : 45,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded( // Use Expanded to make SVG scale with AnimatedContainer
+            Expanded(
               child: SvgPicture.asset(
                 iconPaths[index],
                 colorFilter: ColorFilter.mode(
                   isSelected ? theme.primaryColor : theme.primaryColorDark, BlendMode.srcIn),
-                fit: BoxFit.contain, // Ensure the SVG scales correctly
+                fit: BoxFit.contain,
               ),
             ),
-            // Text(
-            //   iconLabels[index],
-            //   style: TextStyle(
-            //     fontSize: 12,
-            //     color: isSelected ? theme.primaryColor : theme.primaryColorDark,
-            //   ),
-            // )
           ],
         ),
-      )
+      ),
     );
-}
-
-
+  }
 }

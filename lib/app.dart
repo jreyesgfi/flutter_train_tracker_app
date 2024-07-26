@@ -2,6 +2,9 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/router/router.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/profile_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
+import 'package:go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,10 +14,31 @@ class MyApp extends StatelessWidget {
     return Authenticator(
       child: MaterialApp.router(
         title: 'Gymini',
-        routerConfig: router,
-        builder: Authenticator.builder(),
+       routeInformationParser: router.routeInformationParser, // Correct property
+      routerDelegate: router.routerDelegate, // Correct property
+        builder: (newContext, child) {
+          try {
+            final router = GoRouter.of(newContext);
+            print("GoRouter is available in app");
+          } catch (e) {
+            print("GoRouter is not available in app: $e");
+          }
+          return child != null ? ScreenWrapper(child: child) : ProfileScreen();
+        },
         theme: AppTheme.theme,
       ),
     );
   }
 }
+
+// @override
+//   Widget build(BuildContext context) {
+//     return Authenticator(
+//       child: MaterialApp.router(
+//         title: 'Gymini',
+//         routerConfig: router,
+//         builder: Authenticator.builder(),
+//         theme: AppTheme.theme,
+//       ),
+//     );
+//   }

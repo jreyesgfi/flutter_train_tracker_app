@@ -29,13 +29,14 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
           if (muscles.isNotEmpty)
             MuscleCarouselSelector(muscles:  muscles),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
-            child: Text(
-              "Escoge un ejercicio",
-              style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+          if (exercises.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
+              child: Text(
+                "Escoge un ejercicio",
+                style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+              ),
             ),
-          ),
           // Display exercise list selector if exercises are available
           if (exercises.isNotEmpty)
             ExerciseListSelector(exercises:exercises),

@@ -1,3 +1,5 @@
 enum AppRoute {
-  home,
+  profile,
+  train,
+  report,
 }
