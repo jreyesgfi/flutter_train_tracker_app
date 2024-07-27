@@ -6,7 +6,7 @@ import 'package:flutter_application_test1/presentation_layer/screens/training_sc
 import 'package:flutter_application_test1/presentation_layer/screens/report_screen.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/profile',
+  initialLocation: '/training',
   routes: [
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
@@ -31,4 +31,3 @@ final GoRouter router = GoRouter(
     ),
   ],
 );
-

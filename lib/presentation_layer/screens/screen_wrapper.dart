@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/footer.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/bottom_navigation.dart';
 import 'package:go_router/go_router.dart';
 
 class ScreenWrapper extends StatelessWidget {
@@ -11,7 +11,7 @@ class ScreenWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: const FooterNavigation(),
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
