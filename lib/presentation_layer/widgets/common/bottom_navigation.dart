@@ -19,7 +19,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     });
     switch (index) {
       case 0:
-        context.goNamed(AppRoute.profile.name);
+        context.goNamed(AppRoute.settings.name);
         break;
       case 1:
         context.goNamed(AppRoute.training.name);

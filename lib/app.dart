@@ -2,7 +2,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/router/router.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/profile_screen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/settings_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
 import 'package:go_router/go_router.dart';
 

@@ -1,5 +1,5 @@
 enum AppRoute {
-  profile,
+  settings,
   training,
   report,
 }
@@ -20,7 +20,7 @@ final List<NavigationDestinationItem> navigationItems = [
   NavigationDestinationItem(
     iconPath: "assets/icons/profile.svg",
     selectedIconPath: "assets/icons/profile.svg",
-    label: "Profile",
+    label: "Settings",
   ),
   NavigationDestinationItem(
     iconPath: "assets/icons/chrono.svg",
