@@ -30,7 +30,7 @@ class _FooterNavigationState extends State<FooterNavigation> {
         context.goNamed(AppRoute.profile.name);
         break;
       case 1:
-        context.goNamed(AppRoute.train.name);
+        context.goNamed(AppRoute.training.name);
         break;
       case 2:
         context.goNamed(AppRoute.report.name);

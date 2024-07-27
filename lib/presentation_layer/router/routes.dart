@@ -1,5 +1,5 @@
 enum AppRoute {
   profile,
-  train,
+  training,
   report,
 }

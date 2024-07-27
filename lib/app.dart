@@ -14,17 +14,8 @@ class MyApp extends StatelessWidget {
     return Authenticator(
       child: MaterialApp.router(
         title: 'Gymini',
-       routeInformationParser: router.routeInformationParser, // Correct property
-      routerDelegate: router.routerDelegate, // Correct property
-        builder: (newContext, child) {
-          try {
-            final router = GoRouter.of(newContext);
-            print("GoRouter is available in app");
-          } catch (e) {
-            print("GoRouter is not available in app: $e");
-          }
-          return child != null ? ScreenWrapper(child: child) : ProfileScreen();
-        },
+        routerConfig: router,
+        builder: Authenticator.builder(),
         theme: AppTheme.theme,
       ),
     );
