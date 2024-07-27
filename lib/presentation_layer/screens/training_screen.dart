@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/header_widget.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/header_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main TrainingScreen widget that wraps content in ProviderScope

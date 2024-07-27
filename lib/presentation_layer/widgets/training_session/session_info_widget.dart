@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/custom_slider.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/other/custom_slider.dart';
 
 
 

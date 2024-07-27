@@ -3,7 +3,7 @@ import 'package:flutter_application_test1/domain_layer/entities/session_info.dar
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/custom_chrono.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/other/custom_chrono.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
