@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
-class MaxMinLineChart extends StatelessWidget {
-  MaxMinLineChart({super.key});
+class MaxMinLineChart extends ConsumerWidget {
+  const MaxMinLineChart({super.key});
 
   Map<DateTime, List<SessionEntity>> _groupSessionsByDate(List<SessionEntity> sessions) {
     final Map<DateTime, List<SessionEntity>> groupedSessions = {};
@@ -53,9 +54,9 @@ class MaxMinLineChart extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final provider = Provider.of<ReportScreenProvider>(context);
+    final provider = ref.watch(reportScreenProvider);
     final groupedSessions = _groupSessionsByDate(provider.filteredSessions);
 
     return Padding(

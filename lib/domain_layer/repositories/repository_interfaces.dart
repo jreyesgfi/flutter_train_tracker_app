@@ -12,5 +12,6 @@ abstract class SessionRepository {
   //Future<SessionEntity> fetchLastSessionForExercise(String exerciseId);
   //Future<List<SessionEntity>> fetchFilteredSessions({String? muscleId, String? exerciseId});
   Future<List<SessionEntity>> fetchLastSessions(List<String> exerciseIds);
+  Future<List<SessionEntity>> fetchAllSessions();
   Future<void> createNewSession(SessionEntity session);
 }

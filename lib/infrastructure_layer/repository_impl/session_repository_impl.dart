@@ -34,6 +34,25 @@ class SessionRepositoryImpl implements SessionRepository {
       );
     }).toList();
   }
+  @override
+  Future<List<domain.SessionEntity>> fetchAllSessions() async{
+    List<SessionData?> sessionDataList = await sessionService.fetchAllSessions();
+    List<SessionData> nonNullSessionDataList = sessionDataList.whereType<SessionData>().toList();
+
+    return nonNullSessionDataList.map((sessionData) {
+      // Convert SessionData from API to domain entity SessionData
+      return domain.SessionEntity(
+        id: sessionData.sessionId,
+        exerciseId: sessionData.exerciseId,
+        muscleId: sessionData.muscleId,
+        timeStamp: sessionData.timeStamp.getDateTime(),
+        maxWeight: sessionData.maxWeight ?? 10,
+        minWeight: sessionData.minWeight ?? 10, 
+        maxReps: sessionData.maxReps ?? 10,
+        minReps: sessionData.minReps ?? 10,
+      );
+    }).toList();
+  }
 
   @override
   Future<void> createNewSession(domain.SessionEntity sessionEntity) async {

@@ -11,9 +11,8 @@ final sessionDataServiceProvider = Provider<SessionDataService>((ref) {
 
 class SessionDataService {
   Future<List<SessionData?>> fetchLastSessions(List<String> exerciseIds) async {
-
-  List<Future<SessionData?>> futures = exerciseIds.map((exerciseId) async {
-    String getLastSessionQuery = '''
+    List<Future<SessionData?>> futures = exerciseIds.map((exerciseId) async {
+      String getLastSessionQuery = '''
     query GetLastSessionByExercise(\$exerciseId: ID!) {
       getLastSessionByExercise(exerciseId: \$exerciseId) {
         sessionId
@@ -27,35 +26,49 @@ class SessionDataService {
       }
     }
   ''';
-    try {
-      var request = GraphQLRequest<String>(
-        document: getLastSessionQuery, 
-        variables: {'exerciseId': exerciseId}
-      );
+      try {
+        var request = GraphQLRequest<String>(
+            document: getLastSessionQuery,
+            variables: {'exerciseId': exerciseId});
 
-      var operation = Amplify.API.query(request: request);
-      var response = await operation.response;
-      print("$response");
-      var data = jsonDecode(response.data ?? '');
+        var operation = Amplify.API.query(request: request);
+        var response = await operation.response;
+        var data = jsonDecode(response.data ?? '');
 
-      print("\nData: $data");
-      if (data['getLastSessionByExercise'] != null) {
-        return SessionData.fromJson(data['getLastSessionByExercise']);
-      } else {
-        print('No session found for exercise $exerciseId');
+        if (data['getLastSessionByExercise'] != null) {
+          return SessionData.fromJson(data['getLastSessionByExercise']);
+        } else {
+          print('No session found for exercise $exerciseId');
+          return null;
+        }
+      } catch (e) {
+        print('Error fetching session for exercise $exerciseId: $e');
         return null;
       }
-    } catch (e) {
-      print('Error fetching session for exercise $exerciseId: $e');
-      return null;
+    }).toList();
+
+    // Wait for all futures to complete
+    var results = await Future.wait(futures);
+    return results.whereType<SessionData>().toList();
+  }
+
+  Future<List<SessionData>> fetchAllSessions() async {
+    final request = ModelQueries.list(SessionData.classType);
+    final response = await Amplify.API.query(request: request).response;
+
+    if (response.data?.items == null) {
+      print('fetchAllSessions errors: ${response.errors}');
+      return [];
     }
-  }).toList();
 
-  // Wait for all futures to complete
-  var results = await Future.wait(futures);
-  return results.whereType<SessionData>().toList();
-}
-
+    List<SessionData> sessions = [];
+    for (var item in response.data!.items) {
+      if (item is SessionData) {
+        sessions.add(item);
+      }
+    }
+    return sessions;
+  }
 
   Future<void> createNewSession(SessionData sessionData) async {
     final mutationRequest = ModelMutations.create(sessionData);

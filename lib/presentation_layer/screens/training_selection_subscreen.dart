@@ -12,8 +12,8 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     
-    final muscles = ref.read(trainingScreenProvider.notifier).muscleTiles;
-    final exercises = ref.read(trainingScreenProvider.notifier).exerciseTiles;
+    final muscles = ref.watch(trainingScreenProvider.notifier).muscleTiles;
+    final exercises = ref.watch(trainingScreenProvider.notifier).exerciseTiles;
 
     return Scaffold(
       body: ListView(
