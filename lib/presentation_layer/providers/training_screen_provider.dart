@@ -168,7 +168,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
         filteredExercises: [],
       );
     }
-    _updateTiles();
+    _updateExerciseTiles();
   }
 
   ExerciseEntity emptyExercise() => ExerciseEntity(
@@ -261,6 +261,14 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     );
   }
 
+  void _updateExerciseTiles() {
+    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
+        state.filteredExercises, state.lastTrainingTimes);
+    state = state.copyWith(
+      exerciseTiles: newExerciseTiles,
+    );  
+  }
+
   void updateNewSession(SessionValues sessionValues) {
     print("Update new session");
     final newSession = SessionEntity(
@@ -288,6 +296,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       state.lastMuscleTrainingTimes[state.newSession!.muscleId] = state.newSession!.timeStamp;
       state.lastTrainingTimes[state.newSession!.exerciseId] = state.newSession!.timeStamp;
     }
+    _updateExerciseTiles();
     print("New Session Committed");
   }
 

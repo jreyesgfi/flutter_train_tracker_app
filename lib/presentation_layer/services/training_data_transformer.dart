@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_tile.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 class TrainingDataTransformer {
   static List<MuscleTileSchema> transformMusclesToTiles(
       List<MuscleEntity> muscles, Map<String, DateTime> lastTrainingTimes) {
-    return muscles
+    final tiles = muscles
         .map((muscle) => MuscleTileSchema(
               muscleId: muscle.id,
               label: muscle.name,
@@ -15,11 +16,13 @@ class TrainingDataTransformer {
               imagePath: muscleImagePath(muscle),
             ))
         .toList();
+    tiles.sort((a,b) => b.timeSinceExercise.compareTo(a.timeSinceExercise));
+    return tiles;
   }
 
   static List<ExerciseTileSchema> transformExercisesToTiles(
     List<ExerciseEntity> exercises, Map<String, DateTime> lastTrainingTimes) {
-    return exercises
+    final tiles = exercises
         .map((exercise) => ExerciseTileSchema(
               exerciseId: exercise.id,
               label: exercise.name,
@@ -28,6 +31,8 @@ class TrainingDataTransformer {
                   lastTrainingTimes[exercise.id]),
             ))
         .toList();
+    tiles.sort((a,b) => b.timeSinceExercise.compareTo(a.timeSinceExercise));
+    return tiles;
   }
 
   static SessionInfoSchema transformSessionToSummary(

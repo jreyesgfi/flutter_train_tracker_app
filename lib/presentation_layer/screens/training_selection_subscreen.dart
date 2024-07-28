@@ -11,9 +11,17 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    final providerWatch = ref.watch(trainingScreenProvider);
     
-    final muscles = ref.watch(trainingScreenProvider.notifier).muscleTiles;
-    final exercises = ref.watch(trainingScreenProvider.notifier).exerciseTiles;
+    final muscles = providerWatch.muscleTiles;
+    final exercises = providerWatch.exerciseTiles;
+
+    final selectedMuscle = providerWatch.selectedMuscle;
+    // final selectedExercise = providerWatch.selectedExercise;
+    final newSession = providerWatch.newSession;
+
+    final exerciseSelectorKey = ValueKey('${selectedMuscle?.id}_${newSession?.id}');
 
     return Scaffold(
       body: ListView(
@@ -39,7 +47,7 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
             ),
           // Display exercise list selector if exercises are available
           if (exercises.isNotEmpty)
-            ExerciseListSelector(exercises:exercises),
+            ExerciseListSelector(key: exerciseSelectorKey),
         ],
       ),
     );

@@ -6,6 +6,9 @@ class MockDataRepository {
     MuscleEntity(id: "m1", name: "Pecho"),
     MuscleEntity(id: "m2", name: "Hombros"),
     MuscleEntity(id: "m3", name: "Piernas"),
+    MuscleEntity(id: "m4", name:"Triceps"),
+    MuscleEntity(id: "m5", name: "Biceps"),
+    MuscleEntity(id: "m6", name: "Espalda (dorsal)")
   ];
 
   List<ExerciseEntity> exercises = [
@@ -18,6 +21,13 @@ class MockDataRepository {
     ExerciseEntity(id: "e7", name: "Push Up", muscleId: "m1"),
     ExerciseEntity(id: "e8", name: "Seated Military Shoulder Press", muscleId: "m2"),
     ExerciseEntity(id: "e9", name: "Standing Calf Raises", muscleId: "m3"),
+    ExerciseEntity(id: "e10", name: "Extensiones de triceps una mano", muscleId: "m4"),
+    ExerciseEntity(id: "e11", name: "Extensiones de triceps supinas una mano", muscleId: "m4"),
+    ExerciseEntity(id: "e12", name: "Curl Biceps con rotación a pecho", muscleId: "m5"),
+    ExerciseEntity(id: "e13", name: "Curl Biceps concentrado", muscleId: "m5"),
+    ExerciseEntity(id: "e14", name: "Curl Biceps Overhead", muscleId: "m5"),
+    ExerciseEntity(id: "e15", name: "Remo Vertical", muscleId: "m6"),
+    ExerciseEntity(id: "e16", name: "Remo Horizontal", muscleId: "m6"),
   ];
 
   late List<SessionEntity> sessions;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/modals/sign_out_modal.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/modals_snackbars/sign_out_modal.dart';
 
 class SettingItem {
   final IconData icon;
