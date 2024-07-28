@@ -9,21 +9,23 @@ final muscleDataServiceProvider = Provider<MuscleDataService>((ref) {
 
 class MuscleDataService {
   Future<List<MuscleData>> fetchAllMuscles() async {
-    final request = ModelQueries.list(MuscleData.classType);
-    final response = await Amplify.API.query(request: request).response;
-
-    if (response.data?.items == null) {
-      print('fetchAllMuscles errors: ${response.errors}');
+    try {
+      List<MuscleData> muscles =
+          await Amplify.DataStore.query(MuscleData.classType);
+      print("$muscles");
+      return muscles;
+    } catch (e) {
+      print('Error fetching muscles: $e');
       return [];
     }
+  }
 
-    // Safely cast each item to MuscleData
-    List<MuscleData> muscles = [];
-    for (var item in response.data!.items) {
-      if (item is MuscleData) {
-        muscles.add(item);
-      }
+  Future<void> deleteMuscle(MuscleData muscle) async {
+    try {
+      final request = ModelMutations.delete(muscle);
+      await Amplify.API.mutate(request: request).response;
+    } catch (e) {
+      print('Error deleting muscle: $e');
     }
-    return muscles;
   }
 }

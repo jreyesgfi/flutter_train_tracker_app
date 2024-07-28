@@ -73,6 +73,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  amplify_datastore:
+    dependency: "direct main"
+    description:
+      name: amplify_datastore
+      sha256: b4e6a7e5d22e8140b83365b8a6b3f43eea8218edf765bdd3f5860ce84293cabe
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.0"
+  amplify_datastore_plugin_interface:
+    dependency: "direct main"
+    description:
+      name: amplify_datastore_plugin_interface
+      sha256: "8e6ecf3ceb949c5b3439e9fc027d8b09ea5c2166165d07964775d1bad8ff0bf2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.0"
   amplify_db_common:
     dependency: transitive
     description:

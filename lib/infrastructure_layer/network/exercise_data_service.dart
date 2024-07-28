@@ -8,21 +8,24 @@ final exerciseDataServiceProvider = Provider<ExerciseDataService>((ref) {
 });
 
 class ExerciseDataService {
-  Future<List<ExerciseData>> fetchAllExercises() async {
-    final request = ModelQueries.list(ExerciseData.classType);
-    final response = await Amplify.API.query(request: request).response;
+  Future<void> deleteExercise(ExerciseData exercise) async {
+    try {
+      final request = ModelMutations.delete(exercise);
+      await Amplify.API.mutate(request: request).response;
+    } catch (e) {
+      print('Error deleting exercise: $e');
+    }
+  }
 
-    if (response.data?.items == null) {
-      print('fetchAllExercises errors: ${response.errors}');
+  Future<List<ExerciseData>> fetchAllExercises() async {
+    try {
+      List<ExerciseData> exercises =
+          await Amplify.DataStore.query(ExerciseData.classType);
+      print("$exercises");
+      return exercises;
+    } catch (e) {
+      print('Error fetching exercises: $e');
       return [];
     }
-
-    List<ExerciseData> exercises = [];
-    for (var item in response.data!.items) {
-      if (item is ExerciseData) {
-        exercises.add(item);
-      }
-    }
-    return exercises;
   }
 }
