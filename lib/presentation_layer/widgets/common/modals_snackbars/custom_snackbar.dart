@@ -7,6 +7,9 @@ void showWarningSnackbar({
   VoidCallback? action,
   Duration duration = const Duration(seconds: 3),
 }) {
+  if (!context.mounted) {
+    return;
+  }
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),

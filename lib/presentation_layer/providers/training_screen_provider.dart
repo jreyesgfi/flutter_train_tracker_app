@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/infrastructure_layer/network/exercise_data_service.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/exercise_repository_impl.dart';

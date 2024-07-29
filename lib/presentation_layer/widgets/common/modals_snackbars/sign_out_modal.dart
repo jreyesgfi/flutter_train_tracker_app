@@ -1,5 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/infrastructure_layer/network/amplify_service.dart';
 
 
 void showSignOutDialog(BuildContext context) {
@@ -26,12 +27,7 @@ void showSignOutDialog(BuildContext context) {
           ),
           TextButton(
             onPressed: () async{
-              try {
-                await Amplify.Auth.signOut();
-                Navigator.of(context).pop();
-              } catch (e) {
-                print('Sign out failed: $e');
-              }
+              signOut(context);
             },
             child: Text('Cerrar Sesión', style: TextStyle(color: theme.primaryColor)),
           ),

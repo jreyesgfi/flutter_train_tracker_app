@@ -10,13 +10,14 @@ final sessionDataServiceProvider = Provider<SessionDataService>((ref) {
 });
 
 class SessionDataService {
+
   Future<List<SessionData>> fetchLastSessions(List<String> exerciseIds) async {
     try {
       final allSessions = await Amplify.DataStore.query(SessionData.classType);
       final sessions = allSessions
           .where((session) => exerciseIds.contains(session.exerciseId))
           .toList();
-        print("$sessions");
+        print("Last Sessions $sessions");
       return sessions;
     } catch (e) {
       print('Error fetching sessions: $e');
@@ -28,7 +29,7 @@ class SessionDataService {
     try {
       List<SessionData> sessions =
           await Amplify.DataStore.query(SessionData.classType);
-      print("$sessions");
+      print("Sessions $sessions");
       return sessions;
     } catch (e) {
       print('Error fetching sessions: $e');

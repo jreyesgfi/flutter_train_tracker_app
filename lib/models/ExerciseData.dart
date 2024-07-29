@@ -31,8 +31,6 @@ class ExerciseData extends amplify_core.Model {
   final String? _muscleId;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
-  final String? _muscleDataExercisesMuscleId;
-  final String? _muscleDataExercisesName;
 
   @override
   getInstanceType() => classType;
@@ -104,23 +102,13 @@ class ExerciseData extends amplify_core.Model {
     return _updatedAt;
   }
   
-  String? get muscleDataExercisesMuscleId {
-    return _muscleDataExercisesMuscleId;
-  }
+  const ExerciseData._internal({required exerciseId, required name, required muscleId, createdAt, updatedAt}): _exerciseId = exerciseId, _name = name, _muscleId = muscleId, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  String? get muscleDataExercisesName {
-    return _muscleDataExercisesName;
-  }
-  
-  const ExerciseData._internal({required exerciseId, required name, required muscleId, createdAt, updatedAt, muscleDataExercisesMuscleId, muscleDataExercisesName}): _exerciseId = exerciseId, _name = name, _muscleId = muscleId, _createdAt = createdAt, _updatedAt = updatedAt, _muscleDataExercisesMuscleId = muscleDataExercisesMuscleId, _muscleDataExercisesName = muscleDataExercisesName;
-  
-  factory ExerciseData({required String exerciseId, required String name, required String muscleId, String? muscleDataExercisesMuscleId, String? muscleDataExercisesName}) {
+  factory ExerciseData({required String exerciseId, required String name, required String muscleId}) {
     return ExerciseData._internal(
       exerciseId: exerciseId,
       name: name,
-      muscleId: muscleId,
-      muscleDataExercisesMuscleId: muscleDataExercisesMuscleId,
-      muscleDataExercisesName: muscleDataExercisesName);
+      muscleId: muscleId);
   }
   
   bool equals(Object other) {
@@ -133,9 +121,7 @@ class ExerciseData extends amplify_core.Model {
     return other is ExerciseData &&
       _exerciseId == other._exerciseId &&
       _name == other._name &&
-      _muscleId == other._muscleId &&
-      _muscleDataExercisesMuscleId == other._muscleDataExercisesMuscleId &&
-      _muscleDataExercisesName == other._muscleDataExercisesName;
+      _muscleId == other._muscleId;
   }
   
   @override
@@ -150,34 +136,26 @@ class ExerciseData extends amplify_core.Model {
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("muscleId=" + "$_muscleId" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("muscleDataExercisesMuscleId=" + "$_muscleDataExercisesMuscleId" + ", ");
-    buffer.write("muscleDataExercisesName=" + "$_muscleDataExercisesName");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  ExerciseData copyWith({String? muscleId, String? muscleDataExercisesMuscleId, String? muscleDataExercisesName}) {
+  ExerciseData copyWith({String? muscleId}) {
     return ExerciseData._internal(
       exerciseId: exerciseId,
       name: name,
-      muscleId: muscleId ?? this.muscleId,
-      muscleDataExercisesMuscleId: muscleDataExercisesMuscleId ?? this.muscleDataExercisesMuscleId,
-      muscleDataExercisesName: muscleDataExercisesName ?? this.muscleDataExercisesName);
+      muscleId: muscleId ?? this.muscleId);
   }
   
   ExerciseData copyWithModelFieldValues({
-    ModelFieldValue<String>? muscleId,
-    ModelFieldValue<String?>? muscleDataExercisesMuscleId,
-    ModelFieldValue<String?>? muscleDataExercisesName
+    ModelFieldValue<String>? muscleId
   }) {
     return ExerciseData._internal(
       exerciseId: exerciseId,
       name: name,
-      muscleId: muscleId == null ? this.muscleId : muscleId.value,
-      muscleDataExercisesMuscleId: muscleDataExercisesMuscleId == null ? this.muscleDataExercisesMuscleId : muscleDataExercisesMuscleId.value,
-      muscleDataExercisesName: muscleDataExercisesName == null ? this.muscleDataExercisesName : muscleDataExercisesName.value
+      muscleId: muscleId == null ? this.muscleId : muscleId.value
     );
   }
   
@@ -186,12 +164,10 @@ class ExerciseData extends amplify_core.Model {
       _name = json['name'],
       _muscleId = json['muscleId'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null,
-      _muscleDataExercisesMuscleId = json['muscleDataExercisesMuscleId'],
-      _muscleDataExercisesName = json['muscleDataExercisesName'];
+      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'exerciseId': _exerciseId, 'name': _name, 'muscleId': _muscleId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'muscleDataExercisesMuscleId': _muscleDataExercisesMuscleId, 'muscleDataExercisesName': _muscleDataExercisesName
+    'exerciseId': _exerciseId, 'name': _name, 'muscleId': _muscleId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -199,17 +175,13 @@ class ExerciseData extends amplify_core.Model {
     'name': _name,
     'muscleId': _muscleId,
     'createdAt': _createdAt,
-    'updatedAt': _updatedAt,
-    'muscleDataExercisesMuscleId': _muscleDataExercisesMuscleId,
-    'muscleDataExercisesName': _muscleDataExercisesName
+    'updatedAt': _updatedAt
   };
 
   static final amplify_core.QueryModelIdentifier<ExerciseDataModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<ExerciseDataModelIdentifier>();
   static final EXERCISEID = amplify_core.QueryField(fieldName: "exerciseId");
   static final NAME = amplify_core.QueryField(fieldName: "name");
   static final MUSCLEID = amplify_core.QueryField(fieldName: "muscleId");
-  static final MUSCLEDATAEXERCISESMUSCLEID = amplify_core.QueryField(fieldName: "muscleDataExercisesMuscleId");
-  static final MUSCLEDATAEXERCISESNAME = amplify_core.QueryField(fieldName: "muscleDataExercisesName");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "ExerciseData";
     modelSchemaDefinition.pluralName = "ExerciseData";
@@ -270,18 +242,6 @@ class ExerciseData extends amplify_core.Model {
       isRequired: false,
       isReadOnly: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: ExerciseData.MUSCLEDATAEXERCISESMUSCLEID,
-      isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: ExerciseData.MUSCLEDATAEXERCISESNAME,
-      isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
   });
 }

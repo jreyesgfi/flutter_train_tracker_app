@@ -9,7 +9,6 @@ type MuscleData @model
 ]) {
   muscleId: ID! @primaryKey(sortKeyFields: ["name"])
   name: String!
-  exercises: [ExerciseData] @hasMany
 }
 
 type ExerciseData @model

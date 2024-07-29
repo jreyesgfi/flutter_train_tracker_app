@@ -8,20 +8,46 @@ final exerciseDataServiceProvider = Provider<ExerciseDataService>((ref) {
 });
 
 class ExerciseDataService {
-  Future<void> deleteExercise(ExerciseData exercise) async {
-    try {
-      final request = ModelMutations.delete(exercise);
-      await Amplify.API.mutate(request: request).response;
-    } catch (e) {
-      print('Error deleting exercise: $e');
-    }
-  }
+  // Future<void> deleteExercise(ExerciseData exercise) async {
+  //   try {
+  //     final request = ModelMutations.delete(exercise);
+  //     await Amplify.API.mutate(request: request).response;
+  //   } catch (e) {
+  //     print('Error deleting exercise: $e');
+  //   }
+  // }
+
+  // Future<List<ExerciseData>> fetchAllExercises() async {
+  //   final request = ModelQueries.list(ExerciseData.classType);
+  //   final response = await Amplify.API.query(request: request).response;
+
+  //   if (response.data?.items == null) {
+  //     print('fetchAllExercises errors: ${response.errors}');
+  //     return [];
+  //   }
+
+  //   List<ExerciseData> newExercises = [];
+  //   for (var item in response.data!.items) {
+  //     if (item is ExerciseData) {
+  //       // Create a new exercise with a new ID
+  //       var newExercise = ExerciseData(
+  //         exerciseId: item.exerciseId.replaceAll('_', ''),  // Generate a new ID
+  //         name: item.name,
+  //         muscleId: item.muscleId
+  //         // Copy other fields if necessary
+  //       );
+  //       newExercises.add(newExercise);
+  //       await Amplify.DataStore.save(newExercise);
+  //     }
+  //   }
+  //   return newExercises;
+  // }
 
   Future<List<ExerciseData>> fetchAllExercises() async {
     try {
       List<ExerciseData> exercises =
           await Amplify.DataStore.query(ExerciseData.classType);
-      print("$exercises");
+      print("Exercises $exercises");
       return exercises;
     } catch (e) {
       print('Error fetching exercises: $e');

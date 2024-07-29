@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/infrastructure_layer/network/amplify_service.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/modals_snackbars/sign_out_modal.dart';
+import 'package:provider/provider.dart';
 
 class SettingItem {
   final IconData icon;
@@ -32,6 +34,13 @@ final List<SettingGroup> settingsGroups = [
         label: 'Comparte',
         onTap: (context) {
           // Navigation or action
+        },
+      ),
+      SettingItem(
+        icon: Icons.backup,
+        label: 'Generar copia de seguridad',
+        onTap: (context) {
+          triggerDataStoreSync(context);
         },
       ),
       SettingItem(
