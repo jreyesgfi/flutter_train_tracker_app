@@ -22,7 +22,7 @@ Future<void> _configureAmplify() async {
       AmplifyDataStore(modelProvider: ModelProvider.instance),
     ]);
     await Amplify.configure(amplifyconfig); 
-    await Amplify.DataStore.stop();
+    // await Amplify.DataStore.stop();
   } on AmplifyAlreadyConfiguredException {
     debugPrint('Amplify was already configured.');
   } catch (e) {
