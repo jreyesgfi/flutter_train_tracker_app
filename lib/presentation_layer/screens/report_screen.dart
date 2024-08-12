@@ -68,7 +68,7 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
         children: [
           // Your primary content
           state.allSessions.isNotEmpty
-            ? MaxMinLineChart()
+            ? MaxMinLineChart(selectedMonth: 7,)
             : Center(child: CircularProgressIndicator()),
           // Animated modal
           AnimatedBuilder(
