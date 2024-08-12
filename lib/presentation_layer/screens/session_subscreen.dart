@@ -5,7 +5,7 @@ import 'package:flutter_application_test1/presentation_layer/services/training_d
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/other/custom_chrono.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper_test.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -118,6 +118,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
             child: SessionButtonsWrapper(
               currentStage: currentStage,
               onButtonClicked: onButtonClicked,
+              cancelTraining: provider.resetStage,
             ),
           ),
         ]));
