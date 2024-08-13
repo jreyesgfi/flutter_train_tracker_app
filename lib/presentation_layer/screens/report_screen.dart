@@ -9,7 +9,6 @@ class ReportScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ProviderScope is optional here depending on your app structure
     return ProviderScope(
       child: _ReportScreenContent(),
     );
@@ -43,7 +42,6 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     _controller.dispose();
     super.dispose();
   }
-
   void _toggleFilterModal() {
     if (_animation.isDismissed) {
       _controller.forward();
@@ -52,9 +50,23 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     }
   }
 
+  Widget _buildCharts() {
+    final state = ref.watch(reportScreenProvider);
+    if (state.allSessions.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    }
+    
+    // Replace hardcoded month with a dynamic value if needed
+    return ListView(
+      children: [
+        Expanded(child: MaxMinLineChart(selectedMonth: 7)),
+        Expanded(child: MaxMinLineChart(selectedMonth: 7, repsRepresentation: true)),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(reportScreenProvider);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -66,10 +78,9 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
       ),
       body: Stack(
         children: [
-          // Your primary content
-          state.allSessions.isNotEmpty
-            ? MaxMinLineChart(selectedMonth: 7,)
-            : Center(child: CircularProgressIndicator()),
+          // Primary content
+          _buildCharts(),
+          
           // Animated modal
           AnimatedBuilder(
             animation: _animation,

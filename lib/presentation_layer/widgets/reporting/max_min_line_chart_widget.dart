@@ -7,14 +7,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MaxMinLineChart extends ConsumerWidget {
   final int selectedMonth;
+  final bool repsRepresentation;
 
-  MaxMinLineChart._({required this.selectedMonth});
+  MaxMinLineChart._({
+    required this.selectedMonth,
+    this.repsRepresentation = false,
+  });
 
-  factory MaxMinLineChart({required int selectedMonth}) {
+  factory MaxMinLineChart(
+      {required int selectedMonth, bool repsRepresentation = false}) {
     if (selectedMonth < 1 || selectedMonth > 12) {
       throw ArgumentError('selectedMonth must be between 1 and 12');
     }
-    return MaxMinLineChart._(selectedMonth: selectedMonth);
+    return MaxMinLineChart._(
+        selectedMonth: selectedMonth, repsRepresentation: repsRepresentation);
   }
 
   DateTime _getSelectedMonthDateTime() {
@@ -24,16 +30,20 @@ class MaxMinLineChart extends ConsumerWidget {
 
   int _getDaysInSelectedMonth() {
     final selectedMonthDateTime = _getSelectedMonthDateTime();
-    final firstDayOfNextMonth = DateTime(selectedMonthDateTime.year, selectedMonthDateTime.month + 1, 1);
+    final firstDayOfNextMonth = DateTime(
+        selectedMonthDateTime.year, selectedMonthDateTime.month + 1, 1);
     return firstDayOfNextMonth.subtract(Duration(days: 1)).day;
   }
 
-  Map<DateTime, List<SessionEntity>> _groupSessionsByDate(List<SessionEntity> sessions) {
+  Map<DateTime, List<SessionEntity>> _groupSessionsByDate(
+      List<SessionEntity> sessions) {
     final DateTime selectedMonthDateTime = _getSelectedMonthDateTime();
     final Map<DateTime, List<SessionEntity>> groupedSessions = {};
     for (var session in sessions) {
-      final date = DateTime(session.timeStamp.year, session.timeStamp.month, session.timeStamp.day);
-      if (date.year == selectedMonthDateTime.year && date.month == selectedMonthDateTime.month) {
+      final date = DateTime(session.timeStamp.year, session.timeStamp.month,
+          session.timeStamp.day);
+      if (date.year == selectedMonthDateTime.year &&
+          date.month == selectedMonthDateTime.month) {
         if (groupedSessions[date] == null) {
           groupedSessions[date] = [];
         }
@@ -43,11 +53,20 @@ class MaxMinLineChart extends ConsumerWidget {
     return groupedSessions;
   }
 
-  List<FlSpot> _generateSpots(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  List<FlSpot> _generateSpots(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
     final List<FlSpot> spots = [];
     groupedSessions.forEach((date, sessions) {
-      final averageWeight = sessions.map((s) => isMaxWeight ? s.maxWeight : s.minWeight).reduce((a, b) => a + b) / sessions.length;
-      spots.add(FlSpot(date.day.toDouble(), averageWeight));
+      final averageWeight = sessions
+              .map((s) => isMax ? s.maxWeight : s.minWeight)
+              .reduce((a, b) => a + b) /
+          sessions.length;
+      final averageReps = sessions
+              .map((s) => isMax ? s.maxReps : s.minReps)
+              .reduce((a, b) => a + b) /
+          sessions.length;
+      spots.add(FlSpot(date.day.toDouble(),
+          repsRepresentation ? averageReps : averageWeight));
     });
     spots.sort((a, b) => a.x.compareTo(b.x));
     return spots;
@@ -61,20 +80,42 @@ class MaxMinLineChart extends ConsumerWidget {
     return _getDaysInSelectedMonth().toDouble();
   }
 
-  double _getMinY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  double _getMinY(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
     if (groupedSessions.isEmpty) return 0;
+    // Reps Representation
+    if (repsRepresentation == true) {
+      return groupedSessions.values
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxReps : s.minReps)
+            .reduce((a, b) => a < b ? a : b) -
+        1;
+    }
+    // Weight Representation
     return groupedSessions.values
-        .expand((sessions) => sessions)
-        .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)
-        .reduce((a, b) => a < b ? a : b) - 1;
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxWeight : s.minWeight)
+            .reduce((a, b) => a < b ? a : b) -
+        1;
   }
 
-  double _getMaxY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  double _getMaxY(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
     if (groupedSessions.isEmpty) return 10; // Default maximum value
+    // Reps Representation
+    if (repsRepresentation == true) {
     return groupedSessions.values
-        .expand((sessions) => sessions)
-        .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)
-        .reduce((a, b) => a > b ? a : b) + 1;
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxReps : s.minReps)
+            .reduce((a, b) => a > b ? a : b) +
+        1;
+    }
+    // Weight Representation
+    return groupedSessions.values
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxWeight : s.minWeight)
+            .reduce((a, b) => a > b ? a : b) +
+        1;
   }
 
   @override
@@ -89,18 +130,22 @@ class MaxMinLineChart extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(20), // Outer padding
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Align children to the start
         children: [
           Text(
-            "Max-Min Weight",
-            style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+            "Max-Min ${repsRepresentation ? "Reps":"Weights"}",
+            style: theme.textTheme.titleMedium
+                ?.copyWith(color: theme.primaryColorDark),
           ),
           SizedBox(height: 12), // Space between the title and chart
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(20.0), // Padding inside the Container
+          Container(
+              height: 300,
+              padding:
+                  const EdgeInsets.all(20.0), // Padding inside the Container
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12), // Adjust borderRadius as needed
+                borderRadius:
+                    BorderRadius.circular(12), // Adjust borderRadius as needed
                 color: theme.primaryColorLight,
               ),
               child: LineChart(
@@ -113,13 +158,18 @@ class MaxMinLineChart extends ConsumerWidget {
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        reservedSize: 55, // Increase reserved size for the left titles
+                        reservedSize:
+                            55, // Increase reserved size for the left titles
                         getTitlesWidget: (value, meta) {
                           return Align(
-                            alignment: Alignment.centerLeft, // Align titles to the right
+                            alignment: Alignment
+                                .centerLeft, // Align titles to the right
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0), // Add padding to move titles further from the axis
-                              child: Text('${value.toStringAsFixed(2)}', style: TextStyle(fontSize: 12)),
+                              padding: const EdgeInsets.only(
+                                  right:
+                                      8.0), // Add padding to move titles further from the axis
+                              child: Text('${value.toStringAsFixed(2)}',
+                                  style: TextStyle(fontSize: 12)),
                             ),
                           );
                         },
@@ -129,14 +179,19 @@ class MaxMinLineChart extends ConsumerWidget {
                       sideTitles: SideTitles(
                         showTitles: true,
                         interval: 7,
-                        reservedSize: 40, // Increase reserved size for the bottom titles
+                        reservedSize:
+                            40, // Increase reserved size for the bottom titles
                         getTitlesWidget: (value, meta) {
                           final day = value.toInt();
                           return Align(
-                            alignment: Alignment.bottomCenter, // Align titles to the bottom
+                            alignment: Alignment
+                                .bottomCenter, // Align titles to the bottom
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 8.0), // Add padding to move titles further from the axis
-                              child: Text('$day', style: TextStyle(fontSize: 12)),
+                              padding: const EdgeInsets.only(
+                                  top:
+                                      8.0), // Add padding to move titles further from the axis
+                              child:
+                                  Text('$day', style: TextStyle(fontSize: 12)),
                             ),
                           );
                         },
@@ -151,7 +206,7 @@ class MaxMinLineChart extends ConsumerWidget {
                   ),
                   lineBarsData: [
                     LineChartBarData(
-                      spots: _generateSpots(groupedSessions, true),
+                      spots: _generateSpots(groupedSessions, false),
                       isCurved: true,
                       color: theme.primaryColorDark,
                       barWidth: 4,
@@ -159,9 +214,9 @@ class MaxMinLineChart extends ConsumerWidget {
                       dotData: const FlDotData(show: false),
                     ),
                     LineChartBarData(
-                      spots: _generateSpots(groupedSessions, false),
+                      spots: _generateSpots(groupedSessions, true),
                       isCurved: true,
-                      color: theme.primaryColorLight,
+                      color: theme.primaryColor,
                       barWidth: 4,
                       isStrokeCapRound: true,
                       dotData: const FlDotData(show: false),
@@ -173,14 +228,13 @@ class MaxMinLineChart extends ConsumerWidget {
                   ),
                   lineTouchData: LineTouchData(
                     touchTooltipData: LineTouchTooltipData(
-                      // tooltipBgColor: Colors.transparent,
-                    ),
+                        // tooltipBgColor: Colors.transparent,
+                        ),
                     handleBuiltInTouches: true,
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
