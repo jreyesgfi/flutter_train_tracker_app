@@ -26,6 +26,8 @@ class ReportingScreenState {
 
   MuscleEntity? selectedMuscle;
   ExerciseEntity? selectedExercise;
+  int? selectedMonth;
+  int? selectedYear;
 
   ReportingScreenState({
     this.allMuscles = const [],
@@ -35,6 +37,8 @@ class ReportingScreenState {
     this.allSessions = const [],
     this.selectedMuscle,
     this.selectedExercise,
+    this.selectedMonth,
+    this.selectedYear,
   });
 
   static initial() {
@@ -49,6 +53,8 @@ class ReportingScreenState {
     List<SessionEntity>? allSessions,
     MuscleEntity? selectedMuscle,
     ExerciseEntity? selectedExercise,
+    int? selectedMonth,
+    int? selectedYear,
   }) {
     return ReportingScreenState(
       allMuscles: allMuscles ?? this.allMuscles,
@@ -58,6 +64,8 @@ class ReportingScreenState {
       allSessions: allSessions ?? this.allSessions,
       selectedMuscle: selectedMuscle ?? this.selectedMuscle,
       selectedExercise: selectedExercise ?? this.selectedExercise,
+      selectedMonth: selectedMonth ?? this.selectedMonth,
+      selectedYear: selectedYear ?? this.selectedYear,
     );
   }
 }
@@ -116,6 +124,17 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
 
     state = state.copyWith(
       selectedExercise: selectedExercise,
+    );
+  }
+
+  void selectMonthYear(int monthNum, int year) {
+    if (monthNum < 1 || monthNum > 12) {
+      return;
+    }
+
+    state = state.copyWith(
+      selectedMonth: monthNum,
+      selectedYear: year,
     );
   }
 }

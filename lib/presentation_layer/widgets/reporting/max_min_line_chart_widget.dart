@@ -145,7 +145,7 @@ class MaxMinLineChart extends ConsumerWidget {
                   const EdgeInsets.all(20.0), // Padding inside the Container
               decoration: BoxDecoration(
                 borderRadius:
-                    BorderRadius.circular(12), // Adjust borderRadius as needed
+                    BorderRadius.circular(customThemeValues.borderRadius),
                 color: theme.primaryColorLight,
               ),
               child: LineChart(

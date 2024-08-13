@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_modal.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReportScreen extends ConsumerWidget {
@@ -42,6 +43,7 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     _controller.dispose();
     super.dispose();
   }
+
   void _toggleFilterModal() {
     if (_animation.isDismissed) {
       _controller.forward();
@@ -56,11 +58,10 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
       return Center(child: CircularProgressIndicator());
     }
     
-    // Replace hardcoded month with a dynamic value if needed
     return ListView(
       children: [
-        Expanded(child: MaxMinLineChart(selectedMonth: 7)),
-        Expanded(child: MaxMinLineChart(selectedMonth: 7, repsRepresentation: true)),
+        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8),
+        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8, repsRepresentation: true),
       ],
     );
   }
@@ -71,15 +72,29 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: _toggleFilterModal,
           ),
         ],
       ),
       body: Stack(
         children: [
+          // Filter section
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: ReportFilterSection(), // Add the filter section here
+          ),
+
           // Primary content
-          _buildCharts(),
+          Positioned(
+            top: 50, // Adjust based on the height of your filter section
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _buildCharts(),
+          ),
           
           // Animated modal
           AnimatedBuilder(
