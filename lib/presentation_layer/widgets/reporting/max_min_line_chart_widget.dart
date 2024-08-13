@@ -1,56 +1,121 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 class MaxMinLineChart extends ConsumerWidget {
-  const MaxMinLineChart({super.key});
+  final int selectedMonth;
+  final bool repsRepresentation;
 
-  Map<DateTime, List<SessionEntity>> _groupSessionsByDate(List<SessionEntity> sessions) {
+  MaxMinLineChart._({
+    required this.selectedMonth,
+    this.repsRepresentation = false,
+  });
+
+  factory MaxMinLineChart(
+      {required int selectedMonth, bool repsRepresentation = false}) {
+    if (selectedMonth < 1 || selectedMonth > 12) {
+      throw ArgumentError('selectedMonth must be between 1 and 12');
+    }
+    return MaxMinLineChart._(
+        selectedMonth: selectedMonth, repsRepresentation: repsRepresentation);
+  }
+
+  DateTime _getSelectedMonthDateTime() {
+    final now = DateTime.now();
+    return DateTime(now.year, selectedMonth);
+  }
+
+  int _getDaysInSelectedMonth() {
+    final selectedMonthDateTime = _getSelectedMonthDateTime();
+    final firstDayOfNextMonth = DateTime(
+        selectedMonthDateTime.year, selectedMonthDateTime.month + 1, 1);
+    return firstDayOfNextMonth.subtract(Duration(days: 1)).day;
+  }
+
+  Map<DateTime, List<SessionEntity>> _groupSessionsByDate(
+      List<SessionEntity> sessions) {
+    final DateTime selectedMonthDateTime = _getSelectedMonthDateTime();
     final Map<DateTime, List<SessionEntity>> groupedSessions = {};
     for (var session in sessions) {
-      final date = DateTime(session.timeStamp.year, session.timeStamp.month, session.timeStamp.day);
-      if (groupedSessions[date] == null) {
-        groupedSessions[date] = [];
+      final date = DateTime(session.timeStamp.year, session.timeStamp.month,
+          session.timeStamp.day);
+      if (date.year == selectedMonthDateTime.year &&
+          date.month == selectedMonthDateTime.month) {
+        if (groupedSessions[date] == null) {
+          groupedSessions[date] = [];
+        }
+        groupedSessions[date]!.add(session);
       }
-      groupedSessions[date]!.add(session);
     }
     return groupedSessions;
   }
 
-  List<FlSpot> _generateSpots(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  List<FlSpot> _generateSpots(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
     final List<FlSpot> spots = [];
     groupedSessions.forEach((date, sessions) {
-      final averageWeight = sessions.map((s) => isMaxWeight ? s.maxWeight : s.minWeight).reduce((a, b) => a + b) / sessions.length;
-      spots.add(FlSpot(date.millisecondsSinceEpoch.toDouble(), averageWeight));
+      final averageWeight = sessions
+              .map((s) => isMax ? s.maxWeight : s.minWeight)
+              .reduce((a, b) => a + b) /
+          sessions.length;
+      final averageReps = sessions
+              .map((s) => isMax ? s.maxReps : s.minReps)
+              .reduce((a, b) => a + b) /
+          sessions.length;
+      spots.add(FlSpot(date.day.toDouble(),
+          repsRepresentation ? averageReps : averageWeight));
     });
-    spots.sort((a, b) => a.x.compareTo(b.x)); // Sort spots by x value (date)
+    spots.sort((a, b) => a.x.compareTo(b.x));
     return spots;
   }
 
-  double _getMinX(Map<DateTime, List<SessionEntity>> groupedSessions) {
-    return groupedSessions.keys.map((date) => date.millisecondsSinceEpoch.toDouble()).reduce((a, b) => a < b ? a : b) - Duration(days: 1).inMilliseconds;
+  double _getMinX() {
+    return 1;
   }
 
-  double _getMaxX(Map<DateTime, List<SessionEntity>> groupedSessions) {
-    return groupedSessions.keys.map((date) => date.millisecondsSinceEpoch.toDouble()).reduce((a, b) => a > b ? a : b) + Duration(days: 1).inMilliseconds;
+  double _getMaxX() {
+    return _getDaysInSelectedMonth().toDouble();
   }
 
-  double _getMinY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  double _getMinY(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
+    if (groupedSessions.isEmpty) return 0;
+    // Reps Representation
+    if (repsRepresentation == true) {
+      return groupedSessions.values
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxReps : s.minReps)
+            .reduce((a, b) => a < b ? a : b) -
+        1;
+    }
+    // Weight Representation
     return groupedSessions.values
-        .expand((sessions) => sessions)
-        .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)
-        .reduce((a, b) => a < b ? a : b) - 1;
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxWeight : s.minWeight)
+            .reduce((a, b) => a < b ? a : b) -
+        1;
   }
 
-  double _getMaxY(Map<DateTime, List<SessionEntity>> groupedSessions, bool isMaxWeight) {
+  double _getMaxY(
+      Map<DateTime, List<SessionEntity>> groupedSessions, bool isMax) {
+    if (groupedSessions.isEmpty) return 10; // Default maximum value
+    // Reps Representation
+    if (repsRepresentation == true) {
     return groupedSessions.values
-        .expand((sessions) => sessions)
-        .map((s) => isMaxWeight ? s.maxWeight : s.minWeight)
-        .reduce((a, b) => a > b ? a : b) + 1;
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxReps : s.minReps)
+            .reduce((a, b) => a > b ? a : b) +
+        1;
+    }
+    // Weight Representation
+    return groupedSessions.values
+            .expand((sessions) => sessions)
+            .map((s) => isMax ? s.maxWeight : s.minWeight)
+            .reduce((a, b) => a > b ? a : b) +
+        1;
   }
 
   @override
@@ -59,63 +124,118 @@ class MaxMinLineChart extends ConsumerWidget {
     final provider = ref.watch(reportScreenProvider);
     final groupedSessions = _groupSessionsByDate(provider.filteredSessions);
 
+    final minY = _getMinY(groupedSessions, false);
+    final maxY = _getMaxY(groupedSessions, true);
+
     return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
-      child: LineChart(
-        LineChartData(
-          minX: _getMinX(groupedSessions),
-          maxX: _getMaxX(groupedSessions),
-          minY: _getMinY(groupedSessions, false),
-          maxY: _getMaxY(groupedSessions, true),
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 40, // Increase reserved size for left titles
+      padding: const EdgeInsets.all(20), // Outer padding
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Align children to the start
+        children: [
+          Text(
+            "Max-Min ${repsRepresentation ? "Reps":"Weights"}",
+            style: theme.textTheme.titleMedium
+                ?.copyWith(color: theme.primaryColorDark),
+          ),
+          SizedBox(height: 12), // Space between the title and chart
+          Container(
+              height: 300,
+              padding:
+                  const EdgeInsets.all(20.0), // Padding inside the Container
+              decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(customThemeValues.borderRadius),
+                color: theme.primaryColorLight,
+              ),
+              child: LineChart(
+                LineChartData(
+                  minX: _getMinX(),
+                  maxX: _getMaxX(),
+                  minY: minY,
+                  maxY: maxY,
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize:
+                            55, // Increase reserved size for the left titles
+                        getTitlesWidget: (value, meta) {
+                          return Align(
+                            alignment: Alignment
+                                .centerLeft, // Align titles to the right
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  right:
+                                      8.0), // Add padding to move titles further from the axis
+                              child: Text('${value.toStringAsFixed(2)}',
+                                  style: TextStyle(fontSize: 12)),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        interval: 7,
+                        reservedSize:
+                            40, // Increase reserved size for the bottom titles
+                        getTitlesWidget: (value, meta) {
+                          final day = value.toInt();
+                          return Align(
+                            alignment: Alignment
+                                .bottomCenter, // Align titles to the bottom
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top:
+                                      8.0), // Add padding to move titles further from the axis
+                              child:
+                                  Text('$day', style: TextStyle(fontSize: 12)),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                  ),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: _generateSpots(groupedSessions, false),
+                      isCurved: true,
+                      color: theme.primaryColorDark,
+                      barWidth: 4,
+                      isStrokeCapRound: true,
+                      dotData: const FlDotData(show: false),
+                    ),
+                    LineChartBarData(
+                      spots: _generateSpots(groupedSessions, true),
+                      isCurved: true,
+                      color: theme.primaryColor,
+                      barWidth: 4,
+                      isStrokeCapRound: true,
+                      dotData: const FlDotData(show: false),
+                    ),
+                  ],
+                  gridData: FlGridData(show: false),
+                  borderData: FlBorderData(
+                    show: false, // Border around the plot area
+                  ),
+                  lineTouchData: LineTouchData(
+                    touchTooltipData: LineTouchTooltipData(
+                        // tooltipBgColor: Colors.transparent,
+                        ),
+                    handleBuiltInTouches: true,
+                  ),
+                ),
               ),
             ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  final DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-                  return SideTitleWidget(
-                    axisSide: meta.axisSide,
-                    child: Text('${date.month}/${date.day}'),
-                  );
-                },
-              ),
-            ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-          ),
-          lineBarsData: [
-            LineChartBarData(
-              spots: _generateSpots(groupedSessions, true),
-              isCurved: true,
-              color: theme.primaryColorDark,
-              barWidth: 4,
-              isStrokeCapRound: true,
-              dotData: FlDotData(show: false),
-            ),
-            LineChartBarData(
-              spots: _generateSpots(groupedSessions, false),
-              isCurved: true,
-              color: theme.primaryColorLight,
-              barWidth: 4,
-              isStrokeCapRound: true,
-              dotData: FlDotData(show: false),
-            ),
-          ],
-          gridData: FlGridData(show: false), // Hide grid lines
-          borderData: FlBorderData(
-            show: false,
-          ),
-        ),
+        ],
       ),
     );
   }

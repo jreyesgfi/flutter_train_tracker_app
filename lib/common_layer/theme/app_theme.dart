@@ -37,6 +37,18 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
   }
 }
 
+class CustomThemeValues {
+  final double borderRadius;
+
+  CustomThemeValues({
+    required this.borderRadius,
+  });
+}
+
+final customThemeValues = CustomThemeValues(
+  borderRadius: 16.0
+);
+
 class AppTheme {
   static ThemeData get theme {
     return ThemeData(
