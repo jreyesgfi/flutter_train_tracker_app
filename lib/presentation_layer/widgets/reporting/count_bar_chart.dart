@@ -125,7 +125,7 @@ class TrainingCountBarChart extends ConsumerWidget {
                   final dayOfWeek = entry.key;
                   final count = entry.value;
                   return BarChartGroupData(
-                    x: dayOfWeek - 1, // Adjust for 0-based indexing
+                    x: dayOfWeek, 
                     barRods: [
                       BarChartRodData(
                         toY: count.toDouble(),
