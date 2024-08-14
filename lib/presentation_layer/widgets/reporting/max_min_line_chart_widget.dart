@@ -6,26 +6,22 @@ import 'package:flutter_application_test1/presentation_layer/providers/report_sc
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MaxMinLineChart extends ConsumerWidget {
-  final int selectedMonth;
   final bool repsRepresentation;
+  var selectedMonth = DateTime.now().month;
+  var selectedYear = DateTime.now().year;
 
   MaxMinLineChart._({
-    required this.selectedMonth,
     this.repsRepresentation = false,
   });
 
   factory MaxMinLineChart(
-      {required int selectedMonth, bool repsRepresentation = false}) {
-    if (selectedMonth < 1 || selectedMonth > 12) {
-      throw ArgumentError('selectedMonth must be between 1 and 12');
-    }
+      {bool repsRepresentation = false}) {
     return MaxMinLineChart._(
-        selectedMonth: selectedMonth, repsRepresentation: repsRepresentation);
+        repsRepresentation: repsRepresentation);
   }
 
   DateTime _getSelectedMonthDateTime() {
-    final now = DateTime.now();
-    return DateTime(now.year, selectedMonth);
+    return DateTime(selectedYear, selectedMonth);
   }
 
   int _getDaysInSelectedMonth() {
@@ -126,6 +122,9 @@ class MaxMinLineChart extends ConsumerWidget {
 
     final minY = _getMinY(groupedSessions, false);
     final maxY = _getMaxY(groupedSessions, true);
+
+    selectedMonth = provider.selectedMonth;
+    selectedYear = provider.selectedYear;
 
     return Padding(
       padding: const EdgeInsets.all(20), // Outer padding

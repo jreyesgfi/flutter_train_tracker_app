@@ -60,8 +60,8 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     
     return ListView(
       children: [
-        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8),
-        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8, repsRepresentation: true),
+        MaxMinLineChart(),
+        MaxMinLineChart(repsRepresentation: true),
       ],
     );
   }

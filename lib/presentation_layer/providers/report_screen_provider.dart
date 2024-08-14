@@ -26,8 +26,8 @@ class ReportingScreenState {
 
   MuscleEntity? selectedMuscle;
   ExerciseEntity? selectedExercise;
-  int? selectedMonth;
-  int? selectedYear;
+  int selectedMonth;
+  int selectedYear;
 
   ReportingScreenState({
     this.allMuscles = const [],
@@ -37,12 +37,16 @@ class ReportingScreenState {
     this.allSessions = const [],
     this.selectedMuscle,
     this.selectedExercise,
-    this.selectedMonth,
-    this.selectedYear,
+    required this.selectedMonth,
+    required this.selectedYear,
   });
 
-  static initial() {
-    return ReportingScreenState();
+  factory ReportingScreenState.initial() {
+    final now = DateTime.now();
+    return ReportingScreenState(
+      selectedMonth: now.month,
+      selectedYear: now.year,
+    );
   }
 
   ReportingScreenState copyWith({
