@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/reporting/count_bar_chart.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_modal.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
@@ -60,8 +61,10 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     
     return ListView(
       children: [
-        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8),
-        MaxMinLineChart(selectedMonth: state.selectedMonth ?? 8, repsRepresentation: true),
+        TrainingCountBarChart(),
+        TrainingCountBarChart(countMusclesTrained: true),
+        MaxMinLineChart(),
+        MaxMinLineChart(repsRepresentation: true),
       ],
     );
   }
@@ -89,7 +92,7 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
 
           // Primary content
           Positioned(
-            top: 50, // Adjust based on the height of your filter section
+            top: 55, // Adjust based on the height of your filter section
             left: 0,
             right: 0,
             bottom: 0,
