@@ -45,14 +45,6 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     super.dispose();
   }
 
-  void _toggleFilterModal() {
-    if (_animation.isDismissed) {
-      _controller.forward();
-    } else if (_animation.isCompleted) {
-      _controller.reverse();
-    }
-  }
-
   Widget _buildCharts() {
     final state = ref.watch(reportScreenProvider);
     if (state.allSessions.isEmpty) {
@@ -72,46 +64,38 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: _toggleFilterModal,
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Filter section
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: ReportFilterSection(), // Add the filter section here
-          ),
-
-          // Primary content
-          Positioned(
-            top: 55, // Adjust based on the height of your filter section
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: _buildCharts(),
-          ),
-          
-          // Animated modal
-          AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Positioned(
-                top: _animation.value * 300 - 300,
-                left: 0,
-                right: 0,
-                child: ReportFilterModal(onClose: _toggleFilterModal),
-              );
-            },
-          ),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Filter section
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: ReportFilterSection(), // Add the filter section here
+            ),
+            // Primary content
+            Positioned(
+              top: 140, // Adjust based on the height of your filter section
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _buildCharts(),
+            ),
+            // Animated modal
+            // AnimatedBuilder(
+            //   animation: _animation,
+            //   builder: (context, child) {
+            //     return Positioned(
+            //       top: _animation.value * 300 - 300,
+            //       left: 0,
+            //       right: 0,
+            //       child: ReportFilterModal(onClose: _toggleFilterModal),
+            //     );
+            //   },
+            // ),
+          ],
+        ),
       ),
     );
   }
