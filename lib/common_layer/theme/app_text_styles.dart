@@ -35,7 +35,7 @@ class AppTextStyles {
   );
 
   static const body = TextStyle(
-    fontSize: 13.0,
+    fontSize: 14,
     letterSpacing: 0.13,
     height: 1.0,
     fontWeight: FontWeight.normal,

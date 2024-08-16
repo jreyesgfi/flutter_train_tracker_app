@@ -117,6 +117,9 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
             .toList();
 
     state = state.copyWith(
+      selectedExercise: null,
+    );
+    state = state.copyWith(
       selectedMuscle: selectedMuscle,
       filteredExercises: filteredExercises,
     );
