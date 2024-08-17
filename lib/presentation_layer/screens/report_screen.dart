@@ -4,6 +4,7 @@ import 'package:flutter_application_test1/presentation_layer/widgets/reporting/c
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_modal.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReportScreen extends ConsumerWidget {
@@ -53,6 +54,7 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
     
     return ListView(
       children: [
+        SessionsHistoryCalendarWidget(),
         TrainingCountBarChart(),
         TrainingCountBarChart(countMusclesTrained: true),
         MaxMinLineChart(),
