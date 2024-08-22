@@ -86,35 +86,40 @@ class ReportFilterSection extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8),
+              // Muscle selector
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorLight,
-                    borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
-                  ),
-                  child: DropdownButton<String>(
-                    hint: Text(
-                      'Select Muscle',
-                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
-                    ),
-                    value: state.selectedMuscle?.id,
-                    items: state.allMuscles.map((muscle) {
-                      return DropdownMenuItem<String>(
-                        value: muscle.id,
-                        child: Text(clipText(muscle.name, 20)), // Limit text length
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        notifier.selectMuscleById(newValue);
-                        notifier.filterSessions();
-                      }
-                    },
-                  ),
-                ),
-              ),
+  child: Container(
+    padding: const EdgeInsets.all(12),
+    height: 50,
+    decoration: BoxDecoration(
+      color: Theme.of(context).primaryColorLight,
+      borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
+    ),
+    child: DropdownButton<String>(
+      hint: Text(
+        'Select Muscle',
+        style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
+      ),
+      value: state.selectedMuscle?.id,
+      items: [
+        const DropdownMenuItem<String>(
+          value: '', 
+          child: Text("Todos"), 
+        ),
+        ...state.allMuscles.map((muscle) {
+          return DropdownMenuItem<String>(
+            value: muscle.id,
+            child: Text(clipText(muscle.name, 20)), // Limit text length
+          );
+        }).toList(),
+      ],
+      onChanged: (newValue) {
+        notifier.selectMuscleById(newValue ?? '');
+        notifier.filterSessions(); 
+      },
+    ),
+  ),
+),
             ],
           ),
           
