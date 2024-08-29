@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/like_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MuscleTileSchema {
@@ -37,6 +38,7 @@ class _MuscleTileState extends State<MuscleTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final customTheme = theme.extension<CustomTheme>();
+    bool initialIsLiked = false;
 
     return MouseRegion(
         onEnter: (_) => _handleHover(true),
@@ -65,6 +67,19 @@ class _MuscleTileState extends State<MuscleTile> {
                       height: 100,
                       fit: BoxFit.fitHeight,
                     ),
+                  ),
+                ),
+                Positioned.fill(
+                  right: 5,
+                  left: 75,
+                  top: 75,
+                  bottom: 5,
+                  child:LikeButton(
+                    isLiked: initialIsLiked, // This should come from your state management
+                    onLike: () {
+                      // Your logic to handle the like action, e.g., an API call
+                      // This will be called after the UI has updated optimistically
+                    },
                   ),
                 ),
                 Padding(
