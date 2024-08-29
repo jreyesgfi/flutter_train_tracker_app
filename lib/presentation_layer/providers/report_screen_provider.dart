@@ -81,6 +81,7 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
 
   ReportingScreenNotifier(this.ref) : super(ReportingScreenState.initial()) {
     _fetchAllData();
+    selectMuscleById('');
   }
 
   Future<void> _fetchAllData() async {
