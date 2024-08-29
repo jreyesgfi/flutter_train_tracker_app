@@ -18,6 +18,7 @@ final reportScreenProvider =
 });
 
 final nullMuscle = MuscleEntity(id:'',name:'');
+final nullExercise = ExerciseEntity(id: '',name:'', muscleId: '');
 
 class ReportingScreenState {
   final List<MuscleEntity> allMuscles;
@@ -103,10 +104,10 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
 
   void filterSessions() {
     List<SessionEntity> filteredSessions = state.allSessions;
-    print(" Muscle selected ${state.selectedMuscle}");
+    print(" Muscle selected ${state.selectedMuscle?.name}");
     // Filter by selected muscle
     if (state.selectedMuscle != nullMuscle) {
-      filteredSessions = filteredSessions
+      filteredSessions = state.allSessions
           .where((session) => session.muscleId == state.selectedMuscle!.id)
           .toList();
     } else {
@@ -115,11 +116,12 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
     }
 
     // Further filter by selected exercise
-    if (state.selectedExercise != null) {
+    if (state.selectedExercise != nullExercise) {
       filteredSessions = filteredSessions
           .where((session) => session.exerciseId == state.selectedExercise!.id)
           .toList();
     }
+
 
     state = state.copyWith(filteredSessions: filteredSessions);
     print("Sessions filtered: ${filteredSessions.length}");
@@ -128,17 +130,22 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
   void selectMuscleById(String muscleId) {
     print("Selecting muscle asociated with $muscleId...");
     MuscleEntity? selectedMuscle = nullMuscle;
+    List<ExerciseEntity> filteredExercises = state.allExercises;
     if (muscleId != '') {
       // Find the muscle by ID, if it exists
       selectedMuscle =
           state.allMuscles.firstWhereOrNull((m) => m.id == muscleId);
+          filteredExercises = state.allExercises.where(
+        (exercise)=>exercise.muscleId == selectedMuscle?.id
+      ).toList();
     }
-    print("Selected muscle: $selectedMuscle");
     // Update the state with the selected muscle and filtered exercises
     state = state.copyWith(
       selectedMuscle: selectedMuscle,
-      selectedExercise: null,
+      selectedExercise: nullExercise,
+      filteredExercises: filteredExercises,
     );
+
   }
 
   void selectExerciseById(String exerciseId) {

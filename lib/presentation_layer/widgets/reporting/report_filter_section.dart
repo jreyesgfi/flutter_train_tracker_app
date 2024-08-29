@@ -148,7 +148,10 @@ class ReportFilterSection extends ConsumerWidget {
                     items: state.filteredExercises.map((exercise) {
                       return DropdownMenuItem<String>(
                         value: exercise.id,
-                        child: Text(clipText(exercise.name, 24)), // Limit text length
+                        child: Text(
+                          clipText(exercise.name, 40),
+                          style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
+                        ), // Limit text length
                       );
                     }).toList(),
                     onChanged: (newValue) {
