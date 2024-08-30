@@ -42,6 +42,7 @@ class _MuscleCarouselSelectorState extends ConsumerState<MuscleCarouselSelector>
               child: MuscleTile(
                 muscle: widget.muscles[index],
                 isSelected: selectedIndex == index,
+                toggleLike: ref.read(trainingScreenProvider.notifier).toggleMuscleLikeState,
               ),
             ),
           );

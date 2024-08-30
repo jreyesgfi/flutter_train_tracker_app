@@ -8,23 +8,28 @@ class MuscleTileSchema {
   final String label;
   final int timeSinceExercise; //days
   final String imagePath;
+  final bool liked;
 
   MuscleTileSchema({
     required this.muscleId,
     required this.label,
     required this.timeSinceExercise,
     required this.imagePath,
+    required this.liked,
   });
 }
 
 class MuscleTile extends StatefulWidget {
   final MuscleTileSchema muscle;
   final bool isSelected;
+  final Function toggleLike;
 
   const MuscleTile({
     super.key,
     required this.muscle,
     this.isSelected = false,
+    required this.toggleLike,
+
   });
 
   @override
@@ -38,7 +43,6 @@ class _MuscleTileState extends State<MuscleTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final customTheme = theme.extension<CustomTheme>();
-    bool initialIsLiked = false;
 
     return MouseRegion(
         onEnter: (_) => _handleHover(true),
@@ -71,14 +75,13 @@ class _MuscleTileState extends State<MuscleTile> {
                 ),
                 Positioned.fill(
                   right: 5,
-                  left: 75,
-                  top: 75,
+                  left: 80,
+                  top: 80,
                   bottom: 5,
                   child:LikeButton(
-                    isLiked: initialIsLiked, // This should come from your state management
+                    isLiked: widget.muscle.liked, // This should come from your state management
                     onLike: () {
-                      // Your logic to handle the like action, e.g., an API call
-                      // This will be called after the UI has updated optimistically
+                      widget.toggleLike(widget.muscle.muscleId);
                     },
                   ),
                 ),

@@ -46,6 +46,7 @@ dependencies:
 
   # for persist data for the clock
   shared_preferences: ^2.0.6
+  sqflite: ^2.0.0+3
 
   cached_network_image: ^3.2.3
   cupertino_icons: ^1.0.5

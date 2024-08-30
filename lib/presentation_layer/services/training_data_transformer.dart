@@ -6,7 +6,10 @@ import 'package:flutter_application_test1/presentation_layer/widgets/training_se
 
 class TrainingDataTransformer {
   static List<MuscleTileSchema> transformMusclesToTiles(
-      List<MuscleEntity> muscles, Map<String, DateTime> lastTrainingTimes) {
+      List<MuscleEntity> muscles,
+      Map<String, DateTime> lastTrainingTimes,
+      List<String> likedMuscleIds,
+    ) {
     final tiles = muscles
         .map((muscle) => MuscleTileSchema(
               muscleId: muscle.id,
@@ -14,6 +17,7 @@ class TrainingDataTransformer {
               timeSinceExercise:
                   calculateDaysSinceLastExercise(lastTrainingTimes[muscle.id]),
               imagePath: muscleImagePath(muscle),
+              liked: likedMuscleIds.contains(muscle.id)
             ))
         .toList();
     tiles.sort((a,b) => b.timeSinceExercise.compareTo(a.timeSinceExercise));

@@ -31,6 +31,7 @@ class _LikeButtonState extends State<LikeButton>
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 100),
+      reverseDuration: const Duration(milliseconds: 0),
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -77,7 +78,7 @@ class _LikeButtonState extends State<LikeButton>
         height: widget.height,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -85,20 +86,23 @@ class _LikeButtonState extends State<LikeButton>
             ),
           ],
         ),
-        child: Center(
-          child: Container(
-            width: widget.width,
-            height: widget.height,
-            alignment: Alignment.center,
-            child: ScaleTransition(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(
+              Icons.favorite,
+              color: _isLiked ? Colors.red : Colors.grey,
+              size: 20, // Initial and final size of the icon
+            ),
+            ScaleTransition(
               scale: _animation,
               child: Icon(
                 Icons.favorite,
                 color: _isLiked ? Colors.red : Colors.grey,
-                size: 20, // Base size of the icon
+                size: 25, // This will scale up during the animation
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

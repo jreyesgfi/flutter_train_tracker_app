@@ -1,5 +1,5 @@
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart' as domain;
-import 'package:flutter_application_test1/domain_layer/repositories/repository_interfaces.dart';
+import 'package:flutter_application_test1/domain_layer/repositories/cloud_repository_interfaces.dart';
 import 'package:flutter_application_test1/infrastructure_layer/network/muscle_data_service.dart';
 import 'package:flutter_application_test1/models/MuscleData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/infrastructure_layer/network/exercise_data_service.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
+import 'package:flutter_application_test1/infrastructure_layer/repository_impl/local_data_repository_impl.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
 import 'package:flutter_application_test1/infrastructure_layer/repository_impl/session_repository_impl.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
@@ -101,10 +102,11 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     _fetchAllData();
   }
 
-  // DATA CLOUD RETRIVAL
+  // CLOUD STORAGE DATA
   Future<void> _fetchAllData() async {
     print("Fetching all data");
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
+    final likedMuscles = _getLikedMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
     final exerciseIds =
@@ -149,8 +151,19 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   }
 
 
+  // LOCAL STORAGE DATA
+  Future<List<String>> _getLikedMuscles() async{
+    return await ref.read(localRepositoryProvider).getLikedMuscles();
+  }
+  
+  void toggleMuscleLikeState(String muscleId) async{
+    await ref.read(localRepositoryProvider).toggleMuscleLikeState(muscleId);
+    _getLikedMuscles();
+  }
 
-  // DATA LOCAL FILTER
+
+
+  // PROVIDER DATA
   void selectMuscleById(String muscleId) {
     try {
       final selectedMuscle =
@@ -249,10 +262,11 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       : null;
 
   // VIEW MODEL
-  void _updateTiles() {
+  void _updateTiles() async{
     print("Update Tiles");
+    var likedMuscles = await _getLikedMuscles();
     var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(
-        state.allMuscles, state.lastMuscleTrainingTimes);
+        state.allMuscles, state.lastMuscleTrainingTimes, likedMuscles);
     var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
         state.filteredExercises, state.lastTrainingTimes);
 
