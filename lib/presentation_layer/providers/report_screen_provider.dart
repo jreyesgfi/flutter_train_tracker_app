@@ -25,6 +25,7 @@ class ReportingScreenState {
   final List<ExerciseEntity> allExercises;
   final List<ExerciseEntity> filteredExercises;
   final List<SessionEntity> filteredSessions;
+  final List<SessionEntity> filteredSessionsByDate;
   final List<SessionEntity> allSessions;
 
   MuscleEntity? selectedMuscle;
@@ -37,6 +38,7 @@ class ReportingScreenState {
     this.allExercises = const [],
     this.filteredExercises = const [],
     this.filteredSessions = const [],
+    this.filteredSessionsByDate = const [],
     this.allSessions = const [],
     this.selectedMuscle,
     this.selectedExercise,
@@ -57,6 +59,7 @@ class ReportingScreenState {
     List<ExerciseEntity>? allExercises,
     List<ExerciseEntity>? filteredExercises,
     List<SessionEntity>? filteredSessions,
+    List<SessionEntity>? filteredSessionsByDate,
     List<SessionEntity>? allSessions,
     MuscleEntity? selectedMuscle,
     ExerciseEntity? selectedExercise,
@@ -68,6 +71,7 @@ class ReportingScreenState {
       allExercises: allExercises ?? this.allExercises,
       filteredExercises: filteredExercises ?? this.filteredExercises,
       filteredSessions: filteredSessions ?? this.filteredSessions,
+      filteredSessionsByDate: filteredSessionsByDate ?? this.filteredSessionsByDate,
       allSessions: allSessions ?? this.allSessions,
       selectedMuscle: selectedMuscle ?? this.selectedMuscle,
       selectedExercise: selectedExercise ?? this.selectedExercise,
@@ -100,31 +104,38 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
     );
 
     filterSessions();
+    filterSessionsByDate();
+  }
+
+  bool filterLogic(SessionEntity session){
+    bool sameMonthYear = 
+      session.timeStamp.month == state.selectedMonth 
+      && session.timeStamp.year == state.selectedYear;
+
+    bool sameMuscle = true;
+    bool sameExercise = true;
+    if (state.selectedMuscle != nullMuscle){
+      sameMuscle = session.muscleId == state.selectedMuscle!.id;
+    }
+    if (state.selectedExercise != nullExercise){
+      sameExercise = session.exerciseId == state.selectedExercise!.id;
+    }
+
+    return sameMonthYear && sameMuscle && sameExercise; 
   }
 
   void filterSessions() {
-    List<SessionEntity> filteredSessions = state.allSessions;
-    print(" Muscle selected ${state.selectedMuscle?.name}");
-    // Filter by selected muscle
-    if (state.selectedMuscle != nullMuscle) {
-      filteredSessions = state.allSessions
-          .where((session) => session.muscleId == state.selectedMuscle!.id)
-          .toList();
-    } else {
-      print("No muscle selected");
-      filteredSessions = state.allSessions;
-    }
-
-    // Further filter by selected exercise
-    if (state.selectedExercise != nullExercise) {
-      filteredSessions = filteredSessions
-          .where((session) => session.exerciseId == state.selectedExercise!.id)
-          .toList();
-    }
-
-
+    List<SessionEntity> filteredSessions = state.allSessions.where((session)=>filterLogic(session)).toList();
     state = state.copyWith(filteredSessions: filteredSessions);
     print("Sessions filtered: ${filteredSessions.length}");
+  }
+  
+  void filterSessionsByDate() {
+    List<SessionEntity> filteredSessionsByDate = state.allSessions.where((session)=>
+      session.timeStamp.month == state.selectedMonth 
+      && session.timeStamp.year == state.selectedYear)
+    .toList();
+    state = state.copyWith(filteredSessionsByDate: filteredSessionsByDate);
   }
 
   void selectMuscleById(String muscleId) {
@@ -166,5 +177,7 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
       selectedMonth: monthNum,
       selectedYear: year,
     );
+    filterSessions();
+    filterSessionsByDate();
   }
 }

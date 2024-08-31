@@ -40,13 +40,8 @@ class TrainingCountBarChart extends ConsumerWidget {
 
     for (var entry in dateMuscleMap.entries) {
       final dayOfWeek = entry.key.weekday;
-      if (countMusclesTrained) {
-        // Count the number of distinct muscles trained on each day of the week
-        dayOfWeekCounts[dayOfWeek] = (dayOfWeekCounts[dayOfWeek] ?? 0) + entry.value.length;
-      } else {
-        // Count the number of training sessions on each day of the week (each day counts as 1 if any session exists)
-        dayOfWeekCounts[dayOfWeek] = 1; // Each day with sessions counts as 1
-      }
+      dayOfWeekCounts[dayOfWeek] = (dayOfWeekCounts[dayOfWeek] ?? 0) + 
+        (countMusclesTrained == true ? entry.value.length : 1);
     }
     return dayOfWeekCounts;
   }
@@ -55,7 +50,8 @@ class TrainingCountBarChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final provider = ref.watch(reportScreenProvider);
-    final groupedSessions = _groupSessionsByDayOfWeek(provider.filteredSessions);
+    final sessions = countMusclesTrained == true ? provider.filteredSessionsByDate : provider.filteredSessions;
+    final groupedSessions = _groupSessionsByDayOfWeek(sessions);
 
     selectedMonth = provider.selectedMonth;
     selectedYear = provider.selectedYear;
