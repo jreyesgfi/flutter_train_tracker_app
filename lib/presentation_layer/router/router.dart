@@ -16,21 +16,37 @@ final GoRouter router = GoRouter(
           path: '/settings',
           name: 'settings',
           pageBuilder: (context, state) =>
-              MaterialPage(key: state.pageKey, child: SettingsScreen()),
+              NoAnimationPage(key: state.pageKey, child: SettingsScreen()),
         ),
         GoRoute(
           path: '/training',
           name: 'training',
           pageBuilder: (context, state) =>
-              MaterialPage(key: state.pageKey, child: TrainingScreen()),
+              NoAnimationPage(key: state.pageKey, child: TrainingScreen()),
         ),
         GoRoute(
           path: '/report',
           name: 'report',
           pageBuilder: (context, state) =>
-              MaterialPage(key: state.pageKey, child: ReportScreen()),
+              NoAnimationPage(key: state.pageKey, child: ReportScreen()),
         ),
       ],
     ),
   ],
 );
+
+
+class NoAnimationPage<T> extends Page<T> {
+  final Widget child;
+
+  NoAnimationPage({required this.child, LocalKey? key}) : super(key: key);
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return PageRouteBuilder(
+      settings: this,
+      pageBuilder: (_, __, ___) => child,
+      transitionDuration: Duration.zero,
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
@@ -13,7 +14,7 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     final providerWatch = ref.watch(trainingScreenProvider);
-    
+
     final muscles = providerWatch.muscleTiles;
     final exercises = providerWatch.exerciseTiles;
 
@@ -21,28 +22,38 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
     // final selectedExercise = providerWatch.selectedExercise;
     final newSession = providerWatch.newSession;
 
-    final exerciseSelectorKey = ValueKey('${selectedMuscle?.id}_${newSession?.id}');
+    final exerciseSelectorKey =
+        ValueKey('${selectedMuscle?.id}_${newSession?.id}');
 
     return Scaffold(
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
-            child: Text(
-              "¿Qué vamos a entrenar hoy?",
-              style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+          EnteringTransition(
+            position: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
+              child: Text(
+                "¿Qué vamos a entrenar hoy?",
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: theme.primaryColorDark),
+              ),
             ),
           ),
+
           // Display muscle carousel selector if muscles are available
-          if (muscles.isNotEmpty)
-            MuscleCarouselSelector(muscles:  muscles),
+          if (muscles.isNotEmpty) 
+          EnteringTransition(
+            position: 3,
+            child: MuscleCarouselSelector(muscles: muscles),
+          ),
 
           if (exercises.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
               child: Text(
                 "Escoge un ejercicio",
-                style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: theme.primaryColorDark),
               ),
             ),
           // Display exercise list selector if exercises are available

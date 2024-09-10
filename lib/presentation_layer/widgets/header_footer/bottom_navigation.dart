@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
 
-class BottomNavigation extends StatefulWidget {
+class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});
 
   @override
-  _BottomNavigationState createState() => _BottomNavigationState();
+  ConsumerState<BottomNavigation> createState() => _BottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _BottomNavigationState extends ConsumerState<BottomNavigation> {
   int _selectedIndex = 1; 
 
   void _onItemTapped(int index) {
@@ -19,13 +21,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
     });
     switch (index) {
       case 0:
-        context.goNamed(AppRoute.settings.name);
+        navigateWithDelay(ref, context, AppRoute.settings.name);
         break;
       case 1:
-        context.goNamed(AppRoute.training.name);
+        navigateWithDelay(ref, context, AppRoute.training.name);
         break;
       case 2:
-        context.goNamed(AppRoute.report.name);
+        navigateWithDelay(ref, context, AppRoute.report.name);
         break;
     }
   }

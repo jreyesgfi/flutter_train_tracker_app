@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/animation_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'entering_animation.dart';
 
-class EnteringTransition extends StatefulWidget {
+class EnteringTransition extends ConsumerStatefulWidget {
   final Widget child;
   final int position;
-  final bool reverse;
 
-  const EnteringTransition({
-    Key? key,
-    required this.child,
-    required this.position,
-    this.reverse = false,
-  }) : super(key: key);
+  const EnteringTransition({Key? key, required this.child, required this.position}) : super(key: key);
 
   @override
-  _EnteringTransitionState createState() => _EnteringTransitionState();
+  ConsumerState<EnteringTransition> createState() => _EnteringTransitionState();
 }
 
-class _EnteringTransitionState extends State<EnteringTransition>
-    with SingleTickerProviderStateMixin {
+class _EnteringTransitionState extends ConsumerState<EnteringTransition> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _opacityAnimation;
@@ -25,21 +21,27 @@ class _EnteringTransitionState extends State<EnteringTransition>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
+    _controller = AnimationController(duration: const Duration(milliseconds: 1000), vsync: this);
 
     _initAnimations();
-    if (!widget.reverse) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
+    _controller.forward();
+
+    // Schedule the callback registration after the build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(animationProvider.notifier).addExitCallback(() => _controller.reverse());
+    });
+  }
+
+  @override
+  void dispose() {
+    // Ensure to clean up the registered callbacks
+    ref.read(animationProvider.notifier).clearCallbacks();
+    _controller.dispose();
+    super.dispose();
   }
 
   void _initAnimations() {
-    final intervalBegin = (widget.position - 1) * 0.1;
+    final intervalBegin = (widget.position - 1) * 0.1+0.1;
     final intervalEnd = widget.position * 0.2;
 
     _slideAnimation = Tween<Offset>(
@@ -61,12 +63,6 @@ class _EnteringTransitionState extends State<EnteringTransition>
         curve: Interval(intervalBegin, intervalEnd, curve: Curves.easeIn),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override

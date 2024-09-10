@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/header_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,9 +29,12 @@ class _TrainingScreenContent extends ConsumerWidget {
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(140.0),
           child: SafeArea(
-            child: HeaderWidget(
-              title: "Nuevo Entrenamiento",
-              date: "09/06/2024",
+            child: EnteringTransition(
+              position: 1,
+              child: HeaderWidget(
+                title: "Nuevo Entrenamiento",
+                date: "09/06/2024",
+              ),
             ),
           ),
         ),
