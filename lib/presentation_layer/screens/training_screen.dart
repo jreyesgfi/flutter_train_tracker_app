@@ -11,11 +11,7 @@ class TrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      // Local ProviderScope to scope the provider to this screen and its descendants
-      overrides: [], // Optional: Add provider overrides if necessary
-      child: _TrainingScreenContent(),
-    );
+    return _TrainingScreenContent();
   }
 }
 

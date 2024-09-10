@@ -11,6 +11,9 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final provider = ref.watch(reportScreenProvider);
+    final selectedYear = provider.selectedYear;
+    final selectedMonth = provider.selectedMonth;
+    final daysInMonth = _getDaysInMonth(selectedYear, selectedMonth);
     final sessionData = _groupSessionsByWeekAndDay(provider.filteredSessions);
 
     return Padding(
@@ -33,13 +36,12 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
           child: ScatterChart(
             ScatterChartData(
               minX: 1,
-              maxX: _getDaysInMonth()
-                  .toDouble(), // Adjusted to show the days of the current month
+              maxX:daysInMonth.toDouble(), 
               minY: 1,
               maxY: 7, // Days of the week (1: Monday, 7: Sunday)
               gridData: FlGridData(show: false),
               borderData: FlBorderData(show: false),
-              scatterSpots: _generateScatterSpots(sessionData, theme),
+              scatterSpots: _generateScatterSpots(sessionData, theme, daysInMonth),
               titlesData: FlTitlesData(
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
@@ -96,10 +98,9 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   }
 
   List<ScatterSpot> _generateScatterSpots(
-      List<Map<String, dynamic>> sessionData, ThemeData theme) {
+      List<Map<String, dynamic>> sessionData, ThemeData theme, int daysInMonth) {
     final List<ScatterSpot> spots = [];
-    final maxDaysInMonth = _getDaysInMonth();
-
+    final maxDaysInMonth = daysInMonth;
     // Iterate over possible day and day of the week combinations within the current month
     for (int day = 1; day <= maxDaysInMonth; day++) {
       final date = DateTime(DateTime.now().year, DateTime.now().month, day);
@@ -135,19 +136,11 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   }
 
   List<Map<String, dynamic>> _groupSessionsByWeekAndDay(
-      List<SessionEntity> sessions) {
+      List<SessionEntity> sessions,    
+      ) {
     final Map<int, Map<int, int>> dayWeekdayMap = {};
 
-    final currentDate = DateTime.now();
-    final currentMonth = currentDate.month;
-    final currentYear = currentDate.year;
-
     for (var session in sessions) {
-      if (session.timeStamp.month != currentMonth ||
-          session.timeStamp.year != currentYear) {
-        continue; // Skip sessions not in the current month
-      }
-
       final dayOfMonth = session.timeStamp.day;
       final dayOfWeek = session.timeStamp.weekday;
 
@@ -177,9 +170,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
     return result;
   }
 
-  int _getDaysInMonth() {
-    final now = DateTime.now();
-    final firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
-    return firstDayOfNextMonth.subtract(Duration(days: 1)).day;
+  int _getDaysInMonth(int selectedYear, int selectedMonth) {
+    return DateTime(selectedYear, selectedMonth + 1, 0).day;
   }
 }

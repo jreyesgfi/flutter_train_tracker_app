@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/count_bar_chart.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_modal.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,51 +12,37 @@ class ReportScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ProviderScope(
-      child: _ReportScreenContent(),
-    );
+    return _ReportScreenContent();
   }
 }
 
 class _ReportScreenContent extends ConsumerStatefulWidget {
+  const _ReportScreenContent({super.key});
+
   @override
   _ReportScreenContentState createState() => _ReportScreenContentState();
 }
 
-class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class _ReportScreenContentState extends ConsumerState<_ReportScreenContent>{
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
+    // Trigger the filtering asynchronously after UI loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(reportScreenProvider.notifier).filterSessions();
+    });
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+  // Build the chart widgets immediately, even without data
   Widget _buildCharts() {
-    final state = ref.watch(reportScreenProvider);
-    if (state.allSessions.isEmpty) {
-      return Center(child: CircularProgressIndicator());
-    }
-    
+
+    // These widgets will render immediately, data will be updated automatically
     return ListView(
       children: [
-        SessionsHistoryCalendarWidget(),
-        TrainingCountBarChart(),
-        TrainingCountBarChart(countMusclesTrained: true),
+        EnteringTransition(position: 2, child: SessionsHistoryCalendarWidget()),
+        EnteringTransition(position: 3, child: TrainingCountBarChart()),
+        EnteringTransition(position: 4, child: TrainingCountBarChart(countMusclesTrained: true)),
         MaxMinLineChart(),
         MaxMinLineChart(repsRepresentation: true),
       ],
@@ -70,32 +56,20 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> with
         child: Stack(
           children: [
             // Filter section
-            Positioned(
+            const Positioned(
               top: 0,
               left: 0,
               right: 0,
-              child: ReportFilterSection(), // Add the filter section here
+              child: EnteringTransition(position: 1, child: const ReportFilterSection()),
             ),
             // Primary content
             Positioned(
-              top: 140, // Adjust based on the height of your filter section
+              top: 140,
               left: 0,
               right: 0,
               bottom: 0,
               child: _buildCharts(),
             ),
-            // Animated modal
-            // AnimatedBuilder(
-            //   animation: _animation,
-            //   builder: (context, child) {
-            //     return Positioned(
-            //       top: _animation.value * 300 - 300,
-            //       left: 0,
-            //       right: 0,
-            //       child: ReportFilterModal(onClose: _toggleFilterModal),
-            //     );
-            //   },
-            // ),
           ],
         ),
       ),
