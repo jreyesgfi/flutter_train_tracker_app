@@ -41,24 +41,32 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
           ),
 
           // Display muscle carousel selector if muscles are available
-          if (muscles.isNotEmpty) 
-          EnteringTransition(
-            position: 3,
-            child: MuscleCarouselSelector(muscles: muscles),
-          ),
+          if (muscles.isNotEmpty)
+            EnteringTransition(
+              position: 3,
+              child: MuscleCarouselSelector(muscles: muscles),
+            ),
 
           if (exercises.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
-              child: Text(
-                "Escoge un ejercicio",
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: theme.primaryColorDark),
+            EnteringTransition(
+              position: 4,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
+                child: Text(
+                  "Escoge un ejercicio",
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: theme.primaryColorDark),
+                ),
               ),
             ),
+
           // Display exercise list selector if exercises are available
           if (exercises.isNotEmpty)
-            ExerciseListSelector(key: exerciseSelectorKey),
+            EnteringTransition(
+              position: 5,
+              child: ExerciseListSelector(key: exerciseSelectorKey),
+            ),
         ],
       ),
     );

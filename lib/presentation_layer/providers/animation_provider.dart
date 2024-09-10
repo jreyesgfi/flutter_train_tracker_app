@@ -20,5 +20,6 @@ class AnimationControllerNotifier extends StateNotifier<List<VoidCallback>> {
     for (var callback in state) {
       callback();
     }
+    clearCallbacks();
   }
 }

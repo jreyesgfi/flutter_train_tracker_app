@@ -15,6 +15,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
     final selectedMonth = provider.selectedMonth;
     final daysInMonth = _getDaysInMonth(selectedYear, selectedMonth);
     final sessionData = _groupSessionsByWeekAndDay(provider.filteredSessions);
+    Map<int, int> intensityMap = {};
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -36,17 +37,18 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
           child: ScatterChart(
             ScatterChartData(
               minX: 1,
-              maxX:daysInMonth.toDouble(), 
+              maxX: daysInMonth.toDouble(),
               minY: 1,
               maxY: 7, // Days of the week (1: Monday, 7: Sunday)
               gridData: FlGridData(show: false),
               borderData: FlBorderData(show: false),
-              scatterSpots: _generateScatterSpots(sessionData, theme, daysInMonth),
+              scatterSpots: _generateScatterSpots(sessionData, theme,
+                  selectedYear, selectedMonth, daysInMonth, intensityMap),
               titlesData: FlTitlesData(
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 40, // Reserve space for the Y-axis titles
+                    reservedSize: 48, // Reserve space for the Y-axis titles
                     getTitlesWidget: (value, meta) {
                       final dayName = [
                         'Mon',
@@ -68,27 +70,53 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
                   sideTitles: SideTitles(
                     showTitles: true,
                     interval: 7,
-                    reservedSize: 30, // Reserve space for the X-axis titles
+                    reservedSize: 40, // Reserve space for the X-axis titles
                     getTitlesWidget: (value, meta) {
-                          final day = value.toInt();
-                          return Align(
-                            alignment: Alignment
-                                .bottomCenter, // Align titles to the bottom
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top:
-                                      8.0), // Add padding to move titles further from the axis
-                              child:
-                                  Text('${value.toInt()}', style: TextStyle(fontSize: 12)),
-                            ),
-                          );
-                        },
+                      //final day = value.toInt();
+                      return Align(
+                        alignment: Alignment
+                            .bottomCenter, // Align titles to the bottom
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top:
+                                  8.0), // Add padding to move titles further from the axis
+                          child: Text('${value.toInt()}',
+                              style: const TextStyle(fontSize: 12)),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 topTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 rightTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              ),
+              //Tooltip
+              scatterTouchData: ScatterTouchData(
+                enabled: true,
+                handleBuiltInTouches: true,
+                touchTooltipData: ScatterTouchTooltipData(
+                  getTooltipItems: (ScatterSpot touchedSpot) {
+                    final day = touchedSpot.x.toInt();
+                    final intensity = intensityMap[day] ?? 0;
+                    return ScatterTooltipItem(
+                      '',
+                      children: [
+                        TextSpan(
+                          text: '${day}/${selectedMonth}/${selectedYear}\n',
+                          style: theme.textTheme.titleMedium
+                            ?.copyWith(color: theme.primaryColorLight),
+                        ),
+                        TextSpan(
+                          text: 'Ejercicios: $intensity',
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: theme.secondaryHeaderColor),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -98,32 +126,41 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   }
 
   List<ScatterSpot> _generateScatterSpots(
-      List<Map<String, dynamic>> sessionData, ThemeData theme, int daysInMonth) {
+      List<Map<String, dynamic>> sessionData,
+      ThemeData theme,
+      int year,
+      int month,
+      int daysInMonth,
+      Map<int, int> intensityMap) {
     final List<ScatterSpot> spots = [];
     final maxDaysInMonth = daysInMonth;
+    final maxIntensity = sessionData.isEmpty ? 0 :
+        sessionData.map((e) => e['intensity'] as int).reduce(max);
+
     // Iterate over possible day and day of the week combinations within the current month
     for (int day = 1; day <= maxDaysInMonth; day++) {
-      final date = DateTime(DateTime.now().year, DateTime.now().month, day);
+      final date = DateTime(year, month, day);
       final dayOfWeek = date.weekday;
       final data = sessionData.firstWhere(
         (element) => element['day'] == day && element['weekday'] == dayOfWeek,
         orElse: () => {
           'day': day,
           'weekday': dayOfWeek,
-          'intensity': 0.0
+          'intensity': 0
         }, // Return a default map if not found
       );
 
-      final intensity =
-          data['intensity'] as double? ?? 0.0; // Ensure intensity is a double
-
+      final int intensity = data['intensity'] ?? 0;
+      intensityMap[day] = intensity;
+      double normalizedIntensity = maxIntensity > 0 ? (intensity / maxIntensity).clamp(0.0, 1.0) : 0.0;
+      
       spots.add(
         ScatterSpot(
           day.toDouble(),
           dayOfWeek.toDouble(),
           dotPainter: FlDotCirclePainter(
             color: intensity > 0
-                ? theme.primaryColor.withOpacity(intensity)
+                ? theme.primaryColor.withOpacity(normalizedIntensity)
                 : theme.shadowColor.withOpacity(0.5),
             radius: 12,
             strokeWidth: 0,
@@ -136,8 +173,8 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   }
 
   List<Map<String, dynamic>> _groupSessionsByWeekAndDay(
-      List<SessionEntity> sessions,    
-      ) {
+    List<SessionEntity> sessions,
+  ) {
     final Map<int, Map<int, int>> dayWeekdayMap = {};
 
     for (var session in sessions) {
@@ -157,8 +194,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
     final List<Map<String, dynamic>> result = [];
     for (var day in dayWeekdayMap.keys) {
       for (var weekday in dayWeekdayMap[day]!.keys) {
-        final intensity = min(
-            1.0, dayWeekdayMap[day]![weekday]! / 10); // Adjust intensity as needed
+        final intensity = dayWeekdayMap[day]![weekday]!; // Adjust intensity as needed
         result.add({
           'day': day,
           'weekday': weekday,
