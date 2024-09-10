@@ -87,6 +87,7 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
   ReportingScreenNotifier(this.ref) : super(ReportingScreenState.initial()) {
     _fetchAllData();
     selectMuscleById('');
+    filterSessions();
   }
 
   Future<void> _fetchAllData() async {
@@ -138,15 +139,18 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
     state = state.copyWith(filteredSessionsByDate: filteredSessionsByDate);
   }
 
+  MuscleEntity? retrieveMuscleById(String muscleId){
+    return state.allMuscles.firstWhereOrNull((m) => m.id == muscleId);
+  }
+
   void selectMuscleById(String muscleId) {
     print("Selecting muscle asociated with $muscleId...");
     MuscleEntity? selectedMuscle = nullMuscle;
     List<ExerciseEntity> filteredExercises = state.allExercises;
     if (muscleId != '') {
       // Find the muscle by ID, if it exists
-      selectedMuscle =
-          state.allMuscles.firstWhereOrNull((m) => m.id == muscleId);
-          filteredExercises = state.allExercises.where(
+      selectedMuscle = retrieveMuscleById(muscleId);
+      filteredExercises = state.allExercises.where(
         (exercise)=>exercise.muscleId == selectedMuscle?.id
       ).toList();
     }
@@ -159,9 +163,12 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
 
   }
 
+  ExerciseEntity? retrieveExerciseById(String exerciseId){
+    return state.allExercises.firstWhereOrNull((e) => e.id == exerciseId);
+  }
+
   void selectExerciseById(String exerciseId) {
-    final selectedExercise =
-        state.allExercises.firstWhereOrNull((e) => e.id == exerciseId);
+    final selectedExercise = retrieveExerciseById(exerciseId);
 
     state = state.copyWith(
       selectedExercise: selectedExercise,

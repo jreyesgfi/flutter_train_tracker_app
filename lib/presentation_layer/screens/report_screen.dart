@@ -28,10 +28,6 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent>{
   @override
   void initState() {
     super.initState();
-    // Trigger the filtering asynchronously after UI loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(reportScreenProvider.notifier).filterSessions();
-    });
   }
 
   // Build the chart widgets immediately, even without data
@@ -40,9 +36,9 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent>{
     // These widgets will render immediately, data will be updated automatically
     return ListView(
       children: [
-        EnteringTransition(position: 2, child: SessionsHistoryCalendarWidget()),
-        EnteringTransition(position: 3, child: TrainingCountBarChart()),
-        EnteringTransition(position: 4, child: TrainingCountBarChart(countMusclesTrained: true)),
+        EntryTransition(position: 2, child: SessionsHistoryCalendarWidget()),
+        EntryTransition(position: 3, child: TrainingCountBarChart()),
+        EntryTransition(position: 4, child: TrainingCountBarChart(countMusclesTrained: true)),
         MaxMinLineChart(),
         MaxMinLineChart(repsRepresentation: true),
       ],
@@ -60,7 +56,7 @@ class _ReportScreenContentState extends ConsumerState<_ReportScreenContent>{
               top: 0,
               left: 0,
               right: 0,
-              child: EnteringTransition(position: 1, child: const ReportFilterSection()),
+              child: EntryTransition(position: 1, child: const ReportFilterSection()),
             ),
             // Primary content
             Positioned(

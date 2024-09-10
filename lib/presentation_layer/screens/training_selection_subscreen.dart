@@ -28,7 +28,7 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
     return Scaffold(
       body: ListView(
         children: [
-          EnteringTransition(
+          EntryTransition(
             position: 2,
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
@@ -42,13 +42,13 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
 
           // Display muscle carousel selector if muscles are available
           if (muscles.isNotEmpty)
-            EnteringTransition(
+            EntryTransition(
               position: 3,
               child: MuscleCarouselSelector(muscles: muscles),
             ),
 
           if (exercises.isNotEmpty)
-            EnteringTransition(
+            EntryTransition(
               position: 4,
               child: Padding(
                 padding:
@@ -63,7 +63,7 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
 
           // Display exercise list selector if exercises are available
           if (exercises.isNotEmpty)
-            EnteringTransition(
+            EntryTransition(
               position: 5,
               child: ExerciseListSelector(key: exerciseSelectorKey),
             ),

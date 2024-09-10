@@ -3,17 +3,17 @@ import 'package:flutter_application_test1/presentation_layer/providers/animation
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'entering_animation.dart';
 
-class EnteringTransition extends ConsumerStatefulWidget {
+class EntryTransition extends ConsumerStatefulWidget {
   final Widget child;
   final int position;
 
-  const EnteringTransition({Key? key, required this.child, required this.position}) : super(key: key);
+  const EntryTransition({Key? key, required this.child, required this.position}) : super(key: key);
 
   @override
-  ConsumerState<EnteringTransition> createState() => _EnteringTransitionState();
+  ConsumerState<EntryTransition> createState() => _EnteringTransitionState();
 }
 
-class _EnteringTransitionState extends ConsumerState<EnteringTransition> with SingleTickerProviderStateMixin {
+class _EnteringTransitionState extends ConsumerState<EntryTransition> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _opacityAnimation;

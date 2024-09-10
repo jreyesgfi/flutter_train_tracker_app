@@ -29,7 +29,7 @@ class _TrainingScreenContent extends ConsumerWidget {
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(140.0),
           child: SafeArea(
-            child: EnteringTransition(
+            child: EntryTransition(
               position: 1,
               child: HeaderWidget(
                 title: "Nuevo Entrenamiento",

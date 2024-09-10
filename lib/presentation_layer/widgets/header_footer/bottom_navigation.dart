@@ -13,7 +13,7 @@ class BottomNavigation extends ConsumerStatefulWidget {
 }
 
 class _BottomNavigationState extends ConsumerState<BottomNavigation> {
-  int _selectedIndex = 1; 
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,6 +29,9 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
       case 2:
         navigateWithDelay(ref, context, AppRoute.report.name);
         break;
+      case 3:
+        navigateWithDelay(ref, context, AppRoute.history.name);
+        break;
     }
   }
 
@@ -38,25 +41,33 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     return NavigationBar(
       selectedIndex: _selectedIndex,
       onDestinationSelected: _onItemTapped,
-      destinations: navigationItems.map((item) => NavigationDestination(
-        icon: SizedBox(
-          width: 32, // Normal icon size
-          height: 32,
-          child: SvgPicture.asset(
-            item.iconPath,
-            colorFilter: ColorFilter.mode(theme.primaryColorDark, BlendMode.srcIn),
-          ),
-        ),
-        selectedIcon: SizedBox(
-          width: 44, // Larger icon size when selected
-          height: 44,
-          child: SvgPicture.asset(
-            item.selectedIconPath,
-            colorFilter: ColorFilter.mode(theme.primaryColor, BlendMode.srcIn),
-          ),
-        ),
-        label: item.label,
-      )).toList(),
+      destinations: navigationItems
+          .map((item) => NavigationDestination(
+                icon: SizedBox(
+                  width: 28, // Normal icon size
+                  height: 28,
+                  child: item.iconPath != null
+                      ? SvgPicture.asset(
+                          item.iconPath!,
+                          colorFilter: ColorFilter.mode(
+                              theme.primaryColorDark, BlendMode.srcIn),
+                        )
+                      : Icon(item.icon, size: 24),
+                ),
+                selectedIcon: SizedBox(
+                  width: 40, // Larger icon size when selected
+                  height: 40,
+                  child: item.iconPath != null
+                      ? SvgPicture.asset(
+                          item.selectedIconPath!,
+                          colorFilter: ColorFilter.mode(
+                              theme.primaryColor, BlendMode.srcIn),
+                        )
+                      : Icon(item.selectedIcon, color: theme.primaryColor,size: 36,),
+                ),
+                label: item.label,
+              ))
+          .toList(),
       backgroundColor: Colors.transparent,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       indicatorColor: Colors.transparent,
