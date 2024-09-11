@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/common_layer/utils/date_labels.dart';
 import 'package:flutter_application_test1/common_layer/utils/textUtils.dart';
@@ -41,7 +42,7 @@ class ReportFilterSection extends ConsumerWidget {
                         data: theme.copyWith(
                           colorScheme: ColorScheme.light(
                             primary: theme.primaryColor,
-                            onPrimary: theme.primaryColorLight,
+                            onPrimary: AppColors.whiteColor,
                             surface: theme.primaryColor,
                             onSurface: theme.primaryColorDark,
                             secondary: theme.primaryColor,
@@ -76,7 +77,7 @@ class ReportFilterSection extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   constraints: const BoxConstraints(maxWidth: 200),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorLight,
+                    color: AppColors.whiteColor,
                     borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
                   ),
                   child: Text(
@@ -92,10 +93,11 @@ class ReportFilterSection extends ConsumerWidget {
     padding: const EdgeInsets.all(12),
     height: 50,
     decoration: BoxDecoration(
-      color: Theme.of(context).primaryColorLight,
+      color: AppColors.whiteColor,
       borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
     ),
     child: DropdownButton<String>(
+      underline: Container(),
       hint: Text(
         'Select Muscle',
         style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
@@ -134,10 +136,11 @@ class ReportFilterSection extends ConsumerWidget {
                   padding: const EdgeInsets.all(12),
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorLight,
+                    color: AppColors.whiteColor,
                     borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
                   ),
                   child: DropdownButton<String>(
+                    underline: Container(),
                     hint: Text(
                       'Select Exercise',
                       style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),

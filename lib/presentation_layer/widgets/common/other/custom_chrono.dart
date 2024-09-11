@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomChrono extends StatefulWidget {
@@ -100,7 +101,7 @@ class CustomChronoState extends State<CustomChrono> {
               strokeWidth: 5,
               strokeCap: StrokeCap.round,
               value: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
-              backgroundColor: theme.primaryColorLight,
+              backgroundColor: AppColors.whiteColor,
               valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
             ),
           ),

@@ -55,10 +55,10 @@ class AppTheme {
       // Color setup
       primaryColor: AppColors.primaryColor,
       primaryColorDark: AppColors.darkColor,
-      primaryColorLight: AppColors.lightColor,
+      primaryColorLight: AppColors.primaryColorLight,
       shadowColor: AppColors.greyColor,
       highlightColor: AppColors.accentColor,
-      scaffoldBackgroundColor: AppColors.backgroundColor,
+      scaffoldBackgroundColor: AppColors.primaryColorLight,
       textSelectionTheme: TextSelectionThemeData(cursorColor: AppColors.accentColor),
 
       // TextStyle setup
@@ -88,9 +88,9 @@ class AppTheme {
       ),
 
       // Input Decoration theme for text form fields
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: AppColors.greyColor),
-        hintStyle: TextStyle(color: AppColors.lightColor),
+        hintStyle: const TextStyle(color: AppColors.primaryColorLight),
       ),
 
       // extensions

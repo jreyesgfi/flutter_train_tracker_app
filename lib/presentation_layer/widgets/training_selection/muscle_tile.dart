@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/like_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,7 +55,7 @@ class _MuscleTileState extends State<MuscleTile> {
             width: widget.isSelected ? 140 : 120,
             height: widget.isSelected ? 140 : 120,
             decoration: BoxDecoration(
-              color: widget.isSelected ? theme.shadowColor : theme.primaryColorLight,
+              color: widget.isSelected ? theme.shadowColor : AppColors.whiteColor,
               borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
               border: Border.all(
                   color: isHovering ? theme.primaryColorDark : Colors.transparent,

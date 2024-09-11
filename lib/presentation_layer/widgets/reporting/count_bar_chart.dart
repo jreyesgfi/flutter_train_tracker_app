@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/common_layer/utils/date_labels.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
@@ -72,7 +73,7 @@ class TrainingCountBarChart extends ConsumerWidget {
             padding: const EdgeInsets.all(20.0), // Padding inside the Container
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
-              color: theme.primaryColorLight,
+              color: AppColors.whiteColor,
             ),
             child: BarChart(
               BarChartData(

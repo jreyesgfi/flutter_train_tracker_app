@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
@@ -32,7 +33,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
-            color: theme.primaryColorLight,
+            color: AppColors.whiteColor,
           ),
           child: ScatterChart(
             ScatterChartData(
@@ -106,7 +107,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
                         TextSpan(
                           text: '${day}/${selectedMonth}/${selectedYear}\n',
                           style: theme.textTheme.titleMedium
-                            ?.copyWith(color: theme.primaryColorLight),
+                            ?.copyWith(color: AppColors.whiteColor),
                         ),
                         TextSpan(
                           text: 'Ejercicios: $intensity',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/bottom_navigation.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,6 +11,8 @@ class ScreenWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.screenBackgroundColor,
+      extendBody: true,
       body: child,
       bottomNavigationBar: const BottomNavigation(),
     );

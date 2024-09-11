@@ -74,7 +74,7 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
           builder: (context, child) => Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              width: widget.label != null ? 200 : widget.size, // Wider if label is present
+              width: widget.label != null ? 220 : widget.size, // Wider if label is present
               height: widget.size,
               decoration: BoxDecoration(
                 color: 

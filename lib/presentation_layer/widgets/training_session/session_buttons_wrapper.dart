@@ -47,7 +47,7 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(numberOfButtons, (index) { // Assume you have 8 buttons
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/settings/setting_elements.dart';
 
 class SettingsGroupWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class SettingsGroupWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
           shadowColor: Colors.transparent,
-          color: Theme.of(context).primaryColorLight,
+          color: AppColors.whiteColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

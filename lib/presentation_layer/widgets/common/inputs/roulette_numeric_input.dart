@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 
 class NumericRoulettePicker extends StatefulWidget {
   final TextEditingController controller;
@@ -122,7 +123,7 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
                             fontWeight: FontWeight.normal,
                             color: index == _currentPage
                                 ? theme.primaryColor
-                                : theme.primaryColorLight,
+                                : AppColors.greyColor,
                           ),
                         ),
                       ),

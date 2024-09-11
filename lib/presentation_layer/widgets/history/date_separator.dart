@@ -12,11 +12,12 @@ class DateSeparator extends StatelessWidget {
 
     // Set locale to Spanish
     Intl.defaultLocale = 'es_ES';
-    final dayMonthYear = DateFormat('MMMM d, yyyy').format(date); // "Septiembre 10, 2024"
-    final dayOfWeek = DateFormat('EEEE').format(date); // "Sábado"
+    final dayMonthYear = DateFormat('d EEEE').format(date); // "Septiembre 10, 2024"
+    final dayOfWeek = DateFormat('MMMM, yyyy').format(date); // "Sábado"
 
     return Container(
-      padding: const EdgeInsets.only(top: 16, bottom: 8, left: 20, right: 20),
+      margin: const EdgeInsets.only(top:24),
+      padding: const EdgeInsets.only(top: 20, bottom: 8, left: 20, right: 20),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: theme.primaryColorDark, width: 2), // Top border
@@ -27,12 +28,12 @@ class DateSeparator extends StatelessWidget {
         children: [
           Text(
             dayMonthYear, // First line for the month, day, year
-            style: theme.textTheme.titleLarge?.copyWith(color: theme.primaryColorDark),
+            style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
           ),
           SizedBox(height: 8,),
           Text(
             dayOfWeek, // Second line for the weekday
-            style: theme.textTheme.titleLarge?.copyWith(color: theme.primaryColorDark),
+            style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark, fontWeight: FontWeight.normal),
           ),
         ],
       ),

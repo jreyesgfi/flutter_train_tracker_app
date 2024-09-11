@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,13 +33,13 @@ class SessionLogCard extends ConsumerWidget {
     final TextStyle labelStyle = theme.textTheme.bodySmall!;
 
     List<Widget> content = [
-      Text(exercise, style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark)),
-      Text(muscle, style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark)),
+      Text(exercise, style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark)),
+      Text(muscle, style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark)),
     ];
 
     if (!filteredOut) {
       content.addAll([
-        SizedBox(height: 24),
+        SizedBox(height: 16),
         _buildDataRow(
           iconPath: "assets/icons/weight.svg",
           value: "${session.minWeight.toStringAsFixed(1)} - ${session.maxWeight.toStringAsFixed(1)}",
@@ -46,8 +47,9 @@ class SessionLogCard extends ConsumerWidget {
           theme: theme,
           valueStyle: valueStyle,
           labelStyle: labelStyle,
+          firstElement: true,
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12),
         _buildDataRow(
           iconPath: "assets/icons/repeat.svg",
           value: "${session.minReps} - ${session.maxReps}",
@@ -55,6 +57,7 @@ class SessionLogCard extends ConsumerWidget {
           theme: theme,
           valueStyle: valueStyle,
           labelStyle: labelStyle,
+          firstElement: false,
         ),
       ]);
     }
@@ -65,7 +68,7 @@ class SessionLogCard extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: theme.primaryColorLight,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: ConstrainedBox(
@@ -86,12 +89,14 @@ class SessionLogCard extends ConsumerWidget {
     required ThemeData theme,
     required TextStyle valueStyle,
     required TextStyle labelStyle,
+    required bool firstElement,
   }) {
+    final color = firstElement ? AppColors.primaryColor : AppColors.secondaryColor;
     return Container(
       decoration: BoxDecoration(
-        border: Border(left: BorderSide(color: theme.primaryColor, width: 5)),
+        border: Border(left: BorderSide(color: color, width: 5)),
       ),
-      padding: const EdgeInsets.only(left: 12, top:24),
+      padding: const EdgeInsets.only(left: 12, top:16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -101,7 +106,7 @@ class SessionLogCard extends ConsumerWidget {
             height: 28,
             child: SvgPicture.asset(
               iconPath,
-              colorFilter: ColorFilter.mode(theme.primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
           ),
           const SizedBox(width: 40),

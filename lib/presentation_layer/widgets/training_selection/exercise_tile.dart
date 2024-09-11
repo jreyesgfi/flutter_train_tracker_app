@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class ExerciseTileSchema {
@@ -37,7 +38,7 @@ class ExerciseTile extends StatelessWidget {
       curve: Curves.easeInOut,
       height: isSelected ? 80 : 60,
       decoration: BoxDecoration(
-        color: theme.primaryColorLight,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
       ),
       child: Stack(
