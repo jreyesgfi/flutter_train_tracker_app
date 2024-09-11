@@ -39,7 +39,7 @@ class SessionRepositoryImpl implements SessionRepository {
     List<SessionData?> sessionDataList = await sessionService.fetchAllSessions();
     List<SessionData> nonNullSessionDataList = sessionDataList.whereType<SessionData>().toList();
 
-    return nonNullSessionDataList.map((sessionData) {
+     List<domain.SessionEntity> sessions = nonNullSessionDataList.map((sessionData) {
       // Convert SessionData from API to domain entity SessionData
       return domain.SessionEntity(
         id: sessionData.sessionId,
@@ -52,6 +52,10 @@ class SessionRepositoryImpl implements SessionRepository {
         minReps: sessionData.minReps ?? 10,
       );
     }).toList();
+
+     sessions.sort((a, b) => b.timeStamp.compareTo(a.timeStamp));
+
+     return sessions;
   }
 
   @override

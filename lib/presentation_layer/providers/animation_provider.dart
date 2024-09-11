@@ -22,4 +22,10 @@ class AnimationControllerNotifier extends StateNotifier<List<VoidCallback>> {
     }
     clearCallbacks();
   }
+
+  @override
+  void dispose() {
+    clearCallbacks();
+    super.dispose();
+  }
 }
