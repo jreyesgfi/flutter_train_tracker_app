@@ -80,7 +80,7 @@ class ReportFilterSection extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
                   ),
                   child: Text(
-                    '${state.selectedMonth != null ? '${numToMonthDict[state.selectedMonth]}' : 'Select Month'} ${state.selectedYear != null ? ', ${state.selectedYear}' : ''}',
+                    '${clipText(numToMonthDict[state.selectedMonth]!, 3, false)}, ${state.selectedYear}',
                     style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
                   ),
                 ),

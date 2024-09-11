@@ -26,10 +26,20 @@ class _HistoryScreenContent extends ConsumerStatefulWidget {
 }
 
 class _HistoryScreenContentState extends ConsumerState<_HistoryScreenContent> {
+  static const int pageSize = 10;
+  int currentPage = 1;
+
   @override
   Widget build(BuildContext context) {
-    final List<SessionEntity> allSessions =
-        ref.watch(reportScreenProvider).filteredSessions;
+    final provider = ref.watch(reportScreenProvider);
+    final List<SessionEntity> allSessions = provider.allSessions;
+    final List<SessionEntity> filteredSessions = provider.filteredSessions;
+
+    // pagination
+    final int totalLength = allSessions.length;
+    final int pageCount = (totalLength / pageSize).ceil();
+    final List<SessionEntity> currentSessions =
+        allSessions.skip((currentPage - 1) * pageSize).take(pageSize).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -40,9 +50,10 @@ class _HistoryScreenContentState extends ConsumerState<_HistoryScreenContent> {
               child: ListView.builder(
                 itemCount: allSessions.length,
                 itemBuilder: (context, index) {
-                  return SessionLogCard(session: allSessions[index]);
-                },
-              ),
+                  return EntryTransition(
+                      position: index%4 + 2,
+                      child: SessionLogCard(session: allSessions[index]));
+                }),
             ),
           ],
         ),

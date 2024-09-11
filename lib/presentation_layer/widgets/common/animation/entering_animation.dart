@@ -28,14 +28,21 @@ class _EnteringTransitionState extends ConsumerState<EntryTransition> with Singl
 
     // Schedule the callback registration after the build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(animationProvider.notifier).addExitCallback(() => _controller.reverse());
+      ref.read(animationProvider.notifier).addExitCallback(
+        () => {
+          if (mounted) {
+            _controller.reverse();
+          }
+          
+        }
+      );
     });
   }
 
   @override
   void dispose() {
     // Ensure to clean up the registered callbacks
-    ref.read(animationProvider.notifier).clearCallbacks();
+    // ref.read(animationProvider.notifier).clearCallbacks();
     _controller.dispose();
     super.dispose();
   }
