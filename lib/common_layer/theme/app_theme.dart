@@ -49,6 +49,20 @@ final customThemeValues = CustomThemeValues(
   borderRadius: 16.0
 );
 
+
+
+
+class GyminiTheme {
+  GyminiTheme._();
+  // Space
+  static double leftPadding = 16;
+  static double rightPadding = 16;
+  static BorderRadius circularBorderRadius = BorderRadius.circular(16);
+
+
+
+}
+
 class AppTheme {
   static ThemeData get theme {
     return ThemeData(
