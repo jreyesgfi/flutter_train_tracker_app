@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
@@ -22,19 +20,18 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
       _selectedIndex = index;
     });
 
-    ref.read(routeProvider.notifier).state = RouteUtils.indexToRoute[index];
     switch (index) {
       case 0:
-        navigateWithDelay(ref, context, AppRoute.settings.name);
+        NavigationUtils.navigateWithDelay(ref, context, AppRoute.settings);
         break;
       case 1:
-        navigateWithDelay(ref, context, AppRoute.training.name);
+        NavigationUtils.navigateWithDelay(ref, context, AppRoute.training);
         break;
       case 2:
-        navigateWithDelay(ref, context, AppRoute.report.name);
+        NavigationUtils.navigateWithDelay(ref, context, AppRoute.report);
         break;
       case 3:
-        navigateWithDelay(ref, context, AppRoute.history.name);
+        NavigationUtils.navigateWithDelay(ref, context, AppRoute.history);
         break;
     }
   }
@@ -67,7 +64,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
                           : Icon(item.icon, size: 24),
                     ),
                     selectedIcon: SizedBox(
-                      width: 40, // Larger icon size when selected
+                      width: 40, 
                       height: 40,
                       child: item.iconPath != null
                           ? SvgPicture.asset(

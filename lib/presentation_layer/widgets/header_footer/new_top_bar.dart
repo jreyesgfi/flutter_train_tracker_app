@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class NewTopBar extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _NewTopBarState();
 }
 
-class _NewTopBarState extends ConsumerState<NewTopBar> {
+class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateMixin{
   late double _fontSize;
   late Color _backgroundColor;
   late Color _shadowColor;
@@ -29,6 +30,12 @@ class _NewTopBarState extends ConsumerState<NewTopBar> {
   late double _borderRadius;
   late double _height;
   late double _bottomPadding;
+
+  // Animation controllers
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
@@ -41,6 +48,18 @@ class _NewTopBarState extends ConsumerState<NewTopBar> {
     _height = 120;
     _bottomPadding = 32;
     widget.controller.addListener(_updateAppBar);
+
+    // Initialize animation controllers and animations
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _slideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _fadeAnimation = Tween<double>(begin: 1.0, end: 0).animate(_fadeController);
+    _slideAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(0, 0.3)).animate(_slideController);
   }
 
   void _updateAppBar() {
@@ -60,7 +79,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar> {
   @override
   Widget build(BuildContext context) {
     // React to changes in the route name from the provider
-    final routeName = ref.watch(routeProvider);
+    final routeName = NavigationUtils.getRouteLabel(ref);
 
     return SliverAppBar(
       expandedHeight: _height,
@@ -72,32 +91,38 @@ class _NewTopBarState extends ConsumerState<NewTopBar> {
         builder: (BuildContext context, BoxConstraints constraints) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
-            child: Container(
-              margin: EdgeInsets.only(top: 20, left: 4, right: 4),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: _shadowColor,
-                    blurRadius: 8.0,
-                    spreadRadius: 0.0,
-                    offset: Offset(0, 2),
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: Container(
+                  margin: EdgeInsets.only(top: 20, left: 4, right: 4),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: _shadowColor,
+                        blurRadius: 8.0,
+                        spreadRadius: 0.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                    color: _backgroundColor,
+                    borderRadius: BorderRadius.circular(_borderRadius),
                   ),
-                ],
-                color: _backgroundColor,
-                borderRadius: BorderRadius.circular(_borderRadius),
-              ),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: GyminiTheme.leftPadding, bottom: _bottomPadding),
-                  child: Text(
-                    routeName,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontWeight: FontWeight.bold,
-                        fontSize: _fontSize),
-                    key: ValueKey<String>(routeName),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: GyminiTheme.leftPadding, bottom: _bottomPadding),
+                      child: Text(
+                        routeName,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          fontSize: _fontSize,
+                        ),
+                        key: ValueKey<String>(routeName),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -108,9 +133,27 @@ class _NewTopBarState extends ConsumerState<NewTopBar> {
     );
   }
 
+
+  @override
+  void didUpdateWidget(NewTopBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Trigger animation when the routeName changes
+    if (NavigationUtils.getRouteLabel(ref) != oldWidget.controller) {
+      _fadeController.forward().then((_) {
+        // Change the value after fade-out and reverse the fade/slide animation
+        _fadeController.reverse();
+        _slideController.reverse();
+      });
+      _slideController.forward();
+    }
+  }
+
   @override
   void dispose() {
     widget.controller.removeListener(_updateAppBar);
+    _fadeController.dispose();
+    _slideController.dispose();
     super.dispose();
   }
 }

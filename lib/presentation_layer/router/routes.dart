@@ -26,21 +26,21 @@ final List<NavigationDestinationItem> navigationItems = [
   NavigationDestinationItem(
     iconPath: "assets/icons/profile.svg",
     selectedIconPath: "assets/icons/profile.svg",
-    label: "Settings",
+    label: "Ajustes",
   ),
   NavigationDestinationItem(
     iconPath: "assets/icons/chrono.svg",
     selectedIconPath: "assets/icons/chrono.svg",
-    label: "Training",
+    label: "Nuevo Entrenamiento",
   ),
   NavigationDestinationItem(
     iconPath: "assets/icons/chart.svg",
     selectedIconPath: "assets/icons/chart.svg",
-    label: "Statistics",
+    label: "Estadísticas",
   ),
   NavigationDestinationItem(
     icon: Icons.format_list_bulleted,
     selectedIcon: Icons.format_list_bulleted,
-    label: "History",
+    label: "Registro",
   ),
 ];
