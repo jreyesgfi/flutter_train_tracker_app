@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,8 +66,9 @@ class SessionLogCard extends ConsumerWidget {
     return Opacity(
       opacity: filteredOut ? 0.5 : 1.0,
       child: Container(
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(12),
@@ -96,7 +98,7 @@ class SessionLogCard extends ConsumerWidget {
       decoration: BoxDecoration(
         border: Border(left: BorderSide(color: color, width: 5)),
       ),
-      padding: const EdgeInsets.only(left: 12, top:16),
+      padding: EdgeInsets.only(left: GyminiTheme.leftInnerPadding, top:16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

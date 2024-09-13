@@ -50,7 +50,7 @@ class _ExerciseListSelectorState extends ConsumerState<ExerciseListSelector> {
 
                   final exercise = exercises[index];
                   providerPost.selectExerciseById(exercise.exerciseId);
-                  providerPost.nextStage();
+                  // providerPost.nextStage();
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: index == 0 ? 10 : 0, bottom: 10),

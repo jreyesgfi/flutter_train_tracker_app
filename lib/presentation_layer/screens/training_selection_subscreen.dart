@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
+import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
@@ -25,13 +28,13 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
     final exerciseSelectorKey =
         ValueKey('${selectedMuscle?.id}_${newSession?.id}');
 
-    return Scaffold(
-      body: ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           EntryTransition(
             position: 2,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 10.0, top: 30),
+              padding: EdgeInsets.only(top: GyminiTheme.verticalGapUnit*2),
               child: Text(
                 "¿Qué vamos a entrenar hoy?",
                 style: theme.textTheme.titleMedium
@@ -44,8 +47,8 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
           if (muscles.isNotEmpty)
             EntryTransition(
               position: 3,
-              child: MuscleCarouselSelector(muscles: muscles),
-            ),
+              child: MuscleCarouselSelector(muscles: muscles)
+              ),
 
           if (exercises.isNotEmpty)
             EntryTransition(
@@ -68,7 +71,6 @@ class TrainingSelectionSubscreen extends ConsumerWidget {
               child: ExerciseListSelector(key: exerciseSelectorKey),
             ),
         ],
-      ),
     );
   }
 }

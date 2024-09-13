@@ -5,20 +5,19 @@ import 'package:flutter_application_test1/presentation_layer/widgets/settings/se
 import 'package:flutter_application_test1/presentation_layer/widgets/settings/setting_group_card.dart';
 
 class SettingsScreen extends StatelessWidget {
+  final List<Widget> elements = List.generate(
+    settingsGroups.length,
+    (index) {
+      return EntryTransition(
+        position: index + 1,
+        child: SettingsGroupWidget(settingGroup: settingsGroups[index]),
+      );
+    },
+  );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColorLight,  // Your desired background color
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 28.0),
-        itemCount: settingsGroups.length,
-        itemBuilder: (BuildContext context, int index) {
-          return EntryTransition(
-            position: index + 1,
-            child: SettingsGroupWidget(settingGroup: settingsGroups[index]),
-          );
-        },
-      ),
+    return Column(
+      children: elements,
     );
   }
 }

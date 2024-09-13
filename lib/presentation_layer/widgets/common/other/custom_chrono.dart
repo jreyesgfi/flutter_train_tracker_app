@@ -17,7 +17,7 @@ class CustomChronoState extends State<CustomChrono> {
   Timer? _timer;
   bool _isRunning = true;
   DateTime? _startTime;
-  bool _isInitialized = false;  // New flag to track initialization
+  bool _isInitialized = false; // New flag to track initialization
 
   @override
   void initState() {
@@ -27,10 +27,10 @@ class CustomChronoState extends State<CustomChrono> {
 
   void _resetTimer(bool loadFromStorage) async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     // Clear saved start time for new key
     await prefs.remove('chrono_start');
-    
+
     if (loadFromStorage) {
       int? savedStart = prefs.getInt('chrono_start');
 
@@ -48,16 +48,18 @@ class CustomChronoState extends State<CustomChrono> {
       await prefs.setInt('chrono_start', _startTime!.millisecondsSinceEpoch);
     }
     setState(() {
-      _isInitialized = true;  // Set the flag to true after initialization
+      _isInitialized = true; // Set the flag to true after initialization
     });
     _startTimer();
   }
 
   void _startTimer() {
-    _timer?.cancel(); // Ensure any existing timer is cancelled before creating a new one
+    _timer
+        ?.cancel(); // Ensure any existing timer is cancelled before creating a new one
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_isRunning) {
-        setState(() { // Update the UI with the new duration
+        setState(() {
+          // Update the UI with the new duration
           _duration = widget.duration - DateTime.now().difference(_startTime!);
         });
       }
@@ -81,62 +83,67 @@ class CustomChronoState extends State<CustomChrono> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return SizedBox.shrink();  // Return an empty widget while initializing
+      return SizedBox.shrink(); // Return an empty widget while initializing
     }
 
     final theme = Theme.of(context);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final duration = _duration.isNegative ? -_duration : _duration; // Calculate the absolute value of the duration
+    final duration = _duration.isNegative
+        ? -_duration
+        : _duration; // Calculate the absolute value of the duration
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return Container(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: 180,
-            height: 180,
-            child: CircularProgressIndicator(
-              strokeWidth: 5,
-              strokeCap: StrokeCap.round,
-              value: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
-              backgroundColor: AppColors.whiteColor,
-              valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
-            ),
+    return Stack(
+      
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: 250,
+          height: 250,
+          child: CircularProgressIndicator(
+            strokeWidth: 5,
+            strokeCap: StrokeCap.round,
+            value: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
+            backgroundColor: AppColors.whiteColor,
+            valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
           ),
-          Text(
-            "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
-            style: theme.textTheme.headlineLarge!.copyWith(
-              color: _duration.isNegative ? theme.primaryColor : theme.primaryColorDark,
-            ),
+        ),
+        Text(
+          "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
+          style: theme.textTheme.headlineLarge!.copyWith(
+            color: _duration.isNegative
+                ? theme.primaryColor
+                : theme.primaryColorDark,
           ),
-          Positioned(
-            bottom: 10,
-            child: IconButton(
-              icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
-              onPressed: () async {
-                setState(() {
-                  _isRunning = !_isRunning;
-                  if (!_isRunning) {
-                    _timer?.cancel(); // Stop the timer when paused
-                  } else {
-                    // Adjust the start time based on the paused duration
-                    _startTime = DateTime.now().subtract(widget.duration - _duration);
-                    final prefs = SharedPreferences.getInstance();
-                    prefs.then((prefs) {
-                      prefs.setInt('chrono_start', _startTime!.millisecondsSinceEpoch);
-                    });
-                    _startTimer(); // Restart the timer
-                  }
-                });
-              },
-              color: theme.primaryColor,
-              iconSize: 40,
-            ),
-          )
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 10,
+          child: IconButton(
+            icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
+            onPressed: () async {
+              setState(() {
+                _isRunning = !_isRunning;
+                if (!_isRunning) {
+                  _timer?.cancel(); // Stop the timer when paused
+                } else {
+                  // Adjust the start time based on the paused duration
+                  _startTime =
+                      DateTime.now().subtract(widget.duration - _duration);
+                  final prefs = SharedPreferences.getInstance();
+                  prefs.then((prefs) {
+                    prefs.setInt(
+                        'chrono_start', _startTime!.millisecondsSinceEpoch);
+                  });
+                  _startTimer(); // Restart the timer
+                }
+              });
+            },
+            color: theme.primaryColor,
+            iconSize: 40,
+          ),
+        )
+      ],
     );
   }
 }

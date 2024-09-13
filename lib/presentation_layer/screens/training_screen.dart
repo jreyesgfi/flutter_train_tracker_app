@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
+import 'package:flutter_application_test1/presentation_layer/screens/settings_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/header_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main TrainingScreen widget that wraps content in ProviderScope
@@ -20,35 +21,17 @@ class TrainingScreen extends StatelessWidget {
 class _TrainingScreenContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(trainingScreenProvider);
-
+    final bool selectionDone = ref.watch(trainingScreenProvider).currentStage != 0;
+    print("$selectionDone, ${ref.watch(trainingScreenProvider).currentStage} ${ref.watch(trainingScreenProvider).selectedExercise}");
     // Depending on the state of `allMuscles`, show either the content or a loading indicator
-    if (state.allMuscles.isNotEmpty) {
+    if (selectionDone == false) {
       // IndexedStack is used to switch between different subscreens based on `currentStage`
-      return Scaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(140.0),
-          child: SafeArea(
-            child: EntryTransition(
-              position: 1,
-              child: HeaderWidget(
-                title: "Nuevo Entrenamiento",
-                date: "09/06/2024",
-              ),
-            ),
-          ),
-        ),
-        body: IndexedStack(
-          index: state.currentStage,
-          children: [
-            TrainingSelectionSubscreen(),
-            SessionSubscreen(key: ValueKey(state.currentStage)),
-          ],
-        ),
-      );
+      return 
+        TrainingSelectionSubscreen(key: ValueKey(selectionDone));
     } else {
       // Show a loading spinner while the data is being fetched
-      return Center(child: CircularProgressIndicator());
+      return 
+        SessionSubscreen(key: ValueKey(selectionDone));
     }
   }
 }

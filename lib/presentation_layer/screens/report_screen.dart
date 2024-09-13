@@ -23,52 +23,25 @@ class _ReportScreenContent extends ConsumerStatefulWidget {
   _ReportScreenContentState createState() => _ReportScreenContentState();
 }
 
-class _ReportScreenContentState extends ConsumerState<_ReportScreenContent>{
-
+class _ReportScreenContentState extends ConsumerState<_ReportScreenContent> {
   @override
   void initState() {
     super.initState();
   }
 
-  // Build the chart widgets immediately, even without data
-  Widget _buildCharts() {
-
-    // These widgets will render immediately, data will be updated automatically
-    return ListView(
-      children: [
-        EntryTransition(position: 2, child: SessionsHistoryCalendarWidget()),
-        EntryTransition(position: 3, child: TrainingCountBarChart()),
-        EntryTransition(position: 4, child: TrainingCountBarChart(countMusclesTrained: true)),
-        MaxMinLineChart(),
-        MaxMinLineChart(repsRepresentation: true),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Filter section
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: EntryTransition(position: 1, child: const ReportFilterSection()),
-            ),
-            // Primary content
-            Positioned(
-              top: 140,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _buildCharts(),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Column(
+      
+      children: [
+      const EntryTransition(position: 1,totalAnimations: 6, child: FilterSection()),
+      EntryTransition(position: 2,totalAnimations: 6, child: SessionsHistoryCalendarWidget()),
+      EntryTransition(position: 3,totalAnimations: 6, child: TrainingCountBarChart()),
+      EntryTransition(
+          position: 4,totalAnimations: 6, child: TrainingCountBarChart(countMusclesTrained: true)),
+       EntryTransition(position: 5,totalAnimations: 6, child: MaxMinLineChart()),
+      EntryTransition(position: 6,totalAnimations: 6, child: MaxMinLineChart(repsRepresentation: true)),
+    ]);
   }
 }

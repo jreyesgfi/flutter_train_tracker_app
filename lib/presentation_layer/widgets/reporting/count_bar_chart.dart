@@ -58,7 +58,7 @@ class TrainingCountBarChart extends ConsumerWidget {
     selectedYear = provider.selectedYear;
 
     return Padding(
-      padding: const EdgeInsets.all(20), // Outer padding
+      padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit*2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
         children: [

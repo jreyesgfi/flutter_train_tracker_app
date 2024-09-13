@@ -19,7 +19,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
     Map<int, int> intensityMap = {};
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit*2),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           "Sessions History",

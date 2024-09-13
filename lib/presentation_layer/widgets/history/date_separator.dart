@@ -16,8 +16,10 @@ class DateSeparator extends StatelessWidget {
     final dayOfWeek = DateFormat('MMMM, yyyy').format(date); // "Sábado"
 
     return Container(
-      margin: const EdgeInsets.only(top:24),
-      padding: const EdgeInsets.only(top: 20, bottom: 8, left: 20, right: 20),
+      alignment: Alignment.center,
+      width: 300,
+      margin: const EdgeInsets.only(top:30, bottom:4),
+      padding: const EdgeInsets.only(top: 20, bottom: 8),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: theme.primaryColorDark, width: 2), // Top border

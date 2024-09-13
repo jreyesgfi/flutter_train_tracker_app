@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 
 enum AppRoute {
   settings,
-  training,
+  trainingSelection,
   report,
   history,
+  // not included in navigation
+  trainingSession,
+}
+
+enum AppSubRoute {
+  trainingSelection,
+  trainingSession,
 }
 
 class NavigationDestinationItem {
@@ -13,12 +20,14 @@ class NavigationDestinationItem {
   final IconData? icon;
   final IconData? selectedIcon;
   final String label;
+  final bool displayed;
 
   NavigationDestinationItem({
     this.iconPath,
     this.selectedIconPath,
     this.icon,
     this.selectedIcon,
+    this.displayed= true,
     required this.label,
   });
 }
@@ -42,5 +51,13 @@ final List<NavigationDestinationItem> navigationItems = [
     icon: Icons.format_list_bulleted,
     selectedIcon: Icons.format_list_bulleted,
     label: "Registro",
+  ),
+
+  //not displayed in the navigation bar
+  NavigationDestinationItem(
+    iconPath: "assets/icons/chrono.svg",
+    selectedIconPath: "assets/icons/chrono.svg",
+    label: "Nuevo Entrenamiento",
+    displayed: false,
   ),
 ];

@@ -245,6 +245,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       lastSession: lastSession,
       lastSessionSummary: lastSessionSummary,
       newSession: newSession,
+      currentStage: 1,
     );
   }
 

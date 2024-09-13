@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/bottom_navigation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/header_footer/new_top_bar.dart';
@@ -38,10 +40,14 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
         slivers: [
           NewTopBar(controller: _scrollController),
           SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child:widget.child
-            ),
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height
+              ),
+              color: AppColors.screenBackgroundColor,
+              padding:EdgeInsets.only(bottom:100, left:GyminiTheme.leftOuterPadding, right: GyminiTheme.rightOuterPadding),
+              child: widget.child,
+            )
           ),
         ],
       ),

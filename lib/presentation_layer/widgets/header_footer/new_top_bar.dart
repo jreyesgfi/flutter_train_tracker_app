@@ -112,7 +112,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(left: GyminiTheme.leftPadding, bottom: _bottomPadding),
+                      padding: EdgeInsets.only(left: GyminiTheme.leftOuterPadding, bottom: _bottomPadding),
                       child: Text(
                         routeName,
                         style: TextStyle(

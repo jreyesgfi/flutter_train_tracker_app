@@ -25,7 +25,8 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
         NavigationUtils.navigateWithDelay(ref, context, AppRoute.settings);
         break;
       case 1:
-        NavigationUtils.navigateWithDelay(ref, context, AppRoute.training);
+        NavigationUtils.navigateWithDelay(
+            ref, context, AppRoute.trainingSelection);
         break;
       case 2:
         NavigationUtils.navigateWithDelay(ref, context, AppRoute.report);
@@ -41,7 +42,9 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     final theme = Theme.of(context);
     return Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(topLeft: Radius.elliptical(100,30), topRight: Radius.elliptical(100,30)),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.elliptical(100, 30),
+              topRight: Radius.elliptical(100, 30)),
           color: AppColors.bottomBarColor,
         ),
         child: NavigationBar(
@@ -51,6 +54,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
           selectedIndex: _selectedIndex,
           onDestinationSelected: _onItemTapped,
           destinations: navigationItems
+              .where((item) => item.displayed == true)
               .map((item) => NavigationDestination(
                     icon: SizedBox(
                       width: 28, // Normal icon size
@@ -64,7 +68,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
                           : Icon(item.icon, size: 24),
                     ),
                     selectedIcon: SizedBox(
-                      width: 40, 
+                      width: 40,
                       height: 40,
                       child: item.iconPath != null
                           ? SvgPicture.asset(

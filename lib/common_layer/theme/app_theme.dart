@@ -55,11 +55,12 @@ final customThemeValues = CustomThemeValues(
 class GyminiTheme {
   GyminiTheme._();
   // Space
-  static double leftPadding = 16;
-  static double rightPadding = 16;
+  static double leftOuterPadding = 32;
+  static double rightOuterPadding = 16;
+  static double leftInnerPadding = 12;
   static BorderRadius circularBorderRadius = BorderRadius.circular(16);
 
-
+  static double verticalGapUnit = 8;
 
 }
 

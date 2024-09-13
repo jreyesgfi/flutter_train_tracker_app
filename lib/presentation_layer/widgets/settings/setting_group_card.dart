@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/settings/setting_elements.dart';
 
 class SettingsGroupWidget extends StatelessWidget {
@@ -13,7 +14,7 @@ class SettingsGroupWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: EdgeInsets.only(top: 20.0, left:6.0, bottom : 4.0),
+        Padding(padding: EdgeInsets.only(top: GyminiTheme.verticalGapUnit*3, bottom : GyminiTheme.verticalGapUnit),
         child: Text(
               settingGroup.title,
               style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
@@ -27,7 +28,7 @@ class SettingsGroupWidget extends StatelessWidget {
           shadowColor: Colors.transparent,
           color: AppColors.whiteColor,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit),
             child: Column(
               children: settingGroup.items.map((item) {
                 return ListTile(

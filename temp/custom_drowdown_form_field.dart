@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class CustomDropdownFormField extends FormField<String> {
   final void Function(String?)? onChanged;
@@ -56,7 +57,7 @@ class CustomDropdownFormField extends FormField<String> {
                 border: Border(bottom: BorderSide(color: Theme.of(context).primaryColorDark, width: 4)), // Left border
               ),
               child: ListTile(
-                contentPadding: EdgeInsets.only(left: 4.0), // Padding
+                contentPadding: EdgeInsets.only(left: GyminiTheme.leftInnerPadding), // Padding
                 title: RichText(
                   text: TextSpan(
                     children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 
 class NewTopBar extends StatefulWidget {
   const NewTopBar({Key? key, this.animationController}) : super(key: key);
@@ -91,7 +92,7 @@ class _NewTopBarState extends State<NewTopBar> with TickerProviderStateMixin {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 16,
+                            left: GyminiTheme.leftOuterPadding,
                             right: 16,
                             top: 16 - 8.0 * topBarOpacity,
                             bottom: 12 - 8.0 * topBarOpacity),
@@ -130,8 +131,8 @@ class _NewTopBarState extends State<NewTopBar> with TickerProviderStateMixin {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8,
+                              padding: EdgeInsets.only(
+                                left: GyminiTheme.leftInnerPadding,
                                 right: 8,
                               ),
                               child: Row(

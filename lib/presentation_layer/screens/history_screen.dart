@@ -28,29 +28,24 @@ class _HistoryScreenContentState extends ConsumerState<_HistoryScreenContent> {
   Widget build(BuildContext context) {
     final provider = ref.watch(reportScreenProvider);
     final List<SessionEntity> allSessions = provider.allSessions;
-    final filteredSessionIds = provider.filteredSessions.map((s) => s.id).toSet();
+    final filteredSessionIds =
+        provider.filteredSessions.map((s) => s.id).toSet();
     final items = buildItems(allSessions, filteredSessionIds);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const EntryTransition(position: 1, child: ReportFilterSection(), totalAnimations: 10,),
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return items[index];
-                }
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        const EntryTransition(
+          position: 1,
+          child: FilterSection(),
+          totalAnimations: 10,
         ),
-      ),
+        ...items,
+      ],
     );
   }
 
-  List<Widget> buildItems(List<SessionEntity> sessions, Set<String> filteredSessionIds) {
+  List<Widget> buildItems(
+      List<SessionEntity> sessions, Set<String> filteredSessionIds) {
     List<Widget> items = [];
     DateTime? currentDate;
 
@@ -61,18 +56,17 @@ class _HistoryScreenContentState extends ConsumerState<_HistoryScreenContent> {
       if (currentDate == null || session.timeStamp.day != currentDate.day) {
         if (currentDate != null) {
           items.add(
-            const SizedBox(height: 16)
-            );// Optional spacing between sections
+              const SizedBox(height: 16)); // Optional spacing between sections
         }
         items.add(EntryTransition(
-          position: items.length%9 + 1,
+          position: items.length % 9 + 1,
           child: DateSeparator(date: session.timeStamp),
           totalAnimations: 10,
         ));
       }
 
       items.add(EntryTransition(
-        position: items.length%9 + 1,
+        position: items.length % 9 + 1,
         child: SessionLogCard(session: session, filteredOut: filteredOut),
         totalAnimations: 10,
       ));

@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 
-class ReportFilterSection extends ConsumerWidget {
-  const ReportFilterSection({Key? key}) : super(key: key);
+class FilterSection extends ConsumerWidget {
+  const FilterSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +18,7 @@ class ReportFilterSection extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.symmetric(vertical:GyminiTheme.verticalGapUnit),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,7 +74,7 @@ class ReportFilterSection extends ConsumerWidget {
                   }
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal:GyminiTheme.leftInnerPadding*2),
                   constraints: const BoxConstraints(maxWidth: 200),
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
@@ -133,7 +133,7 @@ class ReportFilterSection extends ConsumerWidget {
             children: [
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.symmetric(horizontal:GyminiTheme.leftInnerPadding*2),
                   height: 50,
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,

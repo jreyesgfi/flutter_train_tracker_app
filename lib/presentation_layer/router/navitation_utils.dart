@@ -15,7 +15,7 @@ class NavigationUtils {
     
     
     // Wait for the animation to complete
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 1000));
     ref.read(routeProvider.notifier).state = newRoute;
     // Use GoRouter to navigate after the delay
     if (context.mounted) {
