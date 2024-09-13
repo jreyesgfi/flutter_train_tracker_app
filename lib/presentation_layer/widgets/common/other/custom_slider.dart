@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+
 class InfoChartLastTrain extends StatelessWidget {
   final double minVal;
   final double maxVal;
@@ -82,7 +84,7 @@ class InfoChartLastTrain extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: theme.primaryColorLight,
+        color: AppColors.lightGreyColor,
         shape: BoxShape.circle,
       ),
     );

@@ -88,37 +88,58 @@ class CustomChronoState extends State<CustomChrono> {
 
     final theme = Theme.of(context);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final duration = _duration.isNegative
+    final exceded = _duration.isNegative;
+    final duration = exceded
         ? -_duration
         : _duration; // Calculate the absolute value of the duration
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
+    
 
-    return Stack(
+    return Column(
       
-      alignment: Alignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 250,
-          height: 250,
+        Stack(alignment: Alignment.center,
+        children: [
+          SizedBox(
+          width: 280,
+          height: 280,
           child: CircularProgressIndicator(
             strokeWidth: 5,
             strokeCap: StrokeCap.round,
-            value: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
-            backgroundColor: AppColors.whiteColor,
-            valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+            value: exceded? 1: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
+            backgroundColor: AppColors.lightGreyColor,
+            valueColor: AlwaysStoppedAnimation<Color>(exceded? theme.primaryColor: theme.primaryColorDark),
           ),
         ),
         Text(
-          "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
+          "$minutes:$seconds",
+          // "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
           style: theme.textTheme.headlineLarge!.copyWith(
             color: _duration.isNegative
                 ? theme.primaryColor
                 : theme.primaryColorDark,
           ),
         ),
-        Positioned(
-          bottom: 10,
+        ],),
+        SizedBox(height:32),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 250,
+              height: 6,
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(
+                  color: AppColors.lightGreyColor,
+                  style: BorderStyle.solid,
+                  width: 2,
+                  ))
+              ),
+            ),
+            SizedBox(
+          height: 62,
           child: IconButton(
             icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
             onPressed: () async {
@@ -142,7 +163,7 @@ class CustomChronoState extends State<CustomChrono> {
             color: theme.primaryColor,
             iconSize: 40,
           ),
-        )
+        )],)
       ],
     );
   }

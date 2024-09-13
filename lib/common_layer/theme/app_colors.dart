@@ -13,12 +13,12 @@ class AppColors {
 
   // light
   static Color greyColor = fadeColor(darkColor);
+  static Color lightGreyColor = fadeColor(greyColor);
   static const whiteColor = Color(0xffffffff);
   static const primaryColorLight = Color.fromARGB(237, 244, 245, 255);
   static Color primaryColorFaded = fadeColor(primaryColor);
   static Color secondaryColorFaded = fadeColor(secondaryColor);
 
-  static Color lightGreyColor = fadeColor(greyColor);
 
   // transparent
   static Color primaryColorTransparent = transparentColor(primaryColor);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/other/custom_slider.dart';
 
@@ -28,7 +29,7 @@ class SessionInfoWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.screenBackgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

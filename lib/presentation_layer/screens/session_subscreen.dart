@@ -125,6 +125,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
                 // TRAINING
                 if (currentStage == 0 || isOddStage) ...[
                   ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
+                  SizedBox(height: GyminiTheme.verticalGapUnit*3,),
                   SessionInfoWidget(sessionInfo: lastSession),
                 ]
                 // RESTING
