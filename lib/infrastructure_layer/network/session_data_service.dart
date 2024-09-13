@@ -17,7 +17,6 @@ class SessionDataService {
       final sessions = allSessions
           .where((session) => exerciseIds.contains(session.exerciseId))
           .toList();
-        print("Last Sessions $sessions");
       return sessions;
     } catch (e) {
       print('Error fetching sessions: $e');
@@ -29,7 +28,6 @@ class SessionDataService {
     try {
       List<SessionData> sessions =
           await Amplify.DataStore.query(SessionData.classType);
-      print("Sessions $sessions");
       return sessions;
     } catch (e) {
       print('Error fetching sessions: $e');

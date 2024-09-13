@@ -37,7 +37,6 @@ class MuscleDataService {
     try {
       List<MuscleData> muscles =
           await Amplify.DataStore.query(MuscleData.classType);
-      print("Muscles $muscles");
       return muscles;
     } catch (e) {
       print('Error fetching muscles: $e');

@@ -27,8 +27,8 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     final provider = ref.read(trainingScreenProvider.notifier);
     final lastSession = provider.lastSessionSummary ??
         SessionInfoSchema(
-            exerciseName: provider.selectedExercise!.name,
-            muscleGroup: provider.selectedMuscle!.name,
+            exerciseName: provider.selectedExercise?.name??'',
+            muscleGroup: provider.selectedMuscle?.name??'',
             timeSinceLastSession: 0,
             minWeight: 5,
             maxWeight: 5,
@@ -50,9 +50,11 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     void onButtonClicked(int index) {
       // Retrieve data from form and update provider
       if (_formKey.currentState != null) {
+        if (_formKey.currentState?.getCurrentFormData() !=null) {
         SessionValues sessionValues =
             _formKey.currentState!.getCurrentFormData();
         provider.updateNewSession(sessionValues);
+        }
       }
 
       // Last stage

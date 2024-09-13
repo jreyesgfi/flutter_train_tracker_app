@@ -128,7 +128,6 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
   void filterSessions() {
     List<SessionEntity> filteredSessions = state.allSessions.where((session)=>filterLogic(session)).toList();
     state = state.copyWith(filteredSessions: filteredSessions);
-    print("Sessions filtered: ${filteredSessions.length}");
   }
   
   void filterSessionsByDate() {
@@ -144,7 +143,6 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
   }
 
   void selectMuscleById(String muscleId) {
-    print("Selecting muscle asociated with $muscleId...");
     MuscleEntity? selectedMuscle = nullMuscle;
     List<ExerciseEntity> filteredExercises = state.allExercises;
     if (muscleId != '') {

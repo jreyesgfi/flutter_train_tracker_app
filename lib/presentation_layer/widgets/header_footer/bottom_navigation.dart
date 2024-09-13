@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,6 +21,8 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     setState(() {
       _selectedIndex = index;
     });
+
+    ref.read(routeProvider.notifier).state = RouteUtils.indexToRoute[index];
     switch (index) {
       case 0:
         navigateWithDelay(ref, context, AppRoute.settings.name);

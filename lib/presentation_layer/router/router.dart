@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/history_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/settings_screen.dart';
 import 'package:flutter_application_test1/presentation_layer/screens/training_screen.dart';
@@ -11,7 +13,7 @@ final GoRouter router = GoRouter(
   routes: [
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
-      builder: (context, state, child) => ScreenWrapper(child: child),
+      builder: customShellRouteBuilder,
       routes: [
         GoRoute(
           path: '/settings',
@@ -42,6 +44,11 @@ final GoRouter router = GoRouter(
   ],
 );
 
+Widget customShellRouteBuilder(BuildContext context, GoRouterState state, Widget child) {
+  return ProviderScope(
+    child: ScreenWrapper(child: child),
+  );
+}
 
 class NoAnimationPage<T> extends Page<T> {
   final Widget child;
