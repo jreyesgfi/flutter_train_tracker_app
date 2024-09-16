@@ -30,36 +30,46 @@ class SessionLogCard extends ConsumerWidget {
             ?.name ??
         "Unknown Exercise";
 
-    final TextStyle valueStyle = theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
+    final TextStyle valueStyle =
+        theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
     final TextStyle labelStyle = theme.textTheme.bodySmall!;
 
     List<Widget> content = [
-      Text(exercise, style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark)),
-      Text(muscle, style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark)),
+      Text(exercise,
+          style: theme.textTheme.titleSmall
+              ?.copyWith(color: theme.primaryColorDark)),
+      Text(muscle,
+          style: theme.textTheme.titleMedium
+              ?.copyWith(color: theme.primaryColorDark)),
     ];
 
     if (!filteredOut) {
       content.addAll([
-        SizedBox(height: 16),
-        _buildDataRow(
-          iconPath: "assets/icons/weight.svg",
-          value: "${session.minWeight.toStringAsFixed(1)} - ${session.maxWeight.toStringAsFixed(1)}",
-          label: "kg",
-          theme: theme,
-          valueStyle: valueStyle,
-          labelStyle: labelStyle,
-          firstElement: true,
-        ),
-        SizedBox(height: 12),
-        _buildDataRow(
-          iconPath: "assets/icons/repeat.svg",
-          value: "${session.minReps} - ${session.maxReps}",
-          label: "reps",
-          theme: theme,
-          valueStyle: valueStyle,
-          labelStyle: labelStyle,
-          firstElement: false,
-        ),
+        SizedBox(height:GyminiTheme.verticalGapUnit*2),
+        Row(children: [
+          SizedBox(height: 16),
+          _buildDataRow(
+            iconPath: "assets/icons/weight.svg",
+            value:
+                "${session.minWeight.toStringAsFixed(1)} - ${session.maxWeight.toStringAsFixed(1)}",
+            label: "kg",
+            theme: theme,
+            valueStyle: valueStyle,
+            labelStyle: labelStyle,
+            firstElement: true,
+          ),
+          const SizedBox(width: 28),
+          SizedBox(height: 12),
+          _buildDataRow(
+            iconPath: "assets/icons/repeat.svg",
+            value: "${session.minReps} - ${session.maxReps}",
+            label: "reps",
+            theme: theme,
+            valueStyle: valueStyle,
+            labelStyle: labelStyle,
+            firstElement: false,
+          ),
+        ]),
       ]);
     }
 
@@ -74,7 +84,8 @@ class SessionLogCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600), // Set your maximum width here
+          constraints:
+              BoxConstraints(maxWidth: 600), // Set your maximum width here
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: content,
@@ -93,30 +104,25 @@ class SessionLogCard extends ConsumerWidget {
     required TextStyle labelStyle,
     required bool firstElement,
   }) {
-    final color = firstElement ? AppColors.primaryColor : AppColors.secondaryColor;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(left: BorderSide(color: color, width: 5)),
-      ),
-      padding: EdgeInsets.only(left: GyminiTheme.leftInnerPadding, top:16),
-      child: Row(
+    final color =
+        firstElement ? AppColors.primaryColor : AppColors.secondaryColor;
+    return Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           const SizedBox(width: 4),
           SizedBox(
-            width: 28,
-            height: 28,
+            width: 24,
+            height: 24,
             child: SvgPicture.asset(
               iconPath,
               colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
           ),
-          const SizedBox(width: 40),
+          const SizedBox(width: 8),
           Text(value, style: valueStyle),
           const SizedBox(width: 4),
           Text(label, style: labelStyle),
         ],
-      ),
     );
   }
 }

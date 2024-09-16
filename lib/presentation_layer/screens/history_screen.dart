@@ -4,6 +4,7 @@ import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/slivers/filter_slivers.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/history/date_separator.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/history/session_log_card.dart';
@@ -15,10 +16,12 @@ class HistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScrollController _scrollController = ref.watch(scrollControllerProvider);
+    final ScrollController _scrollController =
+        ref.watch(scrollControllerProvider);
     final provider = ref.watch(reportScreenProvider);
     final List<SessionEntity> allSessions = provider.allSessions;
-    final filteredSessionIds = provider.filteredSessions.map((s) => s.id).toSet();
+    final filteredSessionIds =
+        provider.filteredSessions.map((s) => s.id).toSet();
 
     return CustomScrollView(
       controller: _scrollController,
@@ -37,7 +40,13 @@ class HistoryScreen extends ConsumerWidget {
         ),
 
         // Create date sections for each date group
-        ...buildDateSections(allSessions, filteredSessionIds),
+        SliverPadding(
+          padding:
+              EdgeInsets.symmetric(horizontal: GyminiTheme.leftOuterPadding),
+          sliver: MultiSliver(children: [
+            ...buildDateSections(allSessions, filteredSessionIds)
+          ]),
+        ),
       ],
     );
   }
@@ -59,7 +68,7 @@ class HistoryScreen extends ConsumerWidget {
           // Finalize the previous section
           dateSections.add(
             DateSection(
-              dateSeparator: DateSeparator(date: currentDate!),
+              dateStamp: currentDate!,
               items: itemsForCurrentDate,
             ),
           );
@@ -72,7 +81,10 @@ class HistoryScreen extends ConsumerWidget {
 
       // Add the session to the current date's section
       itemsForCurrentDate.add(
-        SessionLogCard(session: session, filteredOut: filteredOut),
+        EntryTransition(
+            position: i % 8 + 2,
+            totalAnimations: 10,
+            child: SessionLogCard(session: session, filteredOut: filteredOut)),
       );
     }
 
@@ -80,7 +92,7 @@ class HistoryScreen extends ConsumerWidget {
     if (itemsForCurrentDate.isNotEmpty && currentDate != null) {
       dateSections.add(
         DateSection(
-          dateSeparator: DateSeparator(date: currentDate),
+          dateStamp: currentDate,
           items: itemsForCurrentDate,
         ),
       );
@@ -94,7 +106,7 @@ class HistoryScreen extends ConsumerWidget {
 class DateSection extends MultiSliver {
   DateSection({
     Key? key,
-    required DateSeparator dateSeparator, // Use DateSeparator instead of String title
+    required DateTime dateStamp,
     required List<Widget> items,
   }) : super(
           key: key,
@@ -104,7 +116,10 @@ class DateSection extends MultiSliver {
               child: Container(
                 color: AppColors.screenBackgroundColor,
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: dateSeparator, // Use DateSeparator directly here
+                child: EntryTransition(
+                    position: 2,
+                    totalAnimations: 10,
+                    child: DateSeparator(date: dateStamp)),
               ),
             ),
             SliverList(
@@ -113,4 +128,3 @@ class DateSection extends MultiSliver {
           ],
         );
 }
-

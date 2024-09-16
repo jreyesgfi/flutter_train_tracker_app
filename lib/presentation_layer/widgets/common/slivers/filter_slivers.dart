@@ -9,7 +9,9 @@ class SliverFilterHeaderDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: AppColors.screenBackgroundColor, // Background to avoid transparency
+      decoration: BoxDecoration(
+        color: AppColors.screenBackgroundColor,
+      ),
       child: const EntryTransition(
         position: 1,
         totalAnimations: 6,
