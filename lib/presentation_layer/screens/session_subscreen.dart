@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
+import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';
@@ -15,16 +16,16 @@ class SessionSubscreen extends ConsumerStatefulWidget {
   const SessionSubscreen({super.key});
 
   @override
-  ConsumerState<SessionSubscreen> createState() => SessionSubscreenState();
+  ConsumerState<SessionSubscreen> createState() => _SessionSubscreenState();
 }
 
-class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
-  // Footer manage the screen
+class _SessionSubscreenState extends ConsumerState<SessionSubscreen> {
   int currentStage = 0;
   final GlobalKey<SessionFormState> _formKey = GlobalKey<SessionFormState>();
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _scrollController = ref.watch(scrollControllerProvider);
     final provider = ref.read(trainingScreenProvider.notifier);
     final lastSession = provider.lastSessionSummary ??
         SessionInfoSchema(
@@ -38,8 +39,7 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null
         ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
-        : // default images
-        [
+        : [
             "assets/images/exercises/shoulder/Dumbbell-lateral-raises-1.png",
             "assets/images/exercises/shoulder/Dumbbell-lateral-raises-2.png"
           ];
@@ -49,7 +49,6 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
     bool isLastEvenStage = currentStage == 8;
 
     void onButtonClicked(int index) {
-      // Retrieve data from form and update provider
       if (_formKey.currentState != null) {
         if (_formKey.currentState?.getCurrentFormData() != null) {
           SessionValues sessionValues =
@@ -58,99 +57,101 @@ class SessionSubscreenState extends ConsumerState<SessionSubscreen> {
         }
       }
 
-      // Last stage
       if (index == 9) {
         provider.commitNewSession();
         provider.resetStage();
       }
 
-      // Change the session stage
       setState(() {
         currentStage = index;
       });
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      // Positioned(
-      //   bottom: 20,
-      //   left: 0,
-      //   right: 0,
-      //   child: SessionButtonsWrapper(
-      //     currentStage: currentStage,
-      //     onButtonClicked: onButtonClicked,
-      //     cancelTraining: provider.resetStage,
-      //   ),
-      // ),
-      SizedBox(
-        height: GyminiTheme.verticalGapUnit * 2,
-      ),
-      // Header, titles and current stage
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Titltes
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              lastSession.exerciseName,
-              style: theme.textTheme.titleSmall,
-            ),
-            SizedBox(height: 4),
-            Text(
-              lastSession.muscleGroup,
-              style: theme.textTheme.titleMedium,
-            ),
-            Text(
-              '${lastSession.timeSinceLastSession} days ago',
-              style:
-                  theme.textTheme.bodySmall?.copyWith(color: theme.shadowColor),
-            ),
-          ]),
-          // Stage Number
-          SessionStepWidget(
-              currentStep: (currentStage / 2).abs().round(), totalSteps: 4),
-        ],
-      ),
-      SizedBox(height: GyminiTheme.verticalGapUnit * 2),
-
-      // Changing block
-      SizedBox(
-          
-        width: MediaQuery.of(context).size.width-(GyminiTheme.leftOuterPadding*2),
-        height: MediaQuery.of(context).size.height * 0.5,
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.symmetric(
+              vertical: GyminiTheme.verticalGapUnit * 2,
+              horizontal: GyminiTheme.leftOuterPadding),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TRAINING
-                if (currentStage == 0 || isOddStage) ...[
-                  ExerciseImageExample(exerciseImagePaths: exerciseImagePaths),
-                  SizedBox(height: GyminiTheme.verticalGapUnit*3,),
-                  SessionInfoWidget(sessionInfo: lastSession),
-                ]
-                // RESTING
-                else if (!isLastEvenStage) ...[
-                  CustomChrono(
-                    key: ValueKey(currentStage),
-                    duration: const Duration(minutes: 2),
-                  )
-                ] else ...[
-                  SessionForm(
-                    key: _formKey,
-                    initialData: provider.newSessionSchema ?? lastSession,
-                  )
-                ],
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(
+                    lastSession.exerciseName,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    lastSession.muscleGroup,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  Text(
+                    '${lastSession.timeSinceLastSession} days ago',
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.shadowColor),
+                  ),
+                ]),
+                SessionStepWidget(
+                    currentStep: (currentStage / 2).abs().round(),
+                    totalSteps: 4),
               ],
             ),
-      )),
+          ),
+        ),
 
-      SizedBox(height: GyminiTheme.verticalGapUnit * 4),
-      // BUTTONS
-      SessionButtonsWrapper(
-        currentStage: currentStage,
-        onButtonClicked: onButtonClicked,
-        cancelTraining: provider.resetStage,
-      ),
-    ]);
+        // Training or Resting Section
+        SliverPadding(
+          padding: EdgeInsets.symmetric(
+              vertical: GyminiTheme.verticalGapUnit * 2,
+              horizontal: GyminiTheme.leftOuterPadding),
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Column(
+                  children: [
+                    if (currentStage == 0 || isOddStage) ...[
+                      ExerciseImageExample(
+                          exerciseImagePaths: exerciseImagePaths),
+                      SizedBox(height: GyminiTheme.verticalGapUnit * 3),
+                      SessionInfoWidget(sessionInfo: lastSession),
+                    ] else if (!isLastEvenStage) ...[
+                      CustomChrono(
+                        key: ValueKey(currentStage),
+                        duration: const Duration(minutes: 2),
+                      )
+                    ] else ...[
+                      SessionForm(
+                        key: _formKey,
+                        initialData: provider.newSessionSchema ?? lastSession,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+
+
+        // Buttons Section
+        SliverPadding(
+          padding: EdgeInsets.symmetric(
+              vertical: GyminiTheme.verticalGapUnit * 2,
+              horizontal: GyminiTheme.leftOuterPadding),
+          sliver: SliverToBoxAdapter(
+            child: SessionButtonsWrapper(
+              currentStage: currentStage,
+              onButtonClicked: onButtonClicked,
+              cancelTraining: provider.resetStage,
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

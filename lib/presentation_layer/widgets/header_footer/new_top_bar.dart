@@ -81,13 +81,10 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
     // React to changes in the route name from the provider
     final routeName = NavigationUtils.getRouteLabel(ref);
 
-    return SliverAppBar(
-      expandedHeight: _height,
-      floating: false,
-      pinned: true,
-      backgroundColor: _backgroundColor,
-      elevation: _elevation,
-      flexibleSpace: LayoutBuilder(
+    return Container(
+      height: _height,
+      color: AppColors.screenBackgroundColor,
+      child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
