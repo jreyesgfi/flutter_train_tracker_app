@@ -10,15 +10,12 @@ class DateSeparator extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Set locale to Spanish
-    Intl.defaultLocale = 'es_ES';
-    final dayMonthYear = DateFormat('d EEEE').format(date); // "Septiembre 10, 2024"
-    final dayOfWeek = DateFormat('MMMM, yyyy').format(date); // "Sábado"
+    // Use the formatDate method to format the date
+    final formattedDate = DateSeparator.formatDate(date);
 
     return Container(
       alignment: Alignment.center,
       width: 300,
-      margin: const EdgeInsets.only(top:30, bottom:4),
       padding: const EdgeInsets.only(top: 20, bottom: 8),
       decoration: BoxDecoration(
         border: Border(
@@ -29,16 +26,36 @@ class DateSeparator extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            dayMonthYear, // First line for the month, day, year
+            formattedDate.dayMonthYear, // First line for the day and date
             style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
           ),
-          SizedBox(height: 8,),
+          const SizedBox(height: 8),
           Text(
-            dayOfWeek, // Second line for the weekday
+            formattedDate.monthYear, // Second line for the month and year
             style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark, fontWeight: FontWeight.normal),
           ),
         ],
       ),
     );
   }
+
+  // Static method to format the date, useful for consistency across the app
+  static _FormattedDate formatDate(DateTime date) {
+    // Ensure the locale is set for Spanish formatting
+    Intl.defaultLocale = 'es_ES';
+
+    // Format day and weekday
+    final String dayMonthYear = DateFormat('d EEEE').format(date); // "10 Sábado"
+    final String monthYear = DateFormat('MMMM, yyyy').format(date); // "Septiembre, 2024"
+
+    return _FormattedDate(dayMonthYear, monthYear);
+  }
+}
+
+// Private class to return both date formats together
+class _FormattedDate {
+  final String dayMonthYear;
+  final String monthYear;
+
+  _FormattedDate(this.dayMonthYear, this.monthYear);
 }

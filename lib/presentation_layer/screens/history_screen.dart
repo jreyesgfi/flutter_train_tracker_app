@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/common/slivers/filter_slivers.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/history/date_separator.dart';
 import 'package:flutter_application_test1/presentation_layer/widgets/history/session_log_card.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -15,23 +15,20 @@ class HistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScrollController _scrollController =
-        ref.watch(scrollControllerProvider);
+    final ScrollController _scrollController = ref.watch(scrollControllerProvider);
     final provider = ref.watch(reportScreenProvider);
     final List<SessionEntity> allSessions = provider.allSessions;
-    final filteredSessionIds =
-        provider.filteredSessions.map((s) => s.id).toSet();
+    final filteredSessionIds = provider.filteredSessions.map((s) => s.id).toSet();
 
     return CustomScrollView(
-      controller: _scrollController, // Use the provided ScrollController
+      controller: _scrollController,
       slivers: [
-        // Sticky Filter Section
+        // Sticky Filter Section at the top
         SliverPadding(
-          padding:
-              EdgeInsets.symmetric(
-                vertical: GyminiTheme.verticalGapUnit*2,
-                horizontal: GyminiTheme.leftOuterPadding
-              ),
+          padding: EdgeInsets.symmetric(
+            vertical: GyminiTheme.verticalGapUnit * 2,
+            horizontal: GyminiTheme.leftOuterPadding,
+          ),
           sliver: SliverPersistentHeader(
             pinned: true,
             floating: false,
@@ -39,70 +36,81 @@ class HistoryScreen extends ConsumerWidget {
           ),
         ),
 
-        // Session logs and date separators as
-        SliverPadding(
-          padding:
-              EdgeInsets.symmetric(horizontal: GyminiTheme.leftOuterPadding),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return buildSessionItem(
-                    context, allSessions, index, filteredSessionIds);
-              },
-              childCount: allSessions.length,
-            ),
-          ),
-        )
+        // Create date sections for each date group
+        ...buildDateSections(allSessions, filteredSessionIds),
       ],
     );
   }
 
-  // Build session items and date separators
-  Widget buildSessionItem(BuildContext context, List<SessionEntity> sessions,
-      int index, Set<String> filteredSessionIds) {
-    final session = sessions[index];
-    final bool filteredOut = !filteredSessionIds.contains(session.id);
+  // Generate the date sections using DateSection widget
+  List<Widget> buildDateSections(
+      List<SessionEntity> sessions, Set<String> filteredSessionIds) {
+    List<Widget> dateSections = [];
+    DateTime? currentDate;
+    List<Widget> itemsForCurrentDate = [];
 
-    // Check if we need a date separator
-    if (index == 0 ||
-        sessions[index].timeStamp.day != sessions[index - 1].timeStamp.day) {
-      return Column(
-        children: [
-          // Instead of Sliver here (since it's within a SliverList child)
-          DateSeparator(date: session.timeStamp), // Sticky Date Separator
-          SessionLogCard(session: session, filteredOut: filteredOut),
-        ],
+    for (var i = 0; i < sessions.length; i++) {
+      final session = sessions[i];
+      final bool filteredOut = !filteredSessionIds.contains(session.id);
+
+      // If the date changes or this is the first session, finalize the previous section and start a new one
+      if (currentDate == null || session.timeStamp.day != currentDate.day) {
+        if (itemsForCurrentDate.isNotEmpty) {
+          // Finalize the previous section
+          dateSections.add(
+            DateSection(
+              dateSeparator: DateSeparator(date: currentDate!),
+              items: itemsForCurrentDate,
+            ),
+          );
+          itemsForCurrentDate = [];
+        }
+
+        // Start a new date section
+        currentDate = session.timeStamp;
+      }
+
+      // Add the session to the current date's section
+      itemsForCurrentDate.add(
+        SessionLogCard(session: session, filteredOut: filteredOut),
       );
     }
 
-    // Just return the session log card if no separator is needed
-    return SessionLogCard(session: session, filteredOut: filteredOut);
+    // Don't forget the last section
+    if (itemsForCurrentDate.isNotEmpty && currentDate != null) {
+      dateSections.add(
+        DateSection(
+          dateSeparator: DateSeparator(date: currentDate),
+          items: itemsForCurrentDate,
+        ),
+      );
+    }
+
+    return dateSections;
   }
 }
 
-
-
-class _DateSeparatorHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final DateTime date;
-
-  _DateSeparatorHeaderDelegate(this.date);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white, // Add background color for non-transparent separator
-      child: DateSeparator(date: date), // Use your DateSeparator widget
-    );
-  }
-
-  @override
-  double get maxExtent => 60; // Define the max height for DateSeparator
-  @override
-  double get minExtent => 60; // Define the min height for DateSeparator
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true; // Rebuild whenever necessary
-  }
+// DateSection to handle date-based grouping of logs
+class DateSection extends MultiSliver {
+  DateSection({
+    Key? key,
+    required DateSeparator dateSeparator, // Use DateSeparator instead of String title
+    required List<Widget> items,
+  }) : super(
+          key: key,
+          pushPinnedChildren: true,
+          children: [
+            SliverPinnedHeader(
+              child: Container(
+                color: AppColors.screenBackgroundColor,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: dateSeparator, // Use DateSeparator directly here
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate.fixed(items),
+            ),
+          ],
+        );
 }
+

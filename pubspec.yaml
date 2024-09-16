@@ -48,6 +48,9 @@ dependencies:
   shared_preferences: ^2.0.6
   sqflite: ^2.0.0+3
 
+  # 
+  sliver_tools: ^0.2.12
+
   cached_network_image: ^3.2.3
   cupertino_icons: ^1.0.5
   flutter_riverpod: ^2.1.3
