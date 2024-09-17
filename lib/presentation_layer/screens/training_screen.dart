@@ -22,7 +22,6 @@ class _TrainingScreenContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool selectionDone = ref.watch(trainingScreenProvider).currentStage != 0;
-    print("$selectionDone, ${ref.watch(trainingScreenProvider).currentStage} ${ref.watch(trainingScreenProvider).selectedExercise}");
     // Depending on the state of `allMuscles`, show either the content or a loading indicator
     if (selectionDone == false) {
       // IndexedStack is used to switch between different subscreens based on `currentStage`

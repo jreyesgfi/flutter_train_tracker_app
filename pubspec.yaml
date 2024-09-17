@@ -87,6 +87,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/3dpack/
+    - assets/images/exercises/
     - assets/images/muscles/
     - assets/images/exercises/pectoral/
     - assets/images/exercises/back/

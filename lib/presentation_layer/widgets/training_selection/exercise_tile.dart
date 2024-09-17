@@ -36,7 +36,7 @@ class ExerciseTile extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
-      height: isSelected ? 80 : 60,
+      height: isSelected ? 1120 : 100,
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(customTheme?.properties.borderRadius ?? 0.0),
@@ -49,12 +49,11 @@ class ExerciseTile extends StatelessWidget {
             bottom: 5,
             child: Image.asset(
               exercise.imagePath,
-              width: 48,  // Specify a width for the SVG image
               fit: BoxFit.fitHeight,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 75),  // Adjust left padding to give space for the image
+            padding: const EdgeInsets.only(left: 120),  // Adjust left padding to give space for the image
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,  // Align text to the left
               mainAxisAlignment: MainAxisAlignment.center,

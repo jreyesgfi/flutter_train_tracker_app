@@ -35,7 +35,7 @@ class TrainingDataTransformer {
                   lastTrainingTimes[exercise.id]),
             ))
         .toList();
-    tiles.sort((a,b) => b.timeSinceExercise.compareTo(a.timeSinceExercise));
+    tiles.sort((a,b) => a.label.compareTo(b.label));
     return tiles;
   }
 
@@ -71,9 +71,9 @@ class TrainingDataTransformer {
       : 365;
   }
   static List<String> exerciseImagePaths(ExerciseEntity exercise) {
-    final commonPath = "assets/images/test/exercises/${exercise.muscleId}/${exercise.id}_";
+    final commonPath = "assets/images/exercises/${exercise.id}";
     return 
-    ["${commonPath}1.png",
+    ["$commonPath.webp",
     "${commonPath}2.png"];
   }
   static String muscleImagePath(MuscleEntity muscle) {

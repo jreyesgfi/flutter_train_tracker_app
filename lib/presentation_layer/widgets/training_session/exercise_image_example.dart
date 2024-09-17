@@ -11,24 +11,14 @@ class ExerciseImageExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height:250,
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+        height:300,
         child: Row(children: [
           Expanded(
             child: Image.asset(
               exerciseImagePaths?[0],
-              width: 48, // Specify a width for the SVG image
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fitWidth,
             ),
           ),
-          SizedBox(width: 10.0),
-          Expanded(
-            child: Image.asset(
-              exerciseImagePaths?[1],
-              width: 48, // Specify a width for the SVG image
-              fit: BoxFit.fitHeight,
-            ),
-          )
         ]));
   }
 }

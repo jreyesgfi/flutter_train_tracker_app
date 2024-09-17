@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
 import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
 import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
@@ -78,10 +79,14 @@ class _SessionSubscreenState extends ConsumerState<SessionSubscreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.65,
+                    child: Text(
                     lastSession.exerciseName,
                     style: theme.textTheme.titleSmall,
+                  ),
                   ),
                   SizedBox(height: 4),
                   Text(
@@ -117,7 +122,6 @@ class _SessionSubscreenState extends ConsumerState<SessionSubscreen> {
                     if (currentStage == 0 || isOddStage) ...[
                       ExerciseImageExample(
                           exerciseImagePaths: exerciseImagePaths),
-                      SizedBox(height: GyminiTheme.verticalGapUnit * 3),
                       SessionInfoWidget(sessionInfo: lastSession),
                     ] else if (!isLastEvenStage) ...[
                       CustomChrono(
