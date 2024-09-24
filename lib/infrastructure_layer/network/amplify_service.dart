@@ -25,47 +25,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // }
 
 Future<void> triggerDataStoreSync(BuildContext context) async {
-  StreamSubscription<HubEvent>? hubSubscription;
+  forceResync();
+  showWarningSnackbar(context: context, message: "¡Sincronización completada!");
+  // StreamSubscription<HubEvent>? hubSubscription;
 
-  void stopAndCleanUp() {
-    Amplify.DataStore.stop().then((_) {
-      print("DataStore sync stopped.");
-    }).catchError((error) {
-      print("Error stopping DataStore: $error");
-    }).whenComplete(() {
-      if (hubSubscription != null) {
-        hubSubscription.cancel();
-        print("Hub subscription cancelled.");
-      }
-    });
-  }
+  // void stopAndCleanUp() {
+  //   Amplify.DataStore.stop().then((_) {
+  //     print("DataStore sync stopped.");
+  //   }).catchError((error) {
+  //     print("Error stopping DataStore: $error");
+  //   }).whenComplete(() {
+  //     if (hubSubscription != null) {
+  //       hubSubscription.cancel();
+  //       print("Hub subscription cancelled.");
+  //     }
+  //   });
+  // }
 
-  try {
-    // Set up the Hub listener for DataStore events
-    hubSubscription = Amplify.Hub.listen(
-        HubChannel.DataStore as HubChannel<dynamic, HubEvent>,
-        (dynamic hubEvent) async {
-      print('Hub event received: ${hubEvent.eventName}, ${hubEvent.payload}');
-      if (hubEvent.eventName == 'syncQueriesReady') {
-        if (context.mounted) {
-          showWarningSnackbar(
-              context: context, message: "¡Sincronización completada!");
-        }
-        stopAndCleanUp();
-      }
-    });
+  // try {
+  //   // Set up the Hub listener for DataStore events
+  //   hubSubscription = Amplify.Hub.listen(
+  //       HubChannel.DataStore as HubChannel<dynamic, HubEvent>,
+  //       (dynamic hubEvent) async {
+  //     print('Hub event received: ${hubEvent.eventName}, ${hubEvent.payload}');
+  //     if (hubEvent.eventName == 'syncQueriesReady') {
+  //       if (context.mounted) {
+  //         showWarningSnackbar(
+  //             context: context, message: "¡Sincronización completada!");
+  //       }
+  //       stopAndCleanUp();
+  //     }
+  //   });
 
-    // Start the DataStore
-    await Amplify.DataStore.start();
-    if (context.mounted) {
-      showWarningSnackbar(context: context, message: "Sincronización iniciada");
-    }
-  } catch (e) {
-    print("An error occurred during DataStore sync setup: $e");
-    // Attempt to stop DataStore and cancel the Hub subscription on error
-    await Amplify.DataStore.stop();
-    await hubSubscription?.cancel();
-  }
+  //   // Start the DataStore
+  //   await Amplify.DataStore.start();
+  //   if (context.mounted) {
+  //     showWarningSnackbar(context: context, message: "Sincronización iniciada");
+  //   }
+  // } catch (e) {
+  //   print("An error occurred during DataStore sync setup: $e");
+  //   // Attempt to stop DataStore and cancel the Hub subscription on error
+  //   await Amplify.DataStore.stop();
+  //   await hubSubscription?.cancel();
+  // }
 }
 
 Future<void> signOut(BuildContext context) async {
@@ -80,16 +82,16 @@ Future<void> signOut(BuildContext context) async {
   }
 }
 
-// Future<void> forceResync() async {
-//   try {
-//     // Clear the local DataStore
-//     await Amplify.DataStore.clear();
-//     print("DataStore cleared successfully.");
+Future<void> forceResync() async {
+  try {
+    // Clear the local DataStore
+    await Amplify.DataStore.clear();
+    print("DataStore cleared successfully.");
 
-//     // Restart the DataStore to re-sync from the cloud
-//     await Amplify.DataStore.start();
-//     print("DataStore sync started.");
-//   } catch (e) {
-//     print("Error during resync process: $e");
-//   }
-// }
+    // Restart the DataStore to re-sync from the cloud
+    await Amplify.DataStore.start();
+    print("DataStore sync started.");
+  } catch (e) {
+    print("Error during resync process: $e");
+  }
+}

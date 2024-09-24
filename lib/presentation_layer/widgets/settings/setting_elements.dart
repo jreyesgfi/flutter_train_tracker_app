@@ -38,7 +38,7 @@ final List<SettingGroup> settingsGroups = [
       ),
       SettingItem(
         icon: Icons.backup,
-        label: 'Generar copia de seguridad',
+        label: 'Resincronizar',
         onTap: (context) {
           triggerDataStoreSync(context);
         },
