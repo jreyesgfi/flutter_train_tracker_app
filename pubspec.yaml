@@ -86,21 +86,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/
+    - assets/images/welcome/
     - assets/images/3dpack/
     - assets/images/exercises/
     - assets/images/muscles/
-    - assets/images/exercises/pectoral/
-    - assets/images/exercises/back/
-    - assets/images/exercises/legs/
-    - assets/images/exercises/biceps/
-    - assets/images/exercises/gluteus/
-    - assets/images/exercises/shoulder/
-    - assets/images/test/exercises/m1/
-    - assets/images/test/exercises/m2/
-    - assets/images/test/exercises/m3/
-    - assets/images/test/exercises/m4/
-    - assets/images/test/exercises/m5/
-    - assets/images/test/exercises/m6/
     - assets/images/test/muscles/
     
 
