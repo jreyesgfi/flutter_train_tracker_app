@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
 import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/like_button.dart';
 
 class ExerciseTileSchema {
   final String exerciseId;
   final String label;
   final String imagePath;
   final int timeSinceExercise; // Days since last performed
+  final bool liked;
 
   ExerciseTileSchema({
     required this.exerciseId,
     required this.label,
     required this.imagePath,
     required this.timeSinceExercise,
+    required this.liked,
   });
 }
 
@@ -20,12 +23,14 @@ class ExerciseTile extends StatelessWidget {
   final ExerciseTileSchema exercise;
   final bool isSelected;
   final bool isCompleted;
+  final Function toggleLike;
 
   const ExerciseTile({
     super.key,
     required this.exercise,
     this.isSelected = false,
     this.isCompleted = false,
+    required this.toggleLike,
   });
 
   @override
@@ -52,6 +57,18 @@ class ExerciseTile extends StatelessWidget {
               fit: BoxFit.fitHeight,
             ),
           ),
+          Positioned(
+                  width: 30,
+                  height: 30,
+                  right: 5,
+                  bottom: 5,
+                  child:LikeButton(
+                    isLiked: exercise.liked, // This should come from your state management
+                    onLike: () {
+                      toggleLike(exercise.exerciseId);
+                    },
+                  ),
+                ),
           Padding(
             padding: const EdgeInsets.only(left: 120),  // Adjust left padding to give space for the image
             child: Column(

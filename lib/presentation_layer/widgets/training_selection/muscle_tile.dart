@@ -74,10 +74,10 @@ class _MuscleTileState extends State<MuscleTile> {
                     ),
                   ),
                 ),
-                Positioned.fill(
+                Positioned(
+                  width: 30,
+                  height: 30,
                   right: 5,
-                  left: 80,
-                  top: 80,
                   bottom: 5,
                   child:LikeButton(
                     isLiked: widget.muscle.liked, // This should come from your state management

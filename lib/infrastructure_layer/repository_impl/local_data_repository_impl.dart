@@ -20,7 +20,17 @@ class LocalRepositoryImpl implements LocalRepository
   }
 
   @override
+  Future<List<String>> getLikedExercises() async {
+    return await localDataService.getLikedExercises();
+  }
+
+  @override
   Future<void> toggleMuscleLikeState(String muscleId) async {
     await localDataService.toggleMuscleLikeState(muscleId);
+  }
+
+  @override
+  Future<void> toggleExerciseLikeState(String exerciseId) async {
+    await localDataService.toggleExerciseLikeState(exerciseId);
   }
 }

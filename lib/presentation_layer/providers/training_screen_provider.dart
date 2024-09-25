@@ -106,7 +106,6 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   Future<void> _fetchAllData() async {
     print("Fetching all data");
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
-    final likedMuscles = _getLikedMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
     final exerciseIds =
@@ -155,10 +154,18 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   Future<List<String>> _getLikedMuscles() async{
     return await ref.read(localRepositoryProvider).getLikedMuscles();
   }
+
+  Future<List<String>> _getLikedExercises() async{
+    return await ref.read(localRepositoryProvider).getLikedExercises();
+  }
   
   void toggleMuscleLikeState(String muscleId) async{
     await ref.read(localRepositoryProvider).toggleMuscleLikeState(muscleId);
     _getLikedMuscles();
+  }
+  void toggleExerciseLikeState(String exerciseId) async{
+    await ref.read(localRepositoryProvider).toggleExerciseLikeState(exerciseId);
+    _getLikedExercises();
   }
 
 
@@ -266,10 +273,11 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   void _updateTiles() async{
     print("Update Tiles");
     var likedMuscles = await _getLikedMuscles();
+    var likedExercises = await _getLikedExercises();
     var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(
         state.allMuscles, state.lastMuscleTrainingTimes, likedMuscles);
     var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
-        state.filteredExercises, state.lastTrainingTimes);
+        state.filteredExercises, state.lastTrainingTimes, likedExercises);
 
     state = state.copyWith(
       muscleTiles: newMuscleTiles,
@@ -277,9 +285,10 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
     );
   }
 
-  void _updateExerciseTiles() {
+  void _updateExerciseTiles() async{
+    final likedExercises = await _getLikedExercises();
     var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
-        state.filteredExercises, state.lastTrainingTimes);
+        state.filteredExercises, state.lastTrainingTimes, likedExercises);
     state = state.copyWith(
       exerciseTiles: newExerciseTiles,
     );  

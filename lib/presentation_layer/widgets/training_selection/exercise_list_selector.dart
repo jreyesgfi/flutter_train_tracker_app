@@ -56,8 +56,9 @@ class _ExerciseListSelectorState extends ConsumerState<ExerciseListSelector> {
                   margin: EdgeInsets.only(top: index == 0 ? 10 : 0, bottom: 10),
                   child: ExerciseTile(
                     exercise: exercises[index],
-                    isSelected: false,//selectedIndex == index,
+                    isSelected: false,
                     isCompleted: isCompleted,
+                    toggleLike: ref.read(trainingScreenProvider.notifier).toggleExerciseLikeState,
                   ),
                 ));
           },

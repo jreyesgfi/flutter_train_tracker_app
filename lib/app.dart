@@ -34,16 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-// @override
-//   Widget build(BuildContext context) {
-//     return Authenticator(
-//       child: MaterialApp.router(
-//         title: 'Gymini',
-//         routerConfig: router,
-//         builder: Authenticator.builder(),
-//         theme: AppTheme.theme,
-//       ),
-//     );
-//   }

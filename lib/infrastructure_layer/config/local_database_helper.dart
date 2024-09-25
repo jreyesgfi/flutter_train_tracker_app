@@ -25,15 +25,13 @@ class DatabaseHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     // General Config
-    await db.execute(
-      '''
+    await db.execute('''
       CREATE TABLE configurations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         key TEXT UNIQUE,
         value TEXT
       )
-      '''
-    );
+      ''');
 
     // Liked Muscles Config
     await db.execute('''
@@ -41,6 +39,12 @@ class DatabaseHelper {
       muscleId TEXT PRIMARY KEY
     )
   ''');
+    // Liked Exercises Config
+    await db.execute('''
+      CREATE TABLE liked_exercises (
+        exerciseId TEXT PRIMARY KEY
+      )
+    ''');
   }
 
   Future<int> insertConfiguration(String key, String value) async {
