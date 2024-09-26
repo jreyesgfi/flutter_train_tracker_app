@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/router/navitation_utils.dart';
-import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
+import 'package:gymini/presentation_layer/router/navitation_utils.dart';
+import 'package:gymini/presentation_layer/router/routes.dart';
+import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
+import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
+import 'package:gymini/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
 
 class TrainingSelectionSubscreen extends ConsumerWidget {
   TrainingSelectionSubscreen({Key? super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
+import 'package:gymini/domain_layer/entities/session_info.dart';
+import 'package:gymini/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
 
 
 class SessionForm extends StatefulWidget {

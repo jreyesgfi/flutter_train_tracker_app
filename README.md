@@ -1,4 +1,4 @@
-# flutter_application_test1
+# gymini
 
 A new Flutter project.
 

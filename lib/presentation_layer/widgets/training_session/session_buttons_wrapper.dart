@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_button.dart';
+import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 

@@ -1,13 +1,13 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/welcome_screen.dart';
+import 'package:gymini/presentation_layer/screens/welcome_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/presentation_layer/router/router.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/presentation_layer/router/router.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -98,6 +98,7 @@ class _MyAppState extends State<MyApp> {
           routerConfig: router,
           builder: Authenticator.builder(),
           theme: AppTheme.theme,
+          debugShowCheckedModeBanner: false,
           supportedLocales: const [
             Locale('en', 'US'),  // English
             Locale('es', 'ES'),  // Spanish
@@ -130,13 +131,13 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit*4, horizontal: GyminiTheme.leftOuterPadding),
+        padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit*4, horizontal: GyminiTheme.leftOuterPadding*2),
         child: SingleChildScrollView(
           child: Column(
             children: [
               // App logo
               Padding(
-                padding: EdgeInsets.only(top: 32),
+                padding: EdgeInsets.only(top: GyminiTheme.verticalGapUnit*8),
                 child: Center(child: 
                 SizedBox(
                       //width: 28,

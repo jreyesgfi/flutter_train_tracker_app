@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/slivers/filter_slivers.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/count_bar_chart.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
+import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
+import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
+import 'package:gymini/presentation_layer/widgets/common/slivers/filter_slivers.dart';
+import 'package:gymini/presentation_layer/widgets/reporting/count_bar_chart.dart';
+import 'package:gymini/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
+import 'package:gymini/presentation_layer/widgets/reporting/report_filter_section.dart';
+import 'package:gymini/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 
 class ReportScreen extends ConsumerWidget {
   const ReportScreen({super.key});

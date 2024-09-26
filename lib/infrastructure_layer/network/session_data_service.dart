@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/models/SessionData.dart';
+import 'package:gymini/models/SessionData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final sessionDataServiceProvider = Provider<SessionDataService>((ref) {

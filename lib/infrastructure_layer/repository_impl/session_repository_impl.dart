@@ -1,8 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart' as domain;
-import 'package:flutter_application_test1/domain_layer/repositories/cloud_repository_interfaces.dart';
-import 'package:flutter_application_test1/infrastructure_layer/network/session_data_service.dart';
-import 'package:flutter_application_test1/models/SessionData.dart';
+import 'package:gymini/domain_layer/entities/core_entities.dart' as domain;
+import 'package:gymini/domain_layer/repositories/cloud_repository_interfaces.dart';
+import 'package:gymini/infrastructure_layer/network/session_data_service.dart';
+import 'package:gymini/models/SessionData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final sessionRepositoryProvider = Provider<SessionRepository>((ref) {

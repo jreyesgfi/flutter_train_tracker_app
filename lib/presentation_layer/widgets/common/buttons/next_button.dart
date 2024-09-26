@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/custom_icon_button.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/presentation_layer/widgets/common/buttons/custom_icon_button.dart';
 
 class NextIconButton extends StatelessWidget {
   final VoidCallback onTap;

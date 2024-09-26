@@ -1,8 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/temp/ExerciseCard.dart';
-import 'package:flutter_application_test1/presentation_layer/temp/MuscleDateSelector.dart'; // Ensure this import is correct
-import 'package:flutter_application_test1/models/Exercise.dart';
+import 'package:gymini/presentation_layer/temp/ExerciseCard.dart';
+import 'package:gymini/presentation_layer/temp/MuscleDateSelector.dart'; // Ensure this import is correct
+import 'package:gymini/models/Exercise.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:provider/provider.dart';
 

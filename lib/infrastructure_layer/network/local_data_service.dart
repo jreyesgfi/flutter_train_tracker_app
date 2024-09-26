@@ -1,4 +1,4 @@
-import 'package:flutter_application_test1/infrastructure_layer/config/local_database_helper.dart';
+import 'package:gymini/infrastructure_layer/config/local_database_helper.dart';
 
 class LocalDataService {
   final DatabaseHelper _dbHelper = DatabaseHelper();

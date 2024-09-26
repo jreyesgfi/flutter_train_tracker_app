@@ -3,9 +3,9 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/infrastructure_layer/config/local_database_helper.dart';
-import 'package:flutter_application_test1/models/ModelProvider.dart';
-import 'package:flutter_application_test1/app.dart';
+import 'package:gymini/infrastructure_layer/config/local_database_helper.dart';
+import 'package:gymini/models/ModelProvider.dart';
+import 'package:gymini/app.dart';
 import 'amplifyconfiguration.dart';
 
 Future<void> main() async {

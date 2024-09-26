@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/custom_button.dart';
+import 'package:gymini/presentation_layer/widgets/common/buttons/custom_button.dart';
 
 class SessionButton extends StatelessWidget {
   final String? label;

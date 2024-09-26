@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
+import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // final dataStoreServiceProvider = Provider<DataStoreService>((ref) {

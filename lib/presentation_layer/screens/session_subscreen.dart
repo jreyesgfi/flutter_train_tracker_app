@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/domain_layer/entities/session_info.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/services/training_data_transformer.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_form.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/other/custom_chrono.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/exercise_image_example.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_buttons_wrapper_test.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_info_widget.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/training_session/session_step_widget.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/domain_layer/entities/session_info.dart';
+import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
+import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/presentation_layer/services/training_data_transformer.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/session_form.dart';
+import 'package:gymini/presentation_layer/widgets/common/other/custom_chrono.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/exercise_image_example.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/session_buttons_wrapper_test.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/session_info_widget.dart';
+import 'package:gymini/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SessionSubscreen extends ConsumerStatefulWidget {

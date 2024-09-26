@@ -1,8 +1,8 @@
 // SliverPersistentHeader delegate for the sticky filter section
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/reporting/report_filter_section.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
+import 'package:gymini/presentation_layer/widgets/reporting/report_filter_section.dart';
 
 class SliverFilterHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override

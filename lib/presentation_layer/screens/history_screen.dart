@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/scroll_controller_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/slivers/filter_slivers.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/history/date_separator.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/history/session_log_card.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
+import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
+import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
+import 'package:gymini/presentation_layer/widgets/common/slivers/filter_slivers.dart';
+import 'package:gymini/presentation_layer/widgets/history/date_separator.dart';
+import 'package:gymini/presentation_layer/widgets/history/session_log_card.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

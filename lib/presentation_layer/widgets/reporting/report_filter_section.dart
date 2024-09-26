@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/common_layer/utils/date_labels.dart';
-import 'package:flutter_application_test1/common_layer/utils/textUtils.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/common_layer/utils/date_labels.dart';
+import 'package:gymini/common_layer/utils/textUtils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 
 class FilterSection extends ConsumerWidget {
   const FilterSection({Key? key}) : super(key: key);

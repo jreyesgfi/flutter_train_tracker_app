@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/route_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/router/routes.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/session_subscreen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/settings_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/training_selection_subscreen.dart';
+import 'package:gymini/presentation_layer/providers/route_provider.dart';
+import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/presentation_layer/router/routes.dart';
+import 'package:gymini/presentation_layer/screens/session_subscreen.dart';
+import 'package:gymini/presentation_layer/screens/settings_screen.dart';
+import 'package:gymini/presentation_layer/screens/training_selection_subscreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main TrainingScreen widget that wraps content in ProviderScope

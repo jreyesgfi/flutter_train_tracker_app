@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/report_screen_provider.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -77,7 +77,7 @@ class SessionLogCard extends ConsumerWidget {
       opacity: filteredOut ? 0.5 : 1.0,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
@@ -111,14 +111,14 @@ class SessionLogCard extends ConsumerWidget {
         children: [
           const SizedBox(width: 4),
           SizedBox(
-            width: 24,
-            height: 24,
+            width: 20,
+            height: 20,
             child: SvgPicture.asset(
               iconPath,
               colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           Text(value, style: valueStyle),
           const SizedBox(width: 4),
           Text(label, style: labelStyle),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_text_styles.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_text_styles.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final VoidCallback onStartSignUp; // Callback to move to sign-up
@@ -18,21 +19,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final List<Map<String, String>> _pages = [
     {
       'image':
-          'assets/images/exercises/m1e1.webp', // Replace with actual image paths
-      'title': 'Welcome to Gymini',
-      'text': 'Track your workouts and achieve your goals efficiently.',
+          'assets/images/welcome/training.svg',
+      'title': 'Bienvenid@ a Gymini',
+      'text': 'Registra tus marcas y haz más fácil alcanzar tus objetivos.',
     },
     {
       'image':
-          'assets/images/exercises/m1e2.webp', // Replace with actual image paths
-      'title': 'Personalized Plans',
-      'text': 'Create and follow personalized workout plans.',
+          'assets/images/welcome/fitness_stats.svg',
+      'title': 'Estadísticas y Gráficos',
+      'text': 'Podrás analizar tu progreso, ajustando tu entrenamiento en cada momento.',
     },
     {
       'image':
-          'assets/images/exercises/m1e3.webp', // Replace with actual image paths
-      'title': 'Progress Tracking',
-      'text': 'Monitor your progress and stay motivated.',
+          'assets/images/welcome/cloud_sync.svg',
+      'title': 'Copia de Seguridad en la Nube',
+      'text': 'Todos tus datos estarán a salvo con el respaldo cloud de la mano de AWS.',
     },
   ];
 
@@ -75,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Flexible(
-                        child: Image.asset(
+                        child: SvgPicture.asset(
                           _pages[index]['image']!,
                           height: 200,
                           fit: BoxFit.contain,

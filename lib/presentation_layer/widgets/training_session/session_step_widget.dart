@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
 
 class SessionStepWidget extends StatelessWidget {
   final int currentStep;

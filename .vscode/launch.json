@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter_application_test1",
+            "name": "gymini",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "flutter_application_test1 (profile mode)",
+            "name": "gymini (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "flutter_application_test1 (release mode)",
+            "name": "gymini (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

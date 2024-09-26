@@ -1,6 +1,6 @@
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/models/ModelProvider.dart';
+import 'package:gymini/models/ModelProvider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final muscleDataServiceProvider = Provider<MuscleDataService>((ref) {

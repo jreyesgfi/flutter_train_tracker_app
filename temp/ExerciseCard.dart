@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_test1/common_layer/utils/is_same_day.dart';
-import 'package:flutter_application_test1/models/muscles_and_exercises.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/main_screen.dart';
-import 'package:flutter_application_test1/presentation_layer/temp/custom_drowdown_form_field.dart';
+import 'package:gymini/common_layer/utils/is_same_day.dart';
+import 'package:gymini/models/muscles_and_exercises.dart';
+import 'package:gymini/presentation_layer/screens/main_screen.dart';
+import 'package:gymini/presentation_layer/temp/custom_drowdown_form_field.dart';
 
-import 'package:flutter_application_test1/common_layer/theme/custom_colors.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/next_button.dart';
+import 'package:gymini/common_layer/theme/custom_colors.dart';
+import 'package:gymini/presentation_layer/widgets/common/buttons/next_button.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_application_test1/models/Exercise.dart';
+import 'package:gymini/models/Exercise.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
+import 'package:gymini/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatelessWidget {

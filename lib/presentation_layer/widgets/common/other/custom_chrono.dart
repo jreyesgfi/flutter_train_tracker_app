@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomChrono extends StatefulWidget {

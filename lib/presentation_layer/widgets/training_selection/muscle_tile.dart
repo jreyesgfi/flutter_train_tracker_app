@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
-import 'package:flutter_application_test1/common_layer/theme/app_theme.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/buttons/like_button.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/presentation_layer/widgets/common/buttons/like_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MuscleTileSchema {

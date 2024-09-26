@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:flutter_application_test1/common_layer/theme/app_colors.dart';
+import 'package:gymini/common_layer/theme/app_colors.dart';
 
 class InfoChartLastTrain extends StatelessWidget {
   final double minVal;

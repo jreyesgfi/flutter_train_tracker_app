@@ -8,7 +8,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
 
-// import 'package:flutter_application_test1/main.dart';
+// import 'package:gymini/main.dart';
 
 // void main() {
 //   testWidgets('Counter increments smWoke test', (WidgetTester tester) async {

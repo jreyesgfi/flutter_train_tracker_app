@@ -1,4 +1,4 @@
-import 'package:flutter_application_test1/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/core_entities.dart';
 
 abstract class MuscleRepository {
   Future<List<MuscleEntity>> fetchAllMuscles();

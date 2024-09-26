@@ -1,6 +1,6 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter_application_test1/presentation_layer/screens/screen_wrapper.dart';
+import 'package:gymini/presentation_layer/screens/screen_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class EmailConfirmationScreen extends StatelessWidget {

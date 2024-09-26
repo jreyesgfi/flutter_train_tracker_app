@@ -1,5 +1,5 @@
-import 'package:flutter_application_test1/presentation_layer/temp/email_confirmation_screen.dart';
-import 'package:flutter_application_test1/common_layer/utils/email_validator.dart';
+import 'package:gymini/presentation_layer/temp/email_confirmation_screen.dart';
+import 'package:gymini/common_layer/utils/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';

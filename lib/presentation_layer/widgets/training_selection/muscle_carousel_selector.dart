@@ -1,5 +1,5 @@
  import 'package:flutter/material.dart';
- import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
+ import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
  import 'package:provider/provider.dart';
  import 'muscle_tile.dart';

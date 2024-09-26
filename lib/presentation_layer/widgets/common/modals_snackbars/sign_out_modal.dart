@@ -1,6 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/infrastructure_layer/network/amplify_service.dart';
+import 'package:gymini/infrastructure_layer/network/amplify_service.dart';
 
 
 void showSignOutDialog(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test1/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_application_test1/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
+import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'exercise_tile.dart';
