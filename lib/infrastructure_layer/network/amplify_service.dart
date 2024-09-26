@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gymini/presentation_layer/router/navitation_utils.dart';
+import 'package:gymini/presentation_layer/router/router.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
 
 // final dataStoreServiceProvider = Provider<DataStoreService>((ref) {
 //   return DataStoreService();
@@ -25,7 +28,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // }
 
 Future<void> triggerDataStoreSync(BuildContext context) async {
-  forceResync();
+  resetApp(context);
   showWarningSnackbar(context: context, message: "¡Sincronización completada!");
   // StreamSubscription<HubEvent>? hubSubscription;
 
@@ -73,24 +76,32 @@ Future<void> triggerDataStoreSync(BuildContext context) async {
 Future<void> signOut(BuildContext context) async {
   try {
     await Amplify.DataStore.clear();
-    await Amplify.Auth.signOut();
-    if(context.mounted){
-      Navigator.of(context).pop();
+    if (context.mounted) {
+      resetApp(context);
     }
+    await Amplify.Auth.signOut();
+    
   } catch (e) {
     print('Sign out failed: $e');
   }
 }
 
-Future<void> forceResync() async {
-  try {
-    // Clear the local DataStore
-    await Amplify.DataStore.clear();
-    print("DataStore cleared successfully.");
+Future<void> resync() async {
+  // Clear DataStore
+  await Amplify.DataStore.clear();
+  print("DataStore cleared successfully.");
 
-    // Restart the DataStore to re-sync from the cloud
-    await Amplify.DataStore.start();
-    print("DataStore sync started.");
+  // Start DataStore again
+  await Amplify.DataStore.start();
+  print("DataStore sync started.");
+
+}
+Future<void> resetApp(BuildContext context) async {
+  await resync();
+  try {
+    if (context.mounted){
+      NavigationUtils.resetAppNavigation(context);
+    }
   } catch (e) {
     print("Error during resync process: $e");
   }

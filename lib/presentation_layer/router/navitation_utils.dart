@@ -6,33 +6,35 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NavigationUtils {
-  static void navigateWithDelay(WidgetRef ref, BuildContext context, AppRoute newRoute ) async {
+  static void navigateWithDelay(
+      WidgetRef ref, BuildContext context, AppRoute newRoute) async {
     AppRoute previousRoute = ref.watch(routeProvider);
     if (previousRoute == newRoute) return;
-    
+
     ref.read(animationProvider.notifier).runExitAnimations();
-    
-    
-    
+
     // Wait for the animation to complete
     await Future.delayed(const Duration(milliseconds: 1000));
     ref.read(routeProvider.notifier).state = newRoute;
     // Use GoRouter to navigate after the delay
     if (context.mounted) {
-      
       context.goNamed(newRoute.name);
-      
     }
   }
 
   static String getRouteLabel(WidgetRef ref) {
-  int routeIndex = ref.watch(routeProvider).index;
-  
-  assert(routeIndex >= 0 && routeIndex < navigationItems.length, 
-         'Route index $routeIndex is out of bounds');
+    int routeIndex = ref.watch(routeProvider).index;
 
-  return navigationItems[routeIndex].label;
-}
+    assert(routeIndex >= 0 && routeIndex < navigationItems.length,
+        'Route index $routeIndex is out of bounds');
+
+    return navigationItems[routeIndex].label;
+  }
+
+  // Clear all previous routes and navigate to the initial route
+  static void resetAppNavigation(BuildContext context) {
+    context.goNamed(firstRoute.name);
+  }
 
   // // Dynamically create a map from route names to their indices based on AppRoute
   // static final Map<String, int> routeToIndex = {

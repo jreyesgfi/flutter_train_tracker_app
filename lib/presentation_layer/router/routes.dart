@@ -14,6 +14,8 @@ enum AppSubRoute {
   trainingSession,
 }
 
+AppRoute firstRoute = AppRoute.trainingSelection;
+
 class NavigationDestinationItem {
   final String? iconPath;
   final String? selectedIconPath;

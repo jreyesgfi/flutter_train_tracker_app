@@ -74,3 +74,4 @@ class NoAnimationPage<T> extends Page<T> {
     );
   }
 }
+
