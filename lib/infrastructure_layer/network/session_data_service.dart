@@ -11,6 +11,7 @@ final sessionDataServiceProvider = Provider<SessionDataService>((ref) {
 
 class SessionDataService {
 
+  
   Future<List<SessionData>> fetchLastSessions(List<String> exerciseIds) async {
     try {
       final allSessions = await Amplify.DataStore.query(SessionData.classType);

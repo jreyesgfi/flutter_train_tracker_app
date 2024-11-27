@@ -110,9 +110,8 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
     final exerciseIds =
         exercises.map((ExerciseEntity exercise) => exercise.id).toList();
-    final lastSessions = await ref
-        .read(sessionRepositoryProvider)
-        .fetchLastSessions(exerciseIds);
+    final lastSessions = await ref.read(sessionRepositoryProvider)
+        .fetchLastSessionsByExerciseIds(exerciseIds);
 
     state = state.copyWith(
         allMuscles: muscles,
@@ -202,10 +201,10 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
         exerciseId: selectedExerciseId ?? state.selectedExercise!.id,
         muscleId: state.selectedMuscle!.id,
         timeStamp: DateTime.now(),
-        maxWeight: 10,
-        minWeight: 10,
-        maxReps: 10,
-        minReps: 10,
+        maxWeight: 0,
+        minWeight: 0,
+        maxReps: 0,
+        minReps: 0,
       );
 
   SessionEntity createNewSessionFromLast(SessionEntity lastSession) {
@@ -213,7 +212,7 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
       id: Uuid().v4(), // Create a new unique ID
       exerciseId: lastSession.exerciseId,
       muscleId: lastSession.muscleId,
-      timeStamp: DateTime.now(), // Update timestamp to current time
+      timeStamp: DateTime.now(),
       maxWeight: lastSession.maxWeight,
       minWeight: lastSession.minWeight,
       maxReps: lastSession.maxReps,

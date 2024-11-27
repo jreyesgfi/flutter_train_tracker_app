@@ -33,10 +33,10 @@ class _SessionSubscreenState extends ConsumerState<SessionSubscreen> {
             exerciseName: provider.selectedExercise?.name ?? '',
             muscleGroup: provider.selectedMuscle?.name ?? '',
             timeSinceLastSession: 0,
-            minWeight: 5,
-            maxWeight: 5,
-            minReps: 10,
-            maxReps: 10);
+            minWeight: 0,
+            maxWeight: 0,
+            minReps: 0,
+            maxReps: 0);
     final selectedExercise = provider.selectedExercise;
     final exerciseImagePaths = selectedExercise != null
         ? TrainingDataTransformer.exerciseImagePaths(selectedExercise)
