@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart' as domain;
 import 'package:gymini/domain_layer/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/infrastructure_layer/network/session_data_service.dart';
@@ -19,6 +20,9 @@ class SessionRepositoryImpl implements SessionRepository {
   // Maps for partitioning sessions by muscleId and exerciseId
   final Map<String, List<int>> _muscleMapSessions = {};
   Map<String, List<int>> _exerciseMapSessions = {};
+  Map<String, domain.SessionEntity> _lastSessionByMuscleIds = {};
+  Map<String, domain.SessionEntity> _lastSessionByExerciseIds = {};
+
 
   SessionRepositoryImpl(this.sessionService);
 
@@ -47,6 +51,7 @@ class SessionRepositoryImpl implements SessionRepository {
 
     // Create partitioning maps
     _createPartitionMaps();
+    _defineFirstSessions();
 
     return _cachedSessions;
   }
@@ -72,32 +77,33 @@ class SessionRepositoryImpl implements SessionRepository {
     }
   }
 
-  /// Retrieve the most recent sessions for a list of muscle IDs
-  Future<List<domain.SessionEntity>> fetchLastSessionsByMuscleIds(List<String> muscleIds) async {
-    final List<domain.SessionEntity> results = [];
+  void _defineFirstSessions() {
+    _lastSessionByMuscleIds.clear();
+    _lastSessionByExerciseIds.clear();
 
-    for (var muscleId in muscleIds) {
-      if (_muscleMapSessions.containsKey(muscleId)) {
-        final firstIndex = _muscleMapSessions[muscleId]!.first;
-        results.add(_cachedSessions[firstIndex]);
-      }
+    // Define the last session for each muscleId
+    for (var entry in _muscleMapSessions.entries) {
+      final muscleId = entry.key;
+      final firstIndex = entry.value.first;
+      _lastSessionByMuscleIds[muscleId] = _cachedSessions[firstIndex];
     }
 
-    return results;
+    // Define the last session for each exerciseId
+    for (var entry in _exerciseMapSessions.entries) {
+      final exerciseId = entry.key;
+      final firstIndex = entry.value.first;
+      _lastSessionByExerciseIds[exerciseId] = _cachedSessions[firstIndex];
+    }
+  }
+
+  /// Retrieve the most recent sessions for a list of muscle IDs
+  Future<Map<String, domain.SessionEntity>> fetchLastSessionsByMuscleIds() async {
+  return Map.from(_lastSessionByMuscleIds); // Return a copy
   }
 
   /// Retrieve the most recent sessions for a list of exercise IDs
-  Future<List<domain.SessionEntity>> fetchLastSessionsByExerciseIds(List<String> exerciseIds) async {
-    final List<domain.SessionEntity> results = [];
-
-    for (var exerciseId in exerciseIds) {
-      if (_exerciseMapSessions.containsKey(exerciseId)) {
-        final firstIndex = _exerciseMapSessions[exerciseId]!.first;
-        results.add(_cachedSessions[firstIndex]);
-      }
-    }
-
-    return results;
+  Future<Map<String, domain.SessionEntity>> fetchLastSessionsByExerciseIds() async {
+    return Map.from(_lastSessionByExerciseIds); // Return a copy
   }
 
   /// Retrieve all the sessions associated with a specific muscle ID
@@ -114,6 +120,24 @@ class SessionRepositoryImpl implements SessionRepository {
       return [];
     }
     return _exerciseMapSessions[exerciseId]!.map((index) => _cachedSessions[index]).toList();
+  }
+
+  /// Retrieve the last session associated with a specific muscle ID
+  Future<domain.SessionEntity?> fetchLastSessionByMuscleId(String muscleId) async {
+    if (!_muscleMapSessions.containsKey(muscleId)) {
+      return null;
+    }
+    final lastIndex = _muscleMapSessions[muscleId]!.first;
+    return _cachedSessions[lastIndex];
+  }
+
+  /// Retrieve the last session associated with a specific exercise ID
+  Future<domain.SessionEntity?> fetchLastSessionByExerciseId(String exerciseId) async {
+    if (!_exerciseMapSessions.containsKey(exerciseId)) {
+      return null;
+    }
+    final lastIndex = _exerciseMapSessions[exerciseId]!.first;
+    return _cachedSessions[lastIndex];
   }
 
   @override

@@ -23,9 +23,7 @@ class TrainingScreenState {
   final List<ExerciseEntity> allExercises;
   final List<ExerciseEntity> filteredExercises;
   final List<SessionEntity> allLastSessions;
-  final Map<String, DateTime> lastTrainingTimes;
   final Map<String, DateTime> lastMuscleTrainingTimes;
-
   final List<MuscleTileSchema> muscleTiles;
   final List<ExerciseTileSchema> exerciseTiles;
 
@@ -43,7 +41,7 @@ class TrainingScreenState {
     this.allExercises = const [],
     this.filteredExercises = const [],
     this.allLastSessions = const [],
-    this.lastTrainingTimes = const {},
+    //this.lastTrainingTimes = const {},
     this.lastMuscleTrainingTimes = const {},
     this.muscleTiles = const [],
     this.exerciseTiles = const [],
@@ -64,7 +62,7 @@ class TrainingScreenState {
     List<ExerciseEntity>? allExercises,
     List<ExerciseEntity>? filteredExercises,
     List<SessionEntity>? allLastSessions,
-    Map<String, DateTime>? lastTrainingTimes,
+    //Map<String, DateTime>? lastTrainingTimes,
     Map<String, DateTime>? lastMuscleTrainingTimes,
     List<MuscleTileSchema>? muscleTiles,
     List<ExerciseTileSchema>? exerciseTiles,
@@ -80,7 +78,7 @@ class TrainingScreenState {
       allExercises: allExercises ?? this.allExercises,
       filteredExercises: filteredExercises ?? this.filteredExercises,
       allLastSessions: allLastSessions ?? this.allLastSessions,
-      lastTrainingTimes: lastTrainingTimes ?? this.lastTrainingTimes,
+      //lastTrainingTimes: lastTrainingTimes ?? this.lastTrainingTimes,
       lastMuscleTrainingTimes:
           lastMuscleTrainingTimes ?? this.lastMuscleTrainingTimes,
       muscleTiles: muscleTiles ?? this.muscleTiles,
@@ -105,48 +103,66 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   // CLOUD STORAGE DATA
   Future<void> _fetchAllData() async {
     print("Fetching all data");
-    final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
+   final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();
     final exerciseIds =
         exercises.map((ExerciseEntity exercise) => exercise.id).toList();
+      await ref.read(sessionRepositoryProvider).fetchAllSessions();
     final lastSessions = await ref.read(sessionRepositoryProvider)
         .fetchLastSessionsByExerciseIds(exerciseIds);
+  
+    final lastMuscleTimes = await ref
+      .read(sessionRepositoryProvider)
+      .fetchLastSessionsByMuscleIds(muscles.map((muscle)=>muscle.id).toList());
+
+    final lastExerciseTimes = await ref
+      .read(sessionRepositoryProvider)
+      .fetchLastSessionsByExerciseIds(exerciseIds);
 
     state = state.copyWith(
         allMuscles: muscles,
         allExercises: exercises,
         allLastSessions: lastSessions,
     );
-    _updateLastTrainingTimes();
+    //_updateLastTrainingTimes();
     _updateTiles();
   }
 
-  void _updateLastTrainingTimes(){
-    Map<String, DateTime> lastMuscleTrainingTimes = {};
-    for (var session in state.allLastSessions) {
-      // Check if the muscleId is already in the dictionary
-      if (!lastMuscleTrainingTimes.containsKey(session.muscleId)) {
-        // If not, add it with the current session's timestamp
-        lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
-      } else {
-        // If it exists, compare and save the later date
-        if (lastMuscleTrainingTimes[session.muscleId]!
-            .isBefore(session.timeStamp)) {
-          lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
-        }
-      }
-    }
-
-    Map<String, DateTime> lastTrainingTimes = {};
-    for (var session in state.allLastSessions){
-      lastTrainingTimes[session.exerciseId] = session.timeStamp;
-    }
+  void _updateMuscleTiles() async{
+    var likedMuscles = await _getLikedMuscles();
+    var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(
+        state.allMuscles, state.lastMuscleTrainingTimes, likedMuscles);
     state = state.copyWith(
-        lastMuscleTrainingTimes: lastMuscleTrainingTimes,
-        lastTrainingTimes: lastTrainingTimes,
+      muscleTiles: newMuscleTiles,
     );
   }
+
+  // void _updateLastTrainingTimes(){
+  //   Map<String, DateTime> lastMuscleTrainingTimes = {};
+  //   for (var session in state.allLastSessions) {
+  //     // Check if the muscleId is already in the dictionary
+  //     if (!lastMuscleTrainingTimes.containsKey(session.muscleId)) {
+  //       // If not, add it with the current session's timestamp
+  //       lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
+  //     } else {
+  //       // If it exists, compare and save the later date
+  //       if (lastMuscleTrainingTimes[session.muscleId]!
+  //           .isBefore(session.timeStamp)) {
+  //         lastMuscleTrainingTimes[session.muscleId] = session.timeStamp;
+  //       }
+  //     }
+  //   }
+
+  //   Map<String, DateTime> lastTrainingTimes = {};
+  //   for (var session in state.allLastSessions){
+  //     lastTrainingTimes[session.exerciseId] = session.timeStamp;
+  //   }
+  //   state = state.copyWith(
+  //       lastMuscleTrainingTimes: lastMuscleTrainingTimes,
+  //       lastTrainingTimes: lastTrainingTimes,
+  //   );
+  // }
 
 
   // LOCAL STORAGE DATA
@@ -272,16 +288,13 @@ class TrainingScreenNotifier extends StateNotifier<TrainingScreenState> {
   void _updateTiles() async{
     print("Update Tiles");
     var likedMuscles = await _getLikedMuscles();
-    var likedExercises = await _getLikedExercises();
     var newMuscleTiles = TrainingDataTransformer.transformMusclesToTiles(
         state.allMuscles, state.lastMuscleTrainingTimes, likedMuscles);
-    var newExerciseTiles = TrainingDataTransformer.transformExercisesToTiles(
-        state.filteredExercises, state.lastTrainingTimes, likedExercises);
-
     state = state.copyWith(
       muscleTiles: newMuscleTiles,
-      exerciseTiles: newExerciseTiles,
     );
+
+    _updateExerciseTiles();
   }
 
   void _updateExerciseTiles() async{
