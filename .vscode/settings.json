@@ -9,5 +9,5 @@
     "amplify/backend/awscloudformation": true
   },
   "cmake.sourceDirectory": "D:/Programacion/Personal/flutter_train_tracker_app/linux",
-  "dart.flutterSdkPath": "~/dev/flutter"
+  "dart.flutterSdkPath": "C:\\Users\\jorge\\AppData\\Local\\flutter"
 }

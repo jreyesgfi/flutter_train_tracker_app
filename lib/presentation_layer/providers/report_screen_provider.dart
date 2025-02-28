@@ -2,7 +2,7 @@ import 'package:gymini/domain_layer/entities/session_info.dart';
 import 'package:gymini/infrastructure_layer/network/exercise_data_service.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
-import 'package:gymini/infrastructure_layer/repository_impl/session_repository_impl.dart';
+import 'package:gymini/data/repositories/session_repository_impl.dart';
 import 'package:gymini/presentation_layer/services/training_data_transformer.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_tile.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';

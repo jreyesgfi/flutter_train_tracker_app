@@ -1,7 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/services.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart' as domain;
-import 'package:gymini/domain_layer/repositories/cloud_repository_interfaces.dart';
+import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/infrastructure_layer/network/session_data_service.dart';
 import 'package:gymini/models/SessionData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,11 +17,13 @@ class SessionRepositoryImpl implements SessionRepository {
   List<domain.SessionEntity> _cachedSessions = [];
 
   // Maps for partitioning sessions by muscleId and exerciseId
+  // final List<domain.MuscleEntity> _muscleList = [];
+  // final List<domain.ExerciseEntity> _exerciseList = [];
   final Map<String, List<int>> _muscleMapSessions = {};
-  Map<String, List<int>> _exerciseMapSessions = {};
-  Map<String, domain.SessionEntity> _lastSessionByMuscleIds = {};
-  Map<String, domain.SessionEntity> _lastSessionByExerciseIds = {};
-
+  // final Map<String, List<domain.ExerciseEntity>> _muscleMapExercises = {};
+  final Map<String, List<int>> _exerciseMapSessions = {};
+  final Map<String, domain.SessionEntity> _lastSessionByMuscleIds = {};
+  final Map<String, domain.SessionEntity> _lastSessionByExerciseIds = {};
 
   SessionRepositoryImpl(this.sessionService);
 
@@ -97,16 +98,19 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   /// Retrieve the most recent sessions for a list of muscle IDs
-  Future<Map<String, domain.SessionEntity>> fetchLastSessionsByMuscleIds() async {
-  return Map.from(_lastSessionByMuscleIds); // Return a copy
-  }
+  // @override
+  // Future<Map<String, domain.SessionEntity>> fetchLastSessionsByMuscleIds() async {
+  // return Map.from(_lastSessionByMuscleIds); // Return a copy
+  // }
 
   /// Retrieve the most recent sessions for a list of exercise IDs
-  Future<Map<String, domain.SessionEntity>> fetchLastSessionsByExerciseIds() async {
-    return Map.from(_lastSessionByExerciseIds); // Return a copy
-  }
+  // @override
+  // Future<Map<String, domain.SessionEntity>> fetchLastSessionsByExerciseIds() async {
+  //   return Map.from(_lastSessionByExerciseIds); // Return a copy
+  // }
 
   /// Retrieve all the sessions associated with a specific muscle ID
+  @override
   Future<List<domain.SessionEntity>> fetchSessionsByMuscleId(String muscleId) async {
     if (!_muscleMapSessions.containsKey(muscleId)) {
       return [];
@@ -115,6 +119,7 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   /// Retrieve all the sessions associated with a specific exercise ID
+  @override
   Future<List<domain.SessionEntity>> fetchSessionsByExerciseId(String exerciseId) async {
     if (!_exerciseMapSessions.containsKey(exerciseId)) {
       return [];

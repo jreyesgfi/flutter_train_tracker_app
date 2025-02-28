@@ -1,5 +1,5 @@
 import 'package:gymini/domain_layer/entities/core_entities.dart';
-import 'package:gymini/domain_layer/repositories/cloud_repository_interfaces.dart';
+import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/infrastructure_layer/network/exercise_data_service.dart';
 import 'package:gymini/models/ExerciseData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
