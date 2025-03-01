@@ -9,8 +9,8 @@ import 'package:gymini/presentation_layer/widgets/common/animation/entering_anim
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
 
-class TrainingSelectionSubscreen extends ConsumerWidget {
-  const TrainingSelectionSubscreen({Key? super.key});
+class TrainingCreationView extends ConsumerWidget {
+  const TrainingCreationView({Key? super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

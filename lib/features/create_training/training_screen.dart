@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/presentation_layer/providers/route_provider.dart';
-import 'package:gymini/features/create_training/provider/training_screen_provider.dart';
-import 'package:gymini/presentation_layer/router/routes.dart';
-import 'package:gymini/features/create_training/session_subscreen.dart';
-import 'package:gymini/presentation_layer/screens/settings_screen.dart';
-import 'package:gymini/features/create_training/training_selection_subscreen.dart';
+import 'package:gymini/features/create_training/presentation/training_creation_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main TrainingScreen widget that wraps content in ProviderScope
@@ -26,11 +21,11 @@ class _TrainingScreenContent extends ConsumerWidget {
     if (selectionDone == false) {
       // IndexedStack is used to switch between different subscreens based on `currentStage`
       return 
-        TrainingSelectionSubscreen(key: ValueKey(selectionDone));
+        const TrainingCreationView(key: ValueKey(selectionDone));
     } else {
       // Show a loading spinner while the data is being fetched
       return 
-      TrainingSelectionSubscreen(key: ValueKey(selectionDone));
+      const TrainingCreationView(key: ValueKey(selectionDone));
         //SessionSubscreen(key: ValueKey(selectionDone));
     }
   }

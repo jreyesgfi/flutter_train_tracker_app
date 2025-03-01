@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
 import 'package:gymini/data/repositories/session_repository_impl.dart';
@@ -85,7 +86,9 @@ class ReportingScreenNotifier extends StateNotifier<ReportingScreenState> {
   }
 
   Future<void> _fetchAllData() async {
-    print("Fetching all data");
+    if (kDebugMode) {
+      print("Fetching all data");
+    }
     final muscles = await ref.read(muscleRepositoryProvider).fetchAllMuscles();
     final exercises =
         await ref.read(exerciseRepositoryProvider).fetchAllExercises();

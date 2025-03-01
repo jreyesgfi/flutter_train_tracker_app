@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
-import 'package:gymini/presentation_layer/widgets/header_footer/bottom_navigation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:gymini/presentation_layer/widgets/header_footer/new_top_bar.dart';
-
-import 'package:flutter/material.dart';
-import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/header_footer/bottom_navigation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

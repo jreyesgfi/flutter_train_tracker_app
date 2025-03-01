@@ -24,7 +24,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
       return this;
     }
     return CustomColors(
-      greyColor: Color.lerp(this.greyColor, other.greyColor, t)!,
+      greyColor: Color.lerp(greyColor, other.greyColor, t)!,
     );
   }
 }

@@ -1,6 +1,7 @@
 // lib/features/create_training/presentation/create_training_notifier.dart
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/shared_data/global_stream.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/data/repositories/local_repository_interfaces.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
@@ -14,29 +15,31 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
   final MuscleRepository muscleRepository;
   final ExerciseRepository exerciseRepository;
   final LocalRepository localRepository;
+  final GlobalSharedStreams sharedStreams;
 
   CreateTrainingNotifier({
     required this.sessionRepository,
     required this.muscleRepository,
     required this.exerciseRepository,
     required this.localRepository,
+    required this.sharedStreams,
   }) : super(const CreateTrainingState()) {
     _init();
   }
 
-  /// Fetch all the data required for the create training screen
+  /// Fetch all the data required for the create training screen.
   Future<void> _init() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      // 1. Fetch domain data from each repository
+      // 1. Fetch domain data from each repository.
       final muscles = await muscleRepository.fetchAllMuscles();
       final exercises = await exerciseRepository.fetchAllExercises();
 
-      // Populate session repository's in-memory cache
+      // Populate session repository's in-memory cache.
       await sessionRepository.fetchAllSessions();
 
-      // 2. Fetch local liked items
+      // 2. Fetch local liked items.
       final likedMuscles = await localRepository.getLikedMuscles();
       final likedExercises = await localRepository.getLikedExercises();
 
@@ -60,7 +63,7 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
         );
       }).toList();
 
-      // 4. Update state with the fetched + transformed data
+      // 4. Update state with the fetched and transformed data.
       state = state.copyWith(
         isLoading: false,
         allMuscles: muscles,
@@ -68,8 +71,7 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
         muscleTiles: muscleTiles,
         exerciseTiles: exerciseTiles,
       );
-    } catch (e, stack) {
-      // Handle any errors
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.toString(),
@@ -77,18 +79,22 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
     }
   }
 
+  /// When a new session is created in create_training, update the global stream.
+  void createNewSession(SessionEntity newSession) {
+    // You might also update your local state here if needed.
+    sharedStreams.sessionStream.update(newSession);
+  }
+
   /// Handle muscle selection by filtering related exercises and updating tiles.
   void selectMuscle(MuscleEntity muscle) {
-    final filteredExercises = state.allExercises
-        .where((e) => e.muscleId == muscle.id)
-        .toList();
+    final filteredExercises = state.allExercises.where((e) => e.muscleId == muscle.id).toList();
 
     final List<ExerciseTileSchema> newExerciseTiles = filteredExercises.map((exercise) {
       DateTime? lastTrainingTime = null;
       return TrainingDataTransformer.transformExerciseToTile(
         exercise,
         lastTrainingTime,
-        [], // Optionally pass liked exercises if needed
+        [], // Optionally pass liked exercises if needed.
       );
     }).toList();
 
@@ -96,11 +102,15 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
       selectedMuscle: muscle,
       exerciseTiles: newExerciseTiles,
     );
+    // Broadcast the selected muscle ID.
+    sharedStreams.selectedMuscleIdStream.update(muscle.id);
   }
 
   /// Handle exercise selection.
   void selectExercise(ExerciseEntity exercise) {
     state = state.copyWith(selectedExercise: exercise);
+    // Broadcast the selected exercise ID.
+    sharedStreams.selectedExerciseIdStream.update(exercise.id);
   }
 
   /// Toggle the "like" state for a muscle.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ExerciseImageExample extends StatelessWidget {
-  final exerciseImagePaths;
+  final List<String?> exerciseImagePaths;
 
   const ExerciseImageExample({
     super.key,
@@ -10,12 +10,12 @@ class ExerciseImageExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height:300,
         child: Row(children: [
           Expanded(
             child: Image.asset(
-              exerciseImagePaths?[0],
+              exerciseImagePaths[0]!,
               fit: BoxFit.fitWidth,
             ),
           ),

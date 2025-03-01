@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/features/create_training/provider/training_screen_provider.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 class SessionButtonsWrapper extends ConsumerStatefulWidget {
   final int currentStage;
@@ -24,7 +22,7 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _centerCurrentStage());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _centerCurrentStage());
   }
 
   void _centerCurrentStage() {

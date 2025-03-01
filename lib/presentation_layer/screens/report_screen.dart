@@ -18,7 +18,7 @@ class ReportScreen extends ConsumerWidget {
     final ScrollController scrollController = ref.watch(scrollControllerProvider);
 
     final List<Widget> elements = [
-      EntryTransition(
+      const EntryTransition(
         position: 2,
         totalAnimations: 6,
         child: SessionsHistoryCalendarWidget(),

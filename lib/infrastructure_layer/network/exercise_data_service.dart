@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gymini/models/ExerciseData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,7 +49,9 @@ class ExerciseDataService {
           await Amplify.DataStore.query(ExerciseData.classType);
       return exercises;
     } catch (e) {
-      print('Error fetching exercises: $e');
+      if (kDebugMode) {
+        print('Error fetching exercises: $e');
+      }
       return [];
     }
   }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/common_layer/utils/date_labels.dart';
-import 'package:gymini/common_layer/utils/textUtils.dart';
+import 'package:gymini/common_layer/utils/text_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 
@@ -28,12 +29,12 @@ class FilterSection extends ConsumerWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  print('Attempting to show MonthYearPicker');
+                  showWarningSnackbar(context:context, message: 'Attempting to show MonthYearPicker');
                   final selectedDate = await showMonthYearPicker(
                     context: context,
                     initialDate: DateTime(
-                      state.selectedYear ?? DateTime.now().year,
-                      state.selectedMonth ?? DateTime.now().month,
+                      state.selectedYear, //?? DateTime.now().year,
+                      state.selectedMonth, // ?? DateTime.now().month,
                     ),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),

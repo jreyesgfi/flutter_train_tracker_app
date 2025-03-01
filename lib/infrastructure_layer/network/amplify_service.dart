@@ -79,18 +79,20 @@ Future<void> signOut(BuildContext context) async {
     await Amplify.Auth.signOut();
     
   } catch (e) {
-    print('Sign out failed: $e');
+    if(context.mounted){
+      showWarningSnackbar(context:context, message: 'Sign out failed: $e');
+    }
   }
 }
 
 Future<void> resync() async {
   // Clear DataStore
   await Amplify.DataStore.clear();
-  print("DataStore cleared successfully.");
+  //print("DataStore cleared successfully.");
 
   // Start DataStore again
   await Amplify.DataStore.start();
-  print("DataStore sync started.");
+  //print("DataStore sync started.");
 
 }
 Future<void> resetApp(BuildContext context) async {
@@ -100,6 +102,8 @@ Future<void> resetApp(BuildContext context) async {
       NavigationUtils.resetAppNavigation(context);
     }
   } catch (e) {
-    print("Error during resync process: $e");
+    if(context.mounted){
+      showWarningSnackbar(context:context, message: "Error during resync process: $e");
+    }
   }
 }

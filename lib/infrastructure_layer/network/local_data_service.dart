@@ -24,7 +24,6 @@ class LocalDataService {
       where: 'muscleId = ?',
       whereArgs: [muscleId],
     );
-    print("reached");
     // If no rows were deleted, it means the muscle ID was not liked, so we insert it
     if (rowsAffected == 0) {
       await db.insert('liked_muscles', {'muscleId': muscleId});

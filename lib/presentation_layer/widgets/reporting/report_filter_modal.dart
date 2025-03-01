@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 class ReportFilterModal extends ConsumerWidget {
   final VoidCallback onClose;

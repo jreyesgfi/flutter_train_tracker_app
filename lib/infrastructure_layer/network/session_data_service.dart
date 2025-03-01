@@ -1,5 +1,6 @@
 
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gymini/models/SessionData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +39,9 @@ class SessionDataService {
     try {
       await Amplify.DataStore.save(sessionData);
     } catch (e) {
-      print('Error creating new session: $e');
+      if (kDebugMode) {
+        print('Error creating new session: $e');
+      }
     }
   }
 }

@@ -1,17 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/presentation_layer/providers/route_provider.dart';
 import 'package:gymini/presentation_layer/router/navitation_utils.dart';
-import 'package:go_router/go_router.dart';
-
-import 'package:flutter/material.dart';
-import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class NewTopBar extends ConsumerStatefulWidget {
   final ScrollController controller;
@@ -26,7 +18,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
   late double _fontSize;
   late Color _backgroundColor;
   late Color _shadowColor;
-  late double _elevation;
+  // late double _elevation;
   late double _borderRadius;
   late double _height;
   late double _bottomPadding;
@@ -43,7 +35,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
     _fontSize = 26.0;
     _backgroundColor = AppColors.screenBackgroundColor; // Start with green
     _shadowColor = AppColors.screenBackgroundColor;
-    _elevation = 0.0;
+    // _elevation = 0.0;
     _borderRadius = 0.0;
     _height = 120;
     _bottomPadding = 32;

@@ -179,13 +179,13 @@ class SessionData extends amplify_core.Model {
     buffer.write("sessionId=" + "$_sessionId" + ", ");
     buffer.write("exerciseId=" + "$_exerciseId" + ", ");
     buffer.write("muscleId=" + "$_muscleId" + ", ");
-    buffer.write("timeStamp=" + (_timeStamp != null ? _timeStamp!.format() : "null") + ", ");
-    buffer.write("maxWeight=" + (_maxWeight != null ? _maxWeight!.toString() : "null") + ", ");
-    buffer.write("minWeight=" + (_minWeight != null ? _minWeight!.toString() : "null") + ", ");
-    buffer.write("maxReps=" + (_maxReps != null ? _maxReps!.toString() : "null") + ", ");
-    buffer.write("minReps=" + (_minReps != null ? _minReps!.toString() : "null") + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
+    buffer.write("timeStamp=" + (_timeStamp != null ? _timeStamp.format() : "null") + ", ");
+    buffer.write("maxWeight=" + (_maxWeight != null ? _maxWeight.toString() : "null") + ", ");
+    buffer.write("minWeight=" + (_minWeight != null ? _minWeight.toString() : "null") + ", ");
+    buffer.write("maxReps=" + (_maxReps != null ? _maxReps.toString() : "null") + ", ");
+    buffer.write("minReps=" + (_minReps != null ? _minReps.toString() : "null") + ", ");
+    buffer.write("createdAt=" + (_createdAt != null ? _createdAt.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();

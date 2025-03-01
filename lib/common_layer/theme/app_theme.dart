@@ -29,7 +29,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
   CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
     if (other is CustomTheme) {
       var lerpedBorderRadius = lerpDouble(
-          this.properties.borderRadius, other.properties.borderRadius, t)!;
+          properties.borderRadius, other.properties.borderRadius, t)!;
       return CustomTheme(
         properties: CustomThemeProperties(borderRadius: lerpedBorderRadius),
       );
@@ -70,7 +70,7 @@ class AppTheme {
         highlightColor: AppColors.accentColor,
         scaffoldBackgroundColor: AppColors.primaryColorLight,
         textSelectionTheme:
-            TextSelectionThemeData(cursorColor: AppColors.accentColor),
+            const TextSelectionThemeData(cursorColor: AppColors.accentColor),
 
         // TextStyle setup
         fontFamily: 'Poppins',
@@ -127,7 +127,7 @@ class AppTheme {
 ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-            side: BorderSide(
+            side: const BorderSide(
                 color: AppColors
                     .primaryColor), // Border color for outlined buttons
             foregroundColor:
