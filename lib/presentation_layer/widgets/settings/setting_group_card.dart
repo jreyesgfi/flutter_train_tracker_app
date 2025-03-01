@@ -38,7 +38,7 @@ class SettingsGroupWidget extends StatelessWidget {
                     item.label,
                     style: theme.textTheme.titleSmall?.copyWith(color: theme.primaryColorDark),
                   ),
-                  trailing: Icon(Icons.chevron_right),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () => item.onTap(context),
                 );
               }).toList(),

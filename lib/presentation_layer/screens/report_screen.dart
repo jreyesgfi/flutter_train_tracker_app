@@ -15,7 +15,7 @@ class ReportScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScrollController _scrollController = ref.watch(scrollControllerProvider);
+    final ScrollController scrollController = ref.watch(scrollControllerProvider);
 
     final List<Widget> elements = [
       EntryTransition(
@@ -46,7 +46,7 @@ class ReportScreen extends ConsumerWidget {
     ];
 
     return CustomScrollView(
-      controller: _scrollController,
+      controller: scrollController,
       slivers: [
         SliverPadding(
           padding:

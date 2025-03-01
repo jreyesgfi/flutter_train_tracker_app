@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
+import 'package:gymini/features/create_training/provider/training_screen_provider.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
@@ -9,10 +9,10 @@ class SessionButtonsWrapper extends ConsumerStatefulWidget {
   final Function(int) onButtonClicked; // Accepts an index
 
   const SessionButtonsWrapper({
-    Key? key,
+    super.key,
     required this.currentStage,
     required this.onButtonClicked,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<SessionButtonsWrapper> createState() => _SessionButtonsWrapperState();
@@ -42,7 +42,7 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final numberOfButtons = 10;
+    const numberOfButtons = 10;
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,

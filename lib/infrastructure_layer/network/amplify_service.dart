@@ -4,10 +4,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gymini/presentation_layer/router/navitation_utils.dart';
-import 'package:gymini/presentation_layer/router/router.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 
 // final dataStoreServiceProvider = Provider<DataStoreService>((ref) {
 //   return DataStoreService();

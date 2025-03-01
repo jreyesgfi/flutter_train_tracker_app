@@ -86,7 +86,7 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
               alignment: Alignment.center,
               child: widget.label != null
                   ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       widget.label!,
                       style: 
@@ -101,7 +101,7 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
                           color: widget.outlined ? effectiveColor : Colors.white,
                           size: widget.size * 0.6, // Icon size proportional to the button
                         )
-                      : SizedBox.shrink()), // No icon or label means nothing to show
+                      : const SizedBox.shrink()), // No icon or label means nothing to show
             ),
           ),
         ),

@@ -44,7 +44,7 @@ class MockDataRepository {
         id: "s${index + 1}",
         exerciseId: exercise.id,
         muscleId: muscle.id,
-        timeStamp: DateTime.now().subtract(Duration(days: 1)), 
+        timeStamp: DateTime.now().subtract(const Duration(days: 1)), 
         maxWeight: 10 + random.nextDouble()*5,
         minWeight: 5 + random.nextDouble()*5,
         maxReps: 10,

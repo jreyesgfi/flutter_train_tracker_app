@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/infrastructure_layer/network/amplify_service.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/sign_out_modal.dart';
-import 'package:provider/provider.dart';
 
 class SettingItem {
   final IconData icon;

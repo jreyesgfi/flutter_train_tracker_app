@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 class NewTopBar extends ConsumerStatefulWidget {
   final ScrollController controller;
 
-  NewTopBar({Key? key, required this.controller}) : super(key: key);
+  const NewTopBar({super.key, required this.controller});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NewTopBarState();
@@ -59,7 +59,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
       duration: const Duration(milliseconds: 150),
     );
     _fadeAnimation = Tween<double>(begin: 1.0, end: 0).animate(_fadeController);
-    _slideAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(0, 0.3)).animate(_slideController);
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, 0.3)).animate(_slideController);
   }
 
   void _updateAppBar() {
@@ -93,14 +93,14 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
               child: SlideTransition(
                 position: _slideAnimation,
                 child: Container(
-                  margin: EdgeInsets.only(top: 20, left: 4, right: 4),
+                  margin: const EdgeInsets.only(top: 20, left: 4, right: 4),
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
                         color: _shadowColor,
                         blurRadius: 8.0,
                         spreadRadius: 0.0,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                     color: _backgroundColor,

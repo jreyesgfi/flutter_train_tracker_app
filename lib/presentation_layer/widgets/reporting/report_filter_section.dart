@@ -8,7 +8,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 
 class FilterSection extends ConsumerWidget {
-  const FilterSection({Key? key}) : super(key: key);
+  const FilterSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,12 +53,12 @@ class FilterSection extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        child: Container(
+                        child: SizedBox(
                           width: 200,
                           child: Align(
                             alignment: Alignment.center,
                             child: ConstrainedBox(
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 maxWidth: 550,
                               ),
                               child: child!,
@@ -113,7 +113,7 @@ class FilterSection extends ConsumerWidget {
             value: muscle.id,
             child: Text(clipText(muscle.name, 20)), // Limit text length
           );
-        }).toList(),
+        }),
       ],
       onChanged: (newValue) {
         notifier.selectMuscleById(newValue ?? '');

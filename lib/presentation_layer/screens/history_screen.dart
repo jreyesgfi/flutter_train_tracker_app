@@ -16,7 +16,7 @@ class HistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScrollController _scrollController =
+    final ScrollController scrollController =
         ref.watch(scrollControllerProvider);
     final provider = ref.watch(reportScreenProvider);
     final List<SessionEntity> allSessions = provider.allSessions;
@@ -24,7 +24,7 @@ class HistoryScreen extends ConsumerWidget {
         provider.filteredSessions.map((s) => s.id).toSet();
 
     return CustomScrollView(
-      controller: _scrollController,
+      controller: scrollController,
       slivers: [
         // Sticky Filter Section at the top
         SliverPadding(
@@ -105,11 +105,10 @@ class HistoryScreen extends ConsumerWidget {
 // DateSection to handle date-based grouping of logs
 class DateSection extends MultiSliver {
   DateSection({
-    Key? key,
+    super.key,
     required DateTime dateStamp,
     required List<Widget> items,
   }) : super(
-          key: key,
           pushPinnedChildren: true,
           children: [
             SliverPinnedHeader(

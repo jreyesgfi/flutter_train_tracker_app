@@ -11,8 +11,8 @@ class NumericRoulettePicker extends StatefulWidget {
   final double value;
   
 
-  NumericRoulettePicker({
-    Key? key,
+  const NumericRoulettePicker({
+    super.key,
     required this.controller,
     this.value = 0,
     this.allowDecimal = false,
@@ -20,7 +20,7 @@ class NumericRoulettePicker extends StatefulWidget {
     this.maxValue = 100.0,
     this.step = 1.0,
     this.label = '',
-  }) : super(key: key);
+  });
 
   @override
   _NumericRoulettePickerState createState() => _NumericRoulettePickerState();
@@ -75,7 +75,7 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final PageScrollPhysics physics = widget.allowDecimal
-        ? _EnhancedPageScrollPhysics()
+        ? const _EnhancedPageScrollPhysics()
         : const PageScrollPhysics();
     return Row(
       children: [
@@ -94,7 +94,7 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
               //     ),
               //   ),
               // ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: PageView.builder(
                   controller: _pageController,
@@ -151,8 +151,7 @@ void didUpdateWidget(NumericRoulettePicker oldWidget) {
 }
 
 class _EnhancedPageScrollPhysics extends PageScrollPhysics {
-  const _EnhancedPageScrollPhysics({ScrollPhysics? parent})
-      : super(parent: parent);
+  const _EnhancedPageScrollPhysics({super.parent});
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CustomChrono extends StatefulWidget {
   final Duration duration;
 
-  const CustomChrono({Key? key, required this.duration}) : super(key: key);
+  const CustomChrono({super.key, required this.duration});
 
   @override
   CustomChronoState createState() => CustomChronoState();
@@ -83,7 +83,7 @@ class CustomChronoState extends State<CustomChrono> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return SizedBox.shrink(); // Return an empty widget while initializing
+      return const SizedBox.shrink(); // Return an empty widget while initializing
     }
 
     final theme = Theme.of(context);
@@ -123,7 +123,7 @@ class CustomChronoState extends State<CustomChrono> {
           ),
         ),
         ],),
-        SizedBox(height:32),
+        const SizedBox(height:32),
         Stack(
           alignment: Alignment.center,
           children: [

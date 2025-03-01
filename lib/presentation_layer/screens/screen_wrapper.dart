@@ -28,14 +28,14 @@ class _ScreenWrapperState extends ConsumerState<ScreenWrapper> {
   @override
   Widget build(BuildContext context) {
     // Retrieve the scroll controller from the provider
-    final ScrollController _scrollController = ref.watch(scrollControllerProvider);
+    final ScrollController scrollController = ref.watch(scrollControllerProvider);
 
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       extendBody: true,
       body: Column(
         children: [
-          NewTopBar(controller: _scrollController),
+          NewTopBar(controller: scrollController),
           
           // Expanded to ensure the content fills the available space, allows scrolling within child screens
           Expanded(

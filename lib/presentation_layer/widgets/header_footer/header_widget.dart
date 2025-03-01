@@ -46,7 +46,7 @@ class HeaderWidget extends StatelessWidget {
                     style: theme.textTheme.titleLarge?.copyWith(
                         color: theme.colorScheme.onPrimary), // Use titleLarge with custom color
                   ),
-                  SizedBox(height: 8), // Space between the texts
+                  const SizedBox(height: 8), // Space between the texts
                   Text(
                     date,
                     style: theme.textTheme.titleSmall?.copyWith(

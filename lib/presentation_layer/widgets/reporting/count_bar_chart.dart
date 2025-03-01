@@ -67,7 +67,7 @@ class TrainingCountBarChart extends ConsumerWidget {
             style: theme.textTheme.titleMedium
                 ?.copyWith(color: theme.primaryColorDark),
           ),
-          SizedBox(height: 12), // Space between the title and chart
+          const SizedBox(height: 12), // Space between the title and chart
           Container(
             height: 200,
             padding: const EdgeInsets.all(20.0), // Padding inside the Container
@@ -89,8 +89,8 @@ class TrainingCountBarChart extends ConsumerWidget {
                           alignment: Alignment.centerLeft, // Align titles to the right
                           child: Padding(
                             padding: const EdgeInsets.only(right: 8.0), // Add padding to move titles further from the axis
-                            child: Text('${value.toStringAsFixed(0)}',
-                                style: TextStyle(fontSize: 12)),
+                            child: Text(value.toStringAsFixed(0),
+                                style: const TextStyle(fontSize: 12)),
                           ),
                         );
                       },
@@ -107,17 +107,17 @@ class TrainingCountBarChart extends ConsumerWidget {
                           alignment: Alignment.bottomCenter, // Align titles to the bottom
                           child: Padding(
                             padding: const EdgeInsets.only(top: 8.0), // Add padding to move titles further from the axis
-                            child: Text(dayName, style: TextStyle(fontSize: 12)),
+                            child: Text(dayName, style: const TextStyle(fontSize: 12)),
                           ),
                         );
                       },
                     ),
                   ),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: false),
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 barGroups: groupedSessions.entries.map((entry) {
                   final dayOfWeek = entry.key;
                   final count = entry.value;

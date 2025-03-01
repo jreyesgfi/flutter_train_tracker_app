@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/presentation_layer/widgets/common/buttons/custom_icon_button.dart';
 
 class NextIconButton extends StatelessWidget {

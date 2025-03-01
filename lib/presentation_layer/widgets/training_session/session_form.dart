@@ -8,10 +8,10 @@ class SessionForm extends StatefulWidget {
   // final Function(SessionInfoSchema) onResultsChanged;
 
   const SessionForm({
-    Key? key,
+    super.key,
     required this.initialData,
     // required this.onResultsChanged,
-  }) : super(key: key);
+  });
 
   @override
   SessionFormState createState() => SessionFormState();

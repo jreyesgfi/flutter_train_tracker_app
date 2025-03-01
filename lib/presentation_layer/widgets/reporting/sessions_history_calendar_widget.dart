@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
 
 class SessionsHistoryCalendarWidget extends ConsumerWidget {
+  const SessionsHistoryCalendarWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -41,7 +43,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
               maxX: daysInMonth.toDouble(),
               minY: 1,
               maxY: 7, // Days of the week (1: Monday, 7: Sunday)
-              gridData: FlGridData(show: false),
+              gridData: const FlGridData(show: false),
               borderData: FlBorderData(show: false),
               scatterSpots: _generateScatterSpots(sessionData, theme,
                   selectedYear, selectedMonth, daysInMonth, intensityMap),
@@ -62,7 +64,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
                       ][value.toInt() - 1];
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(dayName, style: TextStyle(fontSize: 12)),
+                        child: Text(dayName, style: const TextStyle(fontSize: 12)),
                       );
                     },
                   ),
@@ -105,7 +107,7 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
                       '',
                       children: [
                         TextSpan(
-                          text: '${day}/${selectedMonth}/${selectedYear}\n',
+                          text: '$day/$selectedMonth/$selectedYear\n',
                           style: theme.textTheme.titleMedium
                             ?.copyWith(color: AppColors.whiteColor),
                         ),

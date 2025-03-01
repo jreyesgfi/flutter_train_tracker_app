@@ -20,12 +20,12 @@ class ReportFilterModal extends ConsumerWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                   onPressed: onClose,
                 ),
               ),
               DropdownButton<String>(
-                hint: Text('Select Muscle'),
+                hint: const Text('Select Muscle'),
                 value: providerWatch.selectedMuscle?.id,
                 items: providerWatch.allMuscles.map((muscle) {
                   return DropdownMenuItem<String>(
@@ -41,7 +41,7 @@ class ReportFilterModal extends ConsumerWidget {
                 },
               ),
               DropdownButton<String>(
-                hint: Text('Select Exercise'),
+                hint: const Text('Select Exercise'),
                 value: providerWatch.selectedExercise?.id,
                 items: providerWatch.filteredExercises.map((exercise) {
                   return DropdownMenuItem<String>(

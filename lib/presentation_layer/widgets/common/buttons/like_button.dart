@@ -8,12 +8,12 @@ class LikeButton extends StatefulWidget {
   final double height;
 
   const LikeButton({
-    Key? key,
+    super.key,
     required this.isLiked,
     required this.onLike,
     this.width = 50.0,
     this.height = 50.0,
-  }) : super(key: key);
+  });
 
   @override
   _LikeButtonState createState() => _LikeButtonState();

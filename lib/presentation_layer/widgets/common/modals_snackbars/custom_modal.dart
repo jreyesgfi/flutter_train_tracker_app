@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/infrastructure_layer/network/amplify_service.dart';
 
 void showCustomDialog({
   required BuildContext context,

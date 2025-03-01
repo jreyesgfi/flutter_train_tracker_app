@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MaxMinLineChart extends ConsumerWidget {
   final bool repsRepresentation;
 
-  MaxMinLineChart._({
+  const MaxMinLineChart._({
     this.repsRepresentation = false,
   });
 
@@ -120,7 +120,7 @@ class MaxMinLineChart extends ConsumerWidget {
             style: theme.textTheme.titleMedium
                 ?.copyWith(color: theme.primaryColorDark),
           ),
-          SizedBox(height: 12), // Space between the title and chart
+          const SizedBox(height: 12), // Space between the title and chart
           Container(
             height: 300,
             padding: const EdgeInsets.all(20.0), // Padding inside the Container
@@ -150,8 +150,8 @@ class MaxMinLineChart extends ConsumerWidget {
                             padding: const EdgeInsets.only(
                                 right:
                                     8.0), // Add padding to move titles further from the axis
-                            child: Text('${value.toStringAsFixed(2)}',
-                                style: TextStyle(fontSize: 12)),
+                            child: Text(value.toStringAsFixed(2),
+                                style: const TextStyle(fontSize: 12)),
                           ),
                         );
                       },
@@ -172,16 +172,16 @@ class MaxMinLineChart extends ConsumerWidget {
                             padding: const EdgeInsets.only(
                                 top:
                                     8.0), // Add padding to move titles further from the axis
-                            child: Text('$day', style: TextStyle(fontSize: 12)),
+                            child: Text('$day', style: const TextStyle(fontSize: 12)),
                           ),
                         );
                       },
                     ),
                   ),
-                  topTitles: AxisTitles(
+                  topTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
-                  rightTitles: AxisTitles(
+                  rightTitles: const AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
@@ -203,11 +203,11 @@ class MaxMinLineChart extends ConsumerWidget {
                     dotData: const FlDotData(show: false),
                   ),
                 ],
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 borderData: FlBorderData(
                   show: false, // Border around the plot area
                 ),
-                lineTouchData: LineTouchData(
+                lineTouchData: const LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
                       // tooltipBgColor: Colors.transparent,
                       ),

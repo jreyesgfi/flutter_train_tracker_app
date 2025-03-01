@@ -1,22 +1,23 @@
- import 'package:flutter/material.dart';
- import 'package:gymini/presentation_layer/providers/training_screen_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:provider/provider.dart';
- import 'muscle_tile.dart';
- 
- class MuscleCarouselSelector extends ConsumerStatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';
+
+class MuscleCarouselSelector extends StatefulWidget {
   final List<MuscleTileSchema> muscles;
+  final void Function(String muscleId) onMuscleSelected;
+  final void Function(String muscleId) onToggleLike;
 
   const MuscleCarouselSelector({
     super.key,
     required this.muscles,
+    required this.onMuscleSelected,
+    required this.onToggleLike,
   });
 
   @override
-  ConsumerState<MuscleCarouselSelector> createState() => _MuscleCarouselSelectorState();
+  State<MuscleCarouselSelector> createState() => _MuscleCarouselSelectorState();
 }
 
-class _MuscleCarouselSelectorState extends ConsumerState<MuscleCarouselSelector> {
+class _MuscleCarouselSelectorState extends State<MuscleCarouselSelector> {
   int? selectedIndex;
 
   @override
@@ -28,21 +29,21 @@ class _MuscleCarouselSelectorState extends ConsumerState<MuscleCarouselSelector>
         itemCount: widget.muscles.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          final muscleTile = widget.muscles[index];
           return GestureDetector(
             onTap: () {
               setState(() {
                 selectedIndex = index;
-                final muscleId = widget.muscles[index].muscleId;
-                // Using ref.read to trigger actions without causing this widget to rebuild
-                ref.read(trainingScreenProvider.notifier).selectMuscleById(muscleId);
               });
+              // Notify the parent (or provider) which muscle was selected
+              widget.onMuscleSelected(muscleTile.muscleId);
             },
             child: Container(
               margin: EdgeInsets.only(left: index == 0 ? 10 : 0, right: 10),
               child: MuscleTile(
-                muscle: widget.muscles[index],
+                muscle: muscleTile,
                 isSelected: selectedIndex == index,
-                toggleLike: ref.read(trainingScreenProvider.notifier).toggleMuscleLikeState,
+                toggleLike: (muscleId) => widget.onToggleLike(muscleId),
               ),
             ),
           );

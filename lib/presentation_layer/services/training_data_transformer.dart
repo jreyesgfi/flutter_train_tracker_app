@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/domain_layer/entities/session_info.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';

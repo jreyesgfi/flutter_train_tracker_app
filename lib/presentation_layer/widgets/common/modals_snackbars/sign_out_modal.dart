@@ -23,7 +23,7 @@ void showSignOutDialog(BuildContext context) {
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the dialog
             },
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () async{

@@ -13,7 +13,7 @@ class CustomSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final width = 200.0;
+    const width = 200.0;
     final scale = max + ((max - min) / 2) + 2;
     final double scaledMin = (min / scale) * width;
     final double scaledMax = (max / scale) * width;

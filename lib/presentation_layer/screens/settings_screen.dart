@@ -5,6 +5,8 @@ import 'package:gymini/presentation_layer/widgets/settings/setting_elements.dart
 import 'package:gymini/presentation_layer/widgets/settings/setting_group_card.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

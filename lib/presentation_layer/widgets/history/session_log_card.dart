@@ -11,10 +11,10 @@ class SessionLogCard extends ConsumerWidget {
   final bool filteredOut;
 
   const SessionLogCard({
-    Key? key,
+    super.key,
     required this.session,
     this.filteredOut = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +47,7 @@ class SessionLogCard extends ConsumerWidget {
       content.addAll([
         SizedBox(height:GyminiTheme.verticalGapUnit*2),
         Row(children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildDataRow(
             iconPath: "assets/icons/weight.svg",
             value:
@@ -59,7 +59,7 @@ class SessionLogCard extends ConsumerWidget {
             firstElement: true,
           ),
           const SizedBox(width: 28),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           _buildDataRow(
             iconPath: "assets/icons/repeat.svg",
             value: "${session.minReps} - ${session.maxReps}",
@@ -85,7 +85,7 @@ class SessionLogCard extends ConsumerWidget {
         ),
         child: ConstrainedBox(
           constraints:
-              BoxConstraints(maxWidth: 600), // Set your maximum width here
+              const BoxConstraints(maxWidth: 600), // Set your maximum width here
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: content,

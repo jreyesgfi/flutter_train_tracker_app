@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:gymini/models/SessionData.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
