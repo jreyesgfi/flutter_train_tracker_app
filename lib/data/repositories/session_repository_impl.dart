@@ -128,6 +128,7 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   /// Retrieve the last session associated with a specific muscle ID
+  @override
   Future<domain.SessionEntity?> fetchLastSessionByMuscleId(String muscleId) async {
     if (!_muscleMapSessions.containsKey(muscleId)) {
       return null;
@@ -137,6 +138,7 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   /// Retrieve the last session associated with a specific exercise ID
+  @override
   Future<domain.SessionEntity?> fetchLastSessionByExerciseId(String exerciseId) async {
     if (!_exerciseMapSessions.containsKey(exerciseId)) {
       return null;

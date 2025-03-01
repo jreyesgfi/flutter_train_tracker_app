@@ -18,4 +18,6 @@ abstract class SessionRepository {
   // Future<Map<String, SessionEntity>> fetchLastSessionsByMuscleIds();
   Future<List<SessionEntity>> fetchSessionsByMuscleId(String muscleId);
   Future<List<SessionEntity>> fetchSessionsByExerciseId(String exerciseId);
+  Future<SessionEntity?> fetchLastSessionByMuscleId(String muscleId);
+  Future<SessionEntity?> fetchLastSessionByExerciseId(String exerciseId);
 }

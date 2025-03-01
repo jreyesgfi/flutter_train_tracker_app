@@ -14,6 +14,7 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
   final SessionRepository sessionRepository;
   final MuscleRepository muscleRepository;
   final ExerciseRepository exerciseRepository;
+  final TrainingDataTransformer dataTransformer;
   final LocalRepository localRepository;
   final GlobalSharedStreams sharedStreams;
 
@@ -21,6 +22,7 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
     required this.sessionRepository,
     required this.muscleRepository,
     required this.exerciseRepository,
+    required this.dataTransformer,
     required this.localRepository,
     required this.sharedStreams,
   }) : super(const CreateTrainingState()) {
@@ -39,29 +41,11 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
       // Populate session repository's in-memory cache.
       await sessionRepository.fetchAllSessions();
 
-      // 2. Fetch local liked items.
-      final likedMuscles = await localRepository.getLikedMuscles();
-      final likedExercises = await localRepository.getLikedExercises();
-
-      // 3. Transform domain data into tile schemas.
+      // 2. Transform domain data into tile schemas.
       // For demonstration, lastTrainingTime is left as null.
-      final List<MuscleTileSchema> muscleTiles = muscles.map((muscle) {
-        DateTime? lastTrainingTime = null;
-        return TrainingDataTransformer.transformMuscleToTile(
-          muscle,
-          lastTrainingTime,
-          likedMuscles,
-        );
-      }).toList();
+      final List<MuscleTileSchema> muscleTiles = await dataTransformer.transformMusclesToTiles(muscles: muscles, localRepository: localRepository, sessionRepository: sessionRepository);
 
-      final List<ExerciseTileSchema> exerciseTiles = exercises.map((exercise) {
-        DateTime? lastTrainingTime = null;
-        return TrainingDataTransformer.transformExerciseToTile(
-          exercise,
-          lastTrainingTime,
-          likedExercises,
-        );
-      }).toList();
+      final List<ExerciseTileSchema> exerciseTiles = await dataTransformer.transformExercisesToTiles(exercises: exercises, localRepository: localRepository, sessionRepository: sessionRepository);
 
       // 4. Update state with the fetched and transformed data.
       state = state.copyWith(
@@ -86,17 +70,10 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
   }
 
   /// Handle muscle selection by filtering related exercises and updating tiles.
-  void selectMuscle(MuscleEntity muscle) {
-    final filteredExercises = state.allExercises.where((e) => e.muscleId == muscle.id).toList();
+  void selectMuscle(MuscleEntity muscle) async{
+    final List<ExerciseEntity> filteredExercises = state.allExercises.where((e) => e.muscleId == muscle.id).toList();
 
-    final List<ExerciseTileSchema> newExerciseTiles = filteredExercises.map((exercise) {
-      DateTime? lastTrainingTime = null;
-      return TrainingDataTransformer.transformExerciseToTile(
-        exercise,
-        lastTrainingTime,
-        [], // Optionally pass liked exercises if needed.
-      );
-    }).toList();
+    final List<ExerciseTileSchema> newExerciseTiles = await dataTransformer.transformExercisesToTiles(exercises: filteredExercises, localRepository: localRepository, sessionRepository: sessionRepository);
 
     state = state.copyWith(
       selectedMuscle: muscle,
@@ -116,34 +93,14 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
   /// Toggle the "like" state for a muscle.
   Future<void> toggleMuscleLikeState(String muscleId) async {
     await localRepository.toggleMuscleLikeState(muscleId);
-    final likedMuscles = await localRepository.getLikedMuscles();
-
-    final List<MuscleTileSchema> updatedMuscleTiles = state.allMuscles.map((muscle) {
-      DateTime? lastTrainingTime = null;
-      return TrainingDataTransformer.transformMuscleToTile(
-        muscle,
-        lastTrainingTime,
-        likedMuscles,
-      );
-    }).toList();
-
+    final List<MuscleTileSchema> updatedMuscleTiles = await dataTransformer.transformMusclesToTiles(muscles: state.allMuscles, localRepository: localRepository, sessionRepository: sessionRepository);
     state = state.copyWith(muscleTiles: updatedMuscleTiles);
   }
 
   /// Toggle the "like" state for an exercise.
   Future<void> toggleExerciseLikeState(String exerciseId) async {
     await localRepository.toggleExerciseLikeState(exerciseId);
-    final likedExercises = await localRepository.getLikedExercises();
-
-    final List<ExerciseTileSchema> updatedExerciseTiles = state.allExercises.map((exercise) {
-      DateTime? lastTrainingTime = null;
-      return TrainingDataTransformer.transformExerciseToTile(
-        exercise,
-        lastTrainingTime,
-        likedExercises,
-      );
-    }).toList();
-
+    final List<ExerciseTileSchema> updatedExerciseTiles = await dataTransformer.transformExercisesToTiles(exercises: state.allExercises, localRepository: localRepository, sessionRepository: sessionRepository);
     state = state.copyWith(exerciseTiles: updatedExerciseTiles);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/features/create_training/presentation/training_creation_view.dart';
+import 'package:gymini/features/create_training/ui/training_creation_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main TrainingScreen widget that wraps content in ProviderScope

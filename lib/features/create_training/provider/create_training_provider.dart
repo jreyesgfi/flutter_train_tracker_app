@@ -8,6 +8,7 @@ import 'package:gymini/features/create_training/provider/create_training_state.d
 import 'package:gymini/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/exercise_repository_impl.dart';
 import 'package:gymini/data/repositories/local_data_repository_impl.dart';
+import 'package:gymini/presentation_layer/services/training_data_transformer.dart';
 
 // The final provider you can use in your UI
 final createTrainingProvider =
@@ -17,6 +18,7 @@ final createTrainingProvider =
   final muscleRepo = ref.watch(muscleRepositoryProvider);
   final exerciseRepo = ref.watch(exerciseRepositoryProvider);
   final localRepo = ref.watch(localRepositoryProvider);
+  final dataTransformer = ref.watch(trainingDataTransformer);
   final sharedStreams = ref.watch(globalSharedStreamsProvider);
 
   return CreateTrainingNotifier(
@@ -24,6 +26,7 @@ final createTrainingProvider =
     muscleRepository: muscleRepo,
     exerciseRepository: exerciseRepo,
     localRepository: localRepo,
+    dataTransformer: dataTransformer,
     sharedStreams: sharedStreams,
   );
 });

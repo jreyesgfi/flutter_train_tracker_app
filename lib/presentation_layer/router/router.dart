@@ -4,7 +4,7 @@ import 'package:gymini/presentation_layer/router/routes.dart';
 import 'package:gymini/presentation_layer/screens/history_screen.dart';
 import 'package:gymini/presentation_layer/screens/screen_wrapper.dart';
 import 'package:gymini/features/create_training/session_subscreen.dart';
-import 'package:gymini/features/create_training/presentation/training_creation_view.dart';
+import 'package:gymini/features/create_training/ui/training_creation_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gymini/presentation_layer/screens/settings_screen.dart';
