@@ -1,13 +1,18 @@
+// lib/common/shared_data/selected_exercise_stream_provider.dart
 import 'dart:async';
 
-import 'package:gymini/common/shared_data/global_stream_interface.dart';
-
-/// Implementation for a shared selected exercise ID stream.
-class SelectedExerciseIdSharedStream implements SharedStream<String?> {
+class SelectedExerciseIdSharedStream {
   final _controller = StreamController<String?>.broadcast();
-  @override
-  Stream<String?> get stream => _controller.stream;
-  @override
+  String? _latest;
+  
+  /// Expose the stream and update _latest on every event.
+  Stream<String?> get stream => _controller.stream.map((value) {
+    _latest = value;
+    return value;
+  });
+  
+  String? get latestValue => _latest;
+  
   void update(String? value) => _controller.add(value);
   void dispose() => _controller.close();
 }

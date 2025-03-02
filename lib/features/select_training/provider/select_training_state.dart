@@ -4,7 +4,7 @@ import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_tile.dart';
 
-class CreateTrainingState {
+class SelectTrainingState {
   final bool isLoading;
   final String? errorMessage;
 
@@ -20,7 +20,7 @@ class CreateTrainingState {
 
   // Add any additional fields you need (e.g., newSession, lastSessions, etc.)
 
-  const CreateTrainingState({
+  const SelectTrainingState({
     this.isLoading = false,
     this.errorMessage,
     this.allMuscles = const [],
@@ -31,7 +31,7 @@ class CreateTrainingState {
     this.selectedExercise,
   });
 
-  CreateTrainingState copyWith({
+  SelectTrainingState copyWith({
     bool? isLoading,
     String? errorMessage,
     List<MuscleEntity>? allMuscles,
@@ -41,7 +41,7 @@ class CreateTrainingState {
     MuscleEntity? selectedMuscle,
     ExerciseEntity? selectedExercise,
   }) {
-    return CreateTrainingState(
+    return SelectTrainingState(
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
       allMuscles: allMuscles ?? this.allMuscles,

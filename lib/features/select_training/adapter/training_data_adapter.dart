@@ -8,18 +8,18 @@ import 'package:gymini/domain_layer/entities/session_info.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_tile.dart';
 
-final trainingDataTransformer = Provider<TrainingDataTransformer>((ref) {
-  return TrainingDataTransformer();
+final trainingDataAdapter = Provider<TrainingDataAdapter>((ref) {
+  return TrainingDataAdapter();
 });
 
 /// A singleton transformer that converts domain entities into tile schemas,
 /// automatically obtaining liked status and last training times from the repositories.
-class TrainingDataTransformer {
+class TrainingDataAdapter {
   // Private constructor for singleton.
-  TrainingDataTransformer._internal();
-  static final TrainingDataTransformer _instance =
-      TrainingDataTransformer._internal();
-  factory TrainingDataTransformer() => _instance;
+  TrainingDataAdapter._internal();
+  static final TrainingDataAdapter _instance =
+      TrainingDataAdapter._internal();
+  factory TrainingDataAdapter() => _instance;
 
   /// Transform a single muscle into a MuscleTileSchema by obtaining its liked status
   /// and last training time from the [localRepository] and [sessionRepository].

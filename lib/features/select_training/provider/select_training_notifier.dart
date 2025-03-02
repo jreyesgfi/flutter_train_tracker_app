@@ -5,27 +5,27 @@ import 'package:gymini/common/shared_data/global_stream.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/data/repositories/local_repository_interfaces.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
-import 'package:gymini/features/create_training/provider/create_training_state.dart';
-import 'package:gymini/presentation_layer/services/training_data_transformer.dart';
+import 'package:gymini/features/select_training/provider/select_training_state.dart';
+import 'package:gymini/features/select_training/adapter/training_data_adapter.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_tile.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_tile.dart';
 
-class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
+class SelectTrainingNotifier extends StateNotifier<SelectTrainingState> {
   final SessionRepository sessionRepository;
   final MuscleRepository muscleRepository;
   final ExerciseRepository exerciseRepository;
-  final TrainingDataTransformer dataTransformer;
+  final TrainingDataAdapter dataTransformer;
   final LocalRepository localRepository;
   final GlobalSharedStreams sharedStreams;
 
-  CreateTrainingNotifier({
+  SelectTrainingNotifier({
     required this.sessionRepository,
     required this.muscleRepository,
     required this.exerciseRepository,
     required this.dataTransformer,
     required this.localRepository,
     required this.sharedStreams,
-  }) : super(const CreateTrainingState()) {
+  }) : super(const SelectTrainingState()) {
     _init();
   }
 
@@ -42,12 +42,11 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
       await sessionRepository.fetchAllSessions();
 
       // 2. Transform domain data into tile schemas.
-      // For demonstration, lastTrainingTime is left as null.
       final List<MuscleTileSchema> muscleTiles = await dataTransformer.transformMusclesToTiles(muscles: muscles, localRepository: localRepository, sessionRepository: sessionRepository);
 
       final List<ExerciseTileSchema> exerciseTiles = await dataTransformer.transformExercisesToTiles(exercises: exercises, localRepository: localRepository, sessionRepository: sessionRepository);
 
-      // 4. Update state with the fetched and transformed data.
+      // 3. Update state with the fetched and transformed data.
       state = state.copyWith(
         isLoading: false,
         allMuscles: muscles,
@@ -61,12 +60,6 @@ class CreateTrainingNotifier extends StateNotifier<CreateTrainingState> {
         errorMessage: e.toString(),
       );
     }
-  }
-
-  /// When a new session is created in create_training, update the global stream.
-  void createNewSession(SessionEntity newSession) {
-    // You might also update your local state here if needed.
-    sharedStreams.sessionStream.update(newSession);
   }
 
   /// Handle muscle selection by filtering related exercises and updating tiles.

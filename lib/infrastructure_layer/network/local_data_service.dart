@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:gymini/infrastructure_layer/config/local_database_helper.dart';
 
 class LocalDataService {
@@ -39,7 +40,9 @@ class LocalDataService {
       where: 'exerciseId = ?',
       whereArgs: [exerciseId],
     );
-    print("reached");
+    if (kDebugMode) {
+      print("reached");
+    }
     // If no rows were deleted, it means the exercise ID was not liked, so we insert it
     if (rowsAffected == 0) {
       await db.insert('liked_exercises', {'exerciseId': exerciseId});

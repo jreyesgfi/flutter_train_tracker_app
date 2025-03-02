@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/features/create_training/provider/create_training_provider.dart';
+import 'package:gymini/features/select_training/provider/select_training_provider.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/exercise_list_selector.dart';
 import 'package:gymini/presentation_layer/widgets/training_selection/muscle_carousel_selector.dart';
 
-class TrainingCreationView extends ConsumerWidget {
-  const TrainingCreationView({Key? super.key});
+class SelectTrainingView extends ConsumerWidget {
+  const SelectTrainingView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

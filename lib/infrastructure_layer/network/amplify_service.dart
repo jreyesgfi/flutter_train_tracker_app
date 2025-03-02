@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gymini/presentation_layer/router/navitation_utils.dart';
+import 'package:gymini/app/router/navitation_utils.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 
 // final dataStoreServiceProvider = Provider<DataStoreService>((ref) {

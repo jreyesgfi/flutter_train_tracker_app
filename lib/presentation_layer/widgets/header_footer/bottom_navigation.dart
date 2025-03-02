@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
-import 'package:gymini/presentation_layer/router/navitation_utils.dart';
+import 'package:gymini/app/router/navitation_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gymini/presentation_layer/router/routes.dart';
+import 'package:gymini/app/router/routes.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});

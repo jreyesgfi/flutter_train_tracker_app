@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/presentation_layer/providers/animation_provider.dart';
 import 'package:gymini/presentation_layer/providers/route_provider.dart';
-import 'package:gymini/presentation_layer/router/routes.dart';
+import 'package:gymini/app/router/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,5 +1,7 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:gymini/app/router/router_provider.dart';
 import 'package:gymini/presentation_layer/screens/welcome_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,43 +9,44 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/presentation_layer/router/router.dart';
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
+  
   @override
-  _MyAppState createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
-class _MyAppState extends State<MyApp> {
-  bool _showWelcomeScreen = true; // Initially show the WelcomeScreen
+
+class _MyAppState extends ConsumerState<MyApp> {
+  bool _showWelcomeScreen = true;
 
   void _startSignUpProcess() {
     setState(() {
-      _showWelcomeScreen = false; // Hide the WelcomeScreen and show sign-up
+      _showWelcomeScreen = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    // Obtain the GoRouter instance from our routerProvider.
+    final GoRouter router = ref.watch(routerProvider);
+
     return Authenticator(
-      authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
+      authenticatorBuilder: (BuildContext context, AuthenticatorState authState) {
         if (_showWelcomeScreen) {
           return WelcomeScreen(onStartSignUp: _startSignUpProcess);
         }
-        switch (state.currentStep) {
+        switch (authState.currentStep) {
           case AuthenticatorStep.signIn:
             return CustomScaffold(
-              state: state,
-              // A prebuilt Sign In form from amplify_authenticator
+              state: authState,
               body: SignInForm(),
-              // A custom footer with a button to take the user to sign up
               footer: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('¿Aun no tienes cuenta?'),
                   TextButton(
-                    onPressed: () => state.changeStep(
-                      AuthenticatorStep.signUp,
-                    ),
+                    onPressed: () => authState.changeStep(AuthenticatorStep.signUp),
                     child: const Text('Registrate'),
                   ),
                 ],
@@ -51,18 +54,14 @@ class _MyAppState extends State<MyApp> {
             );
           case AuthenticatorStep.signUp:
             return CustomScaffold(
-              state: state,
-              // A prebuilt Sign Up form from amplify_authenticator
+              state: authState,
               body: SignUpForm(),
-              // A custom footer with a button to take the user to sign in
               footer: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('¿Ya tienes una cuenta?'),
                   TextButton(
-                    onPressed: () => state.changeStep(
-                      AuthenticatorStep.signIn,
-                    ),
+                    onPressed: () => authState.changeStep(AuthenticatorStep.signIn),
                     child: const Text('Iniciar Sesión'),
                   ),
                 ],
@@ -70,51 +69,45 @@ class _MyAppState extends State<MyApp> {
             );
           case AuthenticatorStep.confirmSignUp:
             return CustomScaffold(
-              state: state,
-              // A prebuilt Confirm Sign Up form from amplify_authenticator
+              state: authState,
               body: ConfirmSignUpForm(),
             );
           case AuthenticatorStep.resetPassword:
             return CustomScaffold(
-              state: state,
-              // A prebuilt Reset Password form from amplify_authenticator
+              state: authState,
               body: ResetPasswordForm(),
             );
           case AuthenticatorStep.confirmResetPassword:
             return CustomScaffold(
-              state: state,
-              // A prebuilt Confirm Reset Password form from amplify_authenticator
+              state: authState,
               body: const ConfirmResetPasswordForm(),
             );
           default:
-            // Returning null defaults to the prebuilt authenticator for all other steps
-            return null;
+            return null; // Let the authenticator handle any unexpected steps.
         }
       },
-
-      child: ProviderScope(
-        child: MaterialApp.router(
-          title: 'Gymini',
-          routerConfig: router,
-          builder: Authenticator.builder(),
-          theme: AppTheme.theme,
-          debugShowCheckedModeBanner: false,
-          supportedLocales: const [
-            Locale('en', 'US'),  // English
-            Locale('es', 'ES'),  // Spanish
-          ],
-          locale: const Locale('en', 'US'),  // Default locale
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            MonthYearPickerLocalizations.delegate, 
-          ],
-        ),
+      child: MaterialApp.router(
+        title: 'Gymini',
+        routerConfig: router, // Use the router instance.
+        builder: Authenticator.builder(),
+        theme: AppTheme.theme,
+        debugShowCheckedModeBanner: false,
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('es', 'ES'),
+        ],
+        locale: const Locale('en', 'US'),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate,
+        ],
       ),
     );
   }
 }
+
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({
     super.key,

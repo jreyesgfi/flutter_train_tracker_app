@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/presentation_layer/router/navitation_utils.dart';
+import 'package:gymini/app/router/navitation_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NewTopBar extends ConsumerStatefulWidget {

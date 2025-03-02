@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gymini/models/ModelProvider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +39,9 @@ class MuscleDataService {
           await Amplify.DataStore.query(MuscleData.classType);
       return muscles;
     } catch (e) {
-      print('Error fetching muscles: $e');
+      if (kDebugMode) {
+        print('Error fetching muscles: $e');
+      }
       return [];
     }
   }

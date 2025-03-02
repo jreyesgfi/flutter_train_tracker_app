@@ -19,7 +19,9 @@ class SessionDataService {
           .toList();
       return sessions;
     } catch (e) {
-      print('Error fetching sessions: $e');
+      if (kDebugMode) {
+        print('Error fetching sessions: $e');
+      }
       return [];
     }
   }
@@ -30,7 +32,9 @@ class SessionDataService {
           await Amplify.DataStore.query(SessionData.classType);
       return sessions;
     } catch (e) {
-      print('Error fetching sessions: $e');
+      if (kDebugMode) {
+        print('Error fetching sessions: $e');
+      }
       return [];
     }
   }
