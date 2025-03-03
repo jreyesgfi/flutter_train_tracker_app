@@ -1,21 +1,22 @@
+// lib/common/shared_data/selected_muscle_stream_provider.dart
 import 'dart:async';
-import 'package:gymini/common/shared_data/global_stream_interface.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 
-/// Implementation for a shared selected muscle ID stream.
-class SelectedMuscleSharedStream implements SharedStream<MuscleEntity?> {
+class SelectedMuscleSharedStream {
   final _controller = StreamController<MuscleEntity?>.broadcast();
   MuscleEntity? _latest;
 
-  @override
-  Stream<MuscleEntity?> get stream => _controller.stream.map((value) {
-    _latest = value;
-    return value;
-  });
+  /// Expose the stream (you can add logging here if desired).
+  Stream<MuscleEntity?> get stream => _controller.stream;
 
+  /// Synchronous getter for the most recent value.
   MuscleEntity? get latestValue => _latest;
   
-  @override
-  void update(MuscleEntity? value) => _controller.add(value);
+  /// Update both _latest and add the value to the stream.
+  void update(MuscleEntity? value) {
+    _latest = value;
+    _controller.add(value);
+  }
+
   void dispose() => _controller.close();
 }

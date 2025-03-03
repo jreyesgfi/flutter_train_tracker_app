@@ -1,5 +1,4 @@
 import 'package:gymini/domain_layer/entities/core_entities.dart';
-import 'package:gymini/features/process_training/adapter/session_data_adapter.dart';
 import 'package:gymini/features/process_training/entities/session_tile.dart';
 
 class ProcessTrainingState {

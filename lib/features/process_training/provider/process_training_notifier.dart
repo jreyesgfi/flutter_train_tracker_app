@@ -25,48 +25,49 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
   }
 
   Future<void> _initialize() async {
+    createSessionEntity();
+  }
+
+  // Create an entity based on the selected exercise and muscle.
+  void createSessionEntity() async {
+    ExerciseEntity? exercise = sharedStreams.selectedExerciseStream.latestValue;
+    MuscleEntity? muscle = sharedStreams.selectedMuscleStream.latestValue;
     // Optionally load an existing session if selections exist.
-    if (state.selectedExerciseId != null && state.selectedMuscleId != null) {
-      final lastSession = await sessionRepository.fetchLastSessionByExerciseId(state.selectedExerciseId!);
+    if (exercise != null && muscle != null) {
+      final lastSession =
+          await sessionRepository.fetchLastSessionByExerciseId(exercise.id);
       if (lastSession != null) {
-        // Use the latest full entities from the shared streams.
-        final exercise = sharedStreams.selectedExerciseStream.latestValue;
-        final muscle = sharedStreams.selectedMuscleStream.latestValue;
-        if (exercise != null && muscle != null) {
-          final tile = adapter.transformSessionToTile(
-            lastSession,
-            exercise: exercise,
-            muscle: muscle,
-          );
-          state = state.copyWith(session: lastSession, sessionTile: tile);
-        }
+        final tile = adapter.transformSessionToTile(
+          lastSession,
+          exercise: exercise,
+          muscle: muscle,
+        );
+        state = state.copyWith(session: lastSession, sessionTile: tile);
       }
     }
   }
 
   /// Update the session values based on UI input.
   void updateSessionValues(SessionFormTile sessionValues) {
-    if (state.selectedExerciseId == null || state.selectedMuscleId == null) return;
+    ExerciseEntity? exercise = sharedStreams.selectedExerciseStream.latestValue;
+    MuscleEntity? muscle = sharedStreams.selectedMuscleStream.latestValue;
+    if (exercise == null || muscle == null) return;
     final newSession = SessionEntity(
       id: state.session.id.isEmpty ? const Uuid().v4() : state.session.id,
-      exerciseId: state.selectedExerciseId!,
-      muscleId: state.selectedMuscleId!,
+      exerciseId: exercise.id,
+      muscleId: muscle.id,
       timeStamp: DateTime.now(),
       maxWeight: sessionValues.maxWeight,
       minWeight: sessionValues.minWeight,
       maxReps: sessionValues.maxReps,
       minReps: sessionValues.minReps,
     );
-    final exercise = sharedStreams.selectedExerciseStream.latestValue;
-    final muscle = sharedStreams.selectedMuscleStream.latestValue;
-    if (exercise != null && muscle != null) {
-      final tile = adapter.transformSessionToTile(
-        newSession,
-        exercise: exercise,
-        muscle: muscle,
-      );
-      state = state.copyWith(session: newSession, sessionTile: tile);
-    }
+    final tile = adapter.transformSessionToTile(
+      newSession,
+      exercise: exercise,
+      muscle: muscle,
+    );
+    state = state.copyWith(session: newSession, sessionTile: tile);
   }
 
   /// Commit (save) the session and clear shared signals.
@@ -98,7 +99,7 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
   void nextStage() {
     state = state.copyWith(currentStage: state.currentStage + 1);
   }
-  
+
   void previousStage() {
     if (state.currentStage > 0) {
       state = state.copyWith(currentStage: state.currentStage - 1);
