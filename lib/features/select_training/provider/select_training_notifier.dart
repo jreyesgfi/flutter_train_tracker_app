@@ -73,14 +73,14 @@ class SelectTrainingNotifier extends StateNotifier<SelectTrainingState> {
       exerciseTiles: newExerciseTiles,
     );
     // Broadcast the selected muscle ID.
-    sharedStreams.selectedMuscleIdStream.update(muscle.id);
+    sharedStreams.selectedMuscleStream.update(muscle);
   }
 
   /// Handle exercise selection.
   void selectExercise(ExerciseEntity exercise) {
     state = state.copyWith(selectedExercise: exercise);
     // Broadcast the selected exercise ID.
-    sharedStreams.selectedExerciseIdStream.update(exercise.id);
+    sharedStreams.selectedExerciseStream.update(exercise);
   }
 
   /// Toggle the "like" state for a muscle.

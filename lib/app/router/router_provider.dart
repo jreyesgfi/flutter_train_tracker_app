@@ -13,15 +13,14 @@ import 'package:gymini/presentation_layer/screens/report_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final globalStreams = ref.watch(globalSharedStreamsProvider);
-  final refreshStream = GoRouterRefreshStream(globalStreams.selectedExerciseIdStream.stream);
+  final refreshStream = GoRouterRefreshStream(globalStreams.selectedExerciseStream.stream);
 
   return GoRouter(
     initialLocation: '/trainingSelection',
     refreshListenable: refreshStream,
     // Redirect based on the selected exercise value.
     redirect: (BuildContext context, GoRouterState state) {
-      final selectedExerciseId = globalStreams.selectedExerciseIdStream.latestValue;
-      print(state.matchedLocation);
+      final selectedExerciseId = globalStreams.selectedExerciseStream.latestValue;
       final isAtSelection = state.matchedLocation == '/trainingSelection';
       final isAtSession = state.matchedLocation == '/trainingSession';
 

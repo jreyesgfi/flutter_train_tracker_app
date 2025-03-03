@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
-import 'package:gymini/domain_layer/entities/session_info.dart';
+import 'package:gymini/features/process_training/entities/session_tile.dart';
 import 'package:gymini/presentation_layer/widgets/common/other/custom_slider.dart';
 
 
 
 class SessionInfoWidget extends StatelessWidget {
-  final SessionInfoSchema sessionInfo;
+  final SessionTile sessionInfo;
 
   const SessionInfoWidget({
     super.key,

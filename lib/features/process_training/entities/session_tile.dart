@@ -1,5 +1,6 @@
-class SessionInfoSchema {
+class SessionTile {
   final String exerciseName;
+  final List<String> pathImages;
   final String muscleGroup;
   final int timeSinceLastSession; // in days
   final double minWeight;
@@ -7,8 +8,9 @@ class SessionInfoSchema {
   final int minReps;
   final int maxReps;
 
-  SessionInfoSchema({
+  SessionTile({
     required this.exerciseName,
+    required this.pathImages,
     required this.muscleGroup,
     required this.timeSinceLastSession,
     required this.minWeight,
@@ -18,13 +20,13 @@ class SessionInfoSchema {
   });
 }
 
-class SessionFormValuesSchema {
+class SessionFormTile {
   final double maxWeight;
   final double minWeight;
   final int minReps;
   final int maxReps;
 
-  SessionFormValuesSchema({
+  SessionFormTile({
     this.maxWeight = 10.0,
     this.minWeight = 10.0,
     this.maxReps = 10,

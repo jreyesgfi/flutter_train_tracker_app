@@ -1,48 +1,54 @@
 // lib/features/process_training/provider/process_training_notifier.dart
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common/shared_data/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/features/process_training/entities/session_tile.dart';
 import 'package:gymini/features/process_training/provider/process_training_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/data/repositories/local_repository_interfaces.dart';
+import 'package:gymini/features/process_training/adapter/session_data_adapter.dart';
 import 'package:uuid/uuid.dart';
 
-/// A simple class representing UI input values for a session.
-class SessionValues {
-  final double maxWeight;
-  final double minWeight;
-  final int maxReps;
-  final int minReps;
-
-  SessionValues({
-    required this.maxWeight,
-    required this.minWeight,
-    required this.maxReps,
-    required this.minReps,
-  });
-}
-
+/// A simple class representing UI input for the session form.
 class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
   final SessionRepository sessionRepository;
   final LocalRepository localRepository;
   final GlobalSharedStreams sharedStreams;
+  final SessionDataAdapter adapter = SessionDataAdapter();
 
   ProcessTrainingNotifier({
     required this.sessionRepository,
     required this.localRepository,
     required this.sharedStreams,
-  }) : super(ProcessTrainingState.initial());
+  }) : super(ProcessTrainingState.initial()) {
+    _initialize();
+  }
 
-  /// Update the session values from UI input.
-  void updateSessionValues(SessionValues sessionValues) {
-    // Ensure that selectedExerciseId and selectedMuscleId are already set.
-    if (state.selectedExerciseId == null || state.selectedMuscleId == null) {
-      // You might handle this error.
-      return;
+  Future<void> _initialize() async {
+    // Optionally load an existing session if selections exist.
+    if (state.selectedExerciseId != null && state.selectedMuscleId != null) {
+      final lastSession = await sessionRepository.fetchLastSessionByExerciseId(state.selectedExerciseId!);
+      if (lastSession != null) {
+        // Use the latest full entities from the shared streams.
+        final exercise = sharedStreams.selectedExerciseStream.latestValue;
+        final muscle = sharedStreams.selectedMuscleStream.latestValue;
+        if (exercise != null && muscle != null) {
+          final tile = adapter.transformSessionToTile(
+            lastSession,
+            exercise: exercise,
+            muscle: muscle,
+          );
+          state = state.copyWith(session: lastSession, sessionTile: tile);
+        }
+      }
     }
+  }
+
+  /// Update the session values based on UI input.
+  void updateSessionValues(SessionFormTile sessionValues) {
+    if (state.selectedExerciseId == null || state.selectedMuscleId == null) return;
     final newSession = SessionEntity(
-      id: state.session?.id ?? const Uuid().v4(),
+      id: state.session.id.isEmpty ? const Uuid().v4() : state.session.id,
       exerciseId: state.selectedExerciseId!,
       muscleId: state.selectedMuscleId!,
       timeStamp: DateTime.now(),
@@ -51,26 +57,51 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
       maxReps: sessionValues.maxReps,
       minReps: sessionValues.minReps,
     );
-    state = state.copyWith(session: newSession);
+    final exercise = sharedStreams.selectedExerciseStream.latestValue;
+    final muscle = sharedStreams.selectedMuscleStream.latestValue;
+    if (exercise != null && muscle != null) {
+      final tile = adapter.transformSessionToTile(
+        newSession,
+        exercise: exercise,
+        muscle: muscle,
+      );
+      state = state.copyWith(session: newSession, sessionTile: tile);
+    }
   }
 
-  /// Commit (save) the session to the repository and then clear the shared selection.
+  /// Commit (save) the session and clear shared signals.
   Future<void> commitSession() async {
-    if (state.session == null) return;
+    // Check by session id (if empty, no valid session).
+    if (state.session.id.isEmpty) return;
     try {
       state = state.copyWith(isLoading: true, errorMessage: null);
-      await sessionRepository.createNewSession(state.session!);
-      
-      // Clear the shared selected exercise signal so the router will go back to selection.
-      sharedStreams.selectedExerciseIdStream.update(null);
-      
-      // Reset the state for process_training.
+      await sessionRepository.createNewSession(state.session);
+      // Clear shared signals so that the router falls back to the selection screen.
+      sharedStreams.selectedExerciseStream.update(null);
+      sharedStreams.selectedMuscleStream.update(null);
       state = ProcessTrainingState.initial();
     } catch (e) {
-      state = state.copyWith(
-        errorMessage: e.toString(),
-        isLoading: false,
-      );
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+    }
+  }
+
+  /// Set the selected exercise and muscle IDs.
+  /// (In a more advanced version you might pass full objects instead.)
+  void setSelection({required String exerciseId, required String muscleId}) {
+    state = state.copyWith(
+      selectedExerciseId: exerciseId,
+      selectedMuscleId: muscleId,
+    );
+  }
+
+  /// Navigate between stages.
+  void nextStage() {
+    state = state.copyWith(currentStage: state.currentStage + 1);
+  }
+  
+  void previousStage() {
+    if (state.currentStage > 0) {
+      state = state.copyWith(currentStage: state.currentStage - 1);
     }
   }
 }

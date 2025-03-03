@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gymini/domain_layer/entities/session_info.dart';
+import 'package:gymini/features/process_training/entities/session_tile.dart';
 import 'package:gymini/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
 
 
 class SessionForm extends StatefulWidget {
-  final SessionInfoSchema initialData;
+  final SessionTile initialData;
   // final Function(SessionInfoSchema) onResultsChanged;
 
   const SessionForm({
@@ -41,8 +41,8 @@ class SessionFormState extends State<SessionForm> {
     super.dispose();
   }
 
-  SessionValues getCurrentFormData() {
-    return SessionValues(
+  SessionFormTile getCurrentFormData() {
+    return SessionFormTile(
       maxWeight: double.parse(_maxWeightController.text),
       minWeight: double.parse(_minWeightController.text),
       maxReps: int.parse(_maxRepsController.text),
