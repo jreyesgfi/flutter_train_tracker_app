@@ -8,11 +8,9 @@ import 'package:gymini/presentation_layer/providers/report_screen_provider.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TrainingCountBarChart extends ConsumerWidget {
-  final bool countMusclesTrained; // Flag to count number of muscles trained vs. sessions
-  var selectedMonth = DateTime.now().month;
-  var selectedYear = DateTime.now().year;
+  final bool countMusclesTrained; // Flag to count number of muscles trained vs. sessions;
 
-  TrainingCountBarChart._({
+  const TrainingCountBarChart._({
     this.countMusclesTrained = false,
   });
 
@@ -20,9 +18,9 @@ class TrainingCountBarChart extends ConsumerWidget {
     return TrainingCountBarChart._(countMusclesTrained: countMusclesTrained);
   }
 
-  DateTime _getSelectedMonthDateTime() {
-    return DateTime(selectedYear, selectedMonth);
-  }
+  // DateTime _getSelectedMonthDateTime() {
+  //   return DateTime(selectedYear, selectedMonth);
+  // }
 
   Map<int, int> _groupSessionsByDayOfWeek(List<SessionEntity> sessions) {
     // Step 1: Group sessions by date and muscleId
@@ -54,8 +52,8 @@ class TrainingCountBarChart extends ConsumerWidget {
     final sessions = countMusclesTrained == true ? provider.filteredSessionsByDate : provider.filteredSessions;
     final groupedSessions = _groupSessionsByDayOfWeek(sessions);
 
-    selectedMonth = provider.selectedMonth;
-    selectedYear = provider.selectedYear;
+    // var selectedMonth = provider.selectedMonth;
+    // var selectedYear = provider.selectedYear;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit*2),

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/features/process_training/provider/process_training_provider.dart';
+import 'package:gymini/features/process_training/ui/widgets/process_training_header_widget.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_info_widget.dart';
-import 'package:gymini/presentation_layer/widgets/training_session/session_step_widget.dart';
 import 'package:gymini/presentation_layer/widgets/common/other/custom_chrono.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/exercise_image_example.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
@@ -42,7 +42,6 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
             "assets/images/exercises/default2.png"
           ];
 
-    final theme = Theme.of(context);
     bool isOddStage = currentStage % 2 != 0;
     bool isLastEvenStage = currentStage == 8; // Adjust based on your logic.
 
@@ -64,45 +63,8 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
       controller: scrollController,
       slivers: [
         // Header section: display session summary and step indicator.
-        SliverPadding(
-          padding: EdgeInsets.symmetric(
-            vertical: GyminiTheme.verticalGapUnit * 2,
-            horizontal: GyminiTheme.leftOuterPadding,
-          ),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      child: Text(
-                        sessionSummary,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Muscle Group", // Replace with dynamic data if available.
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Text(
-                      '0 days ago', // Replace with dynamic value if available.
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.shadowColor),
-                    ),
-                  ],
-                ),
-                SessionStepWidget(
-                  currentStep: (currentStage / 2).abs().round(),
-                  totalSteps: 4,
-                ),
-              ],
-            ),
-          ),
-        ),
+        ProcessTrainingHeaderWidget(sessionSummary: sessionSummary, currentStage: currentStage),
+
         // Main content section.
         SliverPadding(
           padding: EdgeInsets.symmetric(

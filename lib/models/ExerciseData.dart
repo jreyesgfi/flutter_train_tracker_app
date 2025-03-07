@@ -135,8 +135,8 @@ class ExerciseData extends amplify_core.Model {
     buffer.write("exerciseId=" + "$_exerciseId" + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("muscleId=" + "$_muscleId" + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
+    buffer.write("createdAt=" + (_createdAt != null ? _createdAt.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();

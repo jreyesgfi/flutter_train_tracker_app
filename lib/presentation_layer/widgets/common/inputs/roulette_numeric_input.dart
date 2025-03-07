@@ -35,7 +35,7 @@ class _NumericRoulettePickerState extends State<NumericRoulettePicker> {
   void initState() {
     super.initState();
     step = widget.allowDecimal ? widget.step / 2 : widget.step;
-    double initialValue = (widget.value ?? widget.minValue) / step;
+    double initialValue = (widget.value);// ?? widget.minValue) / step;
     initialValue =
         initialValue.clamp(widget.minValue / step, widget.maxValue / step);
     _currentPage = initialValue.toInt();
