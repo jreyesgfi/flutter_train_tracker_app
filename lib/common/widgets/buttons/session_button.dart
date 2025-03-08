@@ -34,7 +34,7 @@ class SessionButtonState extends State<SessionButton>
     super.initState();
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
     );
 
     // When the progress completes, trigger the takeBack callback.

@@ -83,7 +83,8 @@ class CustomChronoState extends State<CustomChrono> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return const SizedBox.shrink(); // Return an empty widget while initializing
+      return const SizedBox
+          .shrink(); // Return an empty widget while initializing
     }
 
     final theme = Theme.of(context);
@@ -94,77 +95,87 @@ class CustomChronoState extends State<CustomChrono> {
         : _duration; // Calculate the absolute value of the duration
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
-    
 
-    return Column(
-      
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Stack(alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-          width: 280,
-          height: 280,
-          child: CircularProgressIndicator(
-            strokeWidth: 5,
-            strokeCap: StrokeCap.round,
-            value: exceded? 1: 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
-            backgroundColor: AppColors.lightGreyColor,
-            valueColor: AlwaysStoppedAnimation<Color>(exceded? theme.primaryColor: theme.primaryColorDark),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 240,
+                height: 240,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5,
+                  strokeCap: StrokeCap.round,
+                  value: exceded
+                      ? 1
+                      : 1 -
+                          duration.inMilliseconds /
+                              widget.duration.inMilliseconds,
+                  backgroundColor: AppColors.lightGreyColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      exceded ? theme.primaryColor : theme.primaryColorDark),
+                ),
+              ),
+              Text(
+                "$minutes:$seconds",
+                // "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
+                style: theme.textTheme.headlineLarge!.copyWith(
+                  color: _duration.isNegative
+                      ? theme.primaryColor
+                      : theme.primaryColorDark,
+                ),
+              ),
+            ],
           ),
-        ),
-        Text(
-          "$minutes:$seconds",
-          // "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
-          style: theme.textTheme.headlineLarge!.copyWith(
-            color: _duration.isNegative
-                ? theme.primaryColor
-                : theme.primaryColorDark,
-          ),
-        ),
-        ],),
-        const SizedBox(height:32),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 250,
-              height: 6,
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(
+          const SizedBox(height: 32),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 250,
+                height: 6,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
                   color: AppColors.lightGreyColor,
                   style: BorderStyle.solid,
                   width: 2,
-                  ))
+                ))),
               ),
-            ),
-            SizedBox(
-          height: 62,
-          child: IconButton(
-            icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
-            onPressed: () async {
-              setState(() {
-                _isRunning = !_isRunning;
-                if (!_isRunning) {
-                  _timer?.cancel(); // Stop the timer when paused
-                } else {
-                  // Adjust the start time based on the paused duration
-                  _startTime =
-                      DateTime.now().subtract(widget.duration - _duration);
-                  final prefs = SharedPreferences.getInstance();
-                  prefs.then((prefs) {
-                    prefs.setInt(
-                        'chrono_start', _startTime!.millisecondsSinceEpoch);
-                  });
-                  _startTimer(); // Restart the timer
-                }
-              });
-            },
-            color: theme.primaryColor,
-            iconSize: 40,
-          ),
-        )],)
-      ],
+              SizedBox(
+                height: 62,
+                child: IconButton(
+                  icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
+                  onPressed: () async {
+                    setState(() {
+                      _isRunning = !_isRunning;
+                      if (!_isRunning) {
+                        _timer?.cancel(); // Stop the timer when paused
+                      } else {
+                        // Adjust the start time based on the paused duration
+                        _startTime = DateTime.now()
+                            .subtract(widget.duration - _duration);
+                        final prefs = SharedPreferences.getInstance();
+                        prefs.then((prefs) {
+                          prefs.setInt('chrono_start',
+                              _startTime!.millisecondsSinceEpoch);
+                        });
+                        _startTimer(); // Restart the timer
+                      }
+                    });
+                  },
+                  color: theme.primaryColor,
+                  iconSize: 40,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

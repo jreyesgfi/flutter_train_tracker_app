@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_modal.dart';
-import 'package:gymini/presentation_layer/widgets/training_session/session_button.dart';
+import 'package:gymini/common/widgets/buttons/session_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
