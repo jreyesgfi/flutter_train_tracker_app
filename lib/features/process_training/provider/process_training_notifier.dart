@@ -21,11 +21,15 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
     required this.localRepository,
     required this.sharedStreams,
   }) : super(ProcessTrainingState.initial()) {
-    _initialize();
+    createSessionEntity();
+    _suscribeToStreams();
   }
 
-  Future<void> _initialize() async {
-    createSessionEntity();
+  void _suscribeToStreams() {
+    // Listen for changes to the selected muscle.
+    sharedStreams.selectedExerciseStream.stream.listen((exercise) async {
+      createSessionEntity();
+    });
   }
 
   // Create an entity based on the selected exercise and muscle.
@@ -78,9 +82,7 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
       state = state.copyWith(isLoading: true, errorMessage: null);
       await sessionRepository.createNewSession(state.session);
       // Clear shared signals so that the router falls back to the selection screen.
-      sharedStreams.selectedExerciseStream.update(null);
-      sharedStreams.selectedMuscleStream.update(null);
-      state = ProcessTrainingState.initial();
+      resetStage();
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
@@ -104,5 +106,10 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
     if (state.currentStage > 0) {
       state = state.copyWith(currentStage: state.currentStage - 1);
     }
+  }
+
+  void resetStage() {
+    sharedStreams.selectedExerciseStream.update(null);
+    state = ProcessTrainingState.initial();
   }
 }

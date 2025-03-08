@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/features/process_training/provider/process_training_provider.dart';
+import 'package:gymini/features/process_training/ui/widgets/process_training_buttons_wrapper.dart';
 import 'package:gymini/features/process_training/ui/widgets/process_training_header_widget.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_info_widget.dart';
 import 'package:gymini/presentation_layer/widgets/common/other/custom_chrono.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/exercise_image_example.dart';
-import 'package:gymini/presentation_layer/widgets/training_session/session_buttons_wrapper.dart';
 
 class ProcessTrainingView extends ConsumerStatefulWidget {
   const ProcessTrainingView({super.key});
@@ -32,8 +32,7 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
 
     // Use the sessionTile already stored in state for summary and images.
     final sessionTile = state.sessionTile;
-    final String sessionSummary = "Exercise: ${sessionTile.exerciseName}\nMuscle: ${sessionTile.muscleGroup}\nLast: ${sessionTile.timeSinceLastSession} days ago";
-    
+      
     // Use the image paths stored in the sessionTile.
     final List<String> exerciseImagePaths = sessionTile.pathImages.isNotEmpty
         ? sessionTile.pathImages
@@ -63,7 +62,7 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
       controller: scrollController,
       slivers: [
         // Header section: display session summary and step indicator.
-        ProcessTrainingHeaderWidget(sessionSummary: sessionSummary, currentStage: currentStage),
+        ProcessTrainingHeaderWidget(sessionTile: sessionTile, currentStage: currentStage),
 
         // Main content section.
         SliverPadding(
@@ -102,20 +101,19 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
             ),
           ),
         ),
-        // Buttons section.
+        // Buttons Section
         SliverPadding(
           padding: EdgeInsets.symmetric(
-            vertical: GyminiTheme.verticalGapUnit * 2,
-            horizontal: GyminiTheme.leftOuterPadding,
-          ),
+              vertical: GyminiTheme.verticalGapUnit * 2,
+              horizontal: GyminiTheme.leftOuterPadding),
           sliver: SliverToBoxAdapter(
             child: SessionButtonsWrapper(
               currentStage: currentStage,
               onButtonClicked: onButtonClicked,
-              //cancelTraining: notifier.previousStage,
+              cancelTraining: notifier.resetStage,
             ),
           ),
-        ),
+        )
       ],
     );
   }

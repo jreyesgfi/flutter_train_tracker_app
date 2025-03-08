@@ -14,9 +14,6 @@ class SelectTrainingState {
   final List<MuscleTileSchema> muscleTiles;
   final List<ExerciseTileSchema> exerciseTiles;
 
-  // Example of selected items
-  final MuscleEntity? selectedMuscle;
-  final ExerciseEntity? selectedExercise;
 
   // Add any additional fields you need (e.g., newSession, lastSessions, etc.)
 
@@ -27,8 +24,6 @@ class SelectTrainingState {
     this.allExercises = const [],
     this.muscleTiles = const [],
     this.exerciseTiles = const [],
-    this.selectedMuscle,
-    this.selectedExercise,
   });
 
   SelectTrainingState copyWith({
@@ -48,8 +43,6 @@ class SelectTrainingState {
       allExercises: allExercises ?? this.allExercises,
       muscleTiles: muscleTiles ?? this.muscleTiles,
       exerciseTiles: exerciseTiles ?? this.exerciseTiles,
-      selectedMuscle: selectedMuscle ?? this.selectedMuscle,
-      selectedExercise: selectedExercise ?? this.selectedExercise,
     );
   }
 }

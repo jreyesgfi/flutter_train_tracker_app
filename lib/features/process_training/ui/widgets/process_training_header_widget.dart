@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/features/process_training/entities/session_tile.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_step_widget.dart';
 
 class ProcessTrainingHeaderWidget extends StatelessWidget {
-  final String sessionSummary;
+  final SessionTile sessionTile;
   final int currentStage;
 
   const ProcessTrainingHeaderWidget({
     super.key,
-    required this.sessionSummary,
+    required this.sessionTile,
     required this.currentStage,
   });
 
@@ -17,7 +18,7 @@ class ProcessTrainingHeaderWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return SliverPadding(
           padding: EdgeInsets.symmetric(
-            vertical: GyminiTheme.verticalGapUnit * 2,
+            vertical: 0,
             horizontal: GyminiTheme.leftOuterPadding,
           ),
           sliver: SliverToBoxAdapter(
@@ -27,23 +28,30 @@ class ProcessTrainingHeaderWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      child: Text(
-                        sessionSummary,
-                        style: theme.textTheme.titleSmall,
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6,
                       ),
+                      child: Text(
+                      sessionTile.exerciseName, 
+                      style: theme.textTheme.titleSmall,
+                      softWrap: true,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 4),
+                    Text(
+                      sessionTile.muscleGroup, 
+                      style: theme.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "Muscle Group", // Replace with dynamic data if available.
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Text(
-                      '0 days ago', // Replace with dynamic value if available.
+                      "${sessionTile.timeSinceLastSession} days ago",
                       style: theme.textTheme.bodySmall
                           ?.copyWith(color: theme.shadowColor),
                     ),
+
+                    
                   ],
                 ),
                 SessionStepWidget(

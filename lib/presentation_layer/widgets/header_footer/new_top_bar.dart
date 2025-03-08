@@ -14,7 +14,8 @@ class NewTopBar extends ConsumerStatefulWidget {
   ConsumerState<NewTopBar> createState() => _NewTopBarState();
 }
 
-class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateMixin {
+class _NewTopBarState extends ConsumerState<NewTopBar>
+    with TickerProviderStateMixin {
   late double _fontSize;
   late Color _backgroundColor;
   late Color _shadowColor;
@@ -36,8 +37,8 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
     _backgroundColor = AppColors.screenBackgroundColor;
     _shadowColor = AppColors.screenBackgroundColor;
     _borderRadius = 0.0;
-    _height = 120;
-    _bottomPadding = 32;
+    _height = 100;
+    _bottomPadding = 24;
     widget.controller.addListener(_updateAppBar);
 
     _fadeController = AnimationController(
@@ -49,7 +50,9 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
       duration: const Duration(milliseconds: 150),
     );
     _fadeAnimation = Tween<double>(begin: 1.0, end: 0).animate(_fadeController);
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, 0.3)).animate(_slideController);
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, 0.3))
+            .animate(_slideController);
   }
 
   @override
@@ -101,23 +104,17 @@ class _NewTopBarState extends ConsumerState<NewTopBar> with TickerProviderStateM
               child: SlideTransition(
                 position: _slideAnimation,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 20, left: 4, right: 4),
+                  margin: const EdgeInsets.only(top: 12, left: 4, right: 4),
                   decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: _shadowColor,
-                        blurRadius: 8.0,
-                        spreadRadius: 0.0,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
                     color: _backgroundColor,
                     borderRadius: BorderRadius.circular(_borderRadius),
                   ),
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(left: GyminiTheme.leftOuterPadding, bottom: _bottomPadding),
+                      padding: EdgeInsets.only(
+                          left: GyminiTheme.leftOuterPadding,
+                          bottom: _bottomPadding),
                       child: Text(
                         _lastRouteLabel,
                         style: TextStyle(
