@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_modal.dart';
+import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 class SessionButtonsWrapper extends ConsumerStatefulWidget {
   final int currentStage;
@@ -17,7 +17,8 @@ class SessionButtonsWrapper extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SessionButtonsWrapper> createState() => _SessionButtonsWrapperState();
+  ConsumerState<SessionButtonsWrapper> createState() =>
+      _SessionButtonsWrapperState();
 }
 
 class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
@@ -31,8 +32,10 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
 
   void _centerCurrentStage() {
     if (_scrollController.hasClients) {
-      final buttonWidth = MediaQuery.of(context).size.width / 3; // Adjust based on your button widths
-      final offset = (widget.currentStage * buttonWidth) - (MediaQuery.of(context).size.width / 2) + (buttonWidth / 2);
+      final buttonWidth = MediaQuery.of(context).size.width / 3;
+      final offset = (widget.currentStage * buttonWidth) -
+          (MediaQuery.of(context).size.width / 2) +
+          (buttonWidth / 2);
       _scrollController.animateTo(
         offset,
         duration: const Duration(milliseconds: 300),
@@ -51,66 +54,65 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Cancel Training Button
+          // Cancel Training Button with long press for "takeBack"
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SessionButton(
-              onTap: () => showCustomDialog(context: context,
-               message: '¿Qué deseas hacer con tu entrenamiento?',
-               actionLabel: 'Finalizar',
-               dismissLabel: 'Seguir entrenando',
-               action: widget.cancelTraining),
+              onTap: (){
+                if (widget.currentStage == 0){
+                  showWarningSnackbar(context: context, message: "Si desea finalizar el entrenamiento mantenga presionado el botón.");
+                } else{ 
+                  widget.onButtonClicked(widget.currentStage - 1);
+                }   
+              },
+              // Long press decreases stage by one ("takeBack")
+              onLongPressTakeBack: () => showCustomDialog(
+                  context: context,
+                  message: '¿Qué deseas hacer con tu entrenamiento?',
+                  actionLabel: 'Finalizar',
+                  dismissLabel: 'Seguir entrenando',
+                  action: widget.cancelTraining),
+                  
               stage: 1,
               color: theme.primaryColorDark,
-              icon:
-                Icons.stop
+              icon: Icons.stop,
             ),
           ),
 
-          // // Back Button
-          // if (widget.currentStage != 0)
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
-          //   child: SessionButton(
-          //     onTap: () => widget.onButtonClicked(widget.currentStage -1),
-          //     stage: -1,
-          //     color: (widget.currentStage % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
-          //     icon:
-          //       (widget.currentStage % 2 == 1) ? Icons.arrow_forward : Icons.double_arrow
-          //   ),
-          // ),
-          
           // Current Button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SessionButton(
-              onTap: () => widget.onButtonClicked(widget.currentStage +1),
+              onTap: () => widget.onButtonClicked(widget.currentStage + 1),
               stage: 0,
-              color: (widget.currentStage % 2 == 1) ? theme.primaryColor : theme.primaryColorDark,
-              label: 
-                (widget.currentStage== numberOfRounds-1) ? "¡Conseguido!": 
-                (widget.currentStage == 0) ? "¿Comenzamos?" :
-                widget.currentStage-widget.currentStage!=0 ? null :
-                (widget.currentStage % 2 == 1) ? "Entrenando" : "Descansando",
+              color: (widget.currentStage % 2 == 1)
+                  ? theme.primaryColor
+                  : theme.primaryColorDark,
+              label: (widget.currentStage == numberOfRounds - 1)
+                  ? "¡Conseguido!"
+                  : (widget.currentStage == 0)
+                      ? "¿Comenzamos?"
+                      : (widget.currentStage % 2 == 1)
+                          ? "Entrenando"
+                          : "Descansando",
             ),
           ),
 
           // Next Button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal space between buttons
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SessionButton(
-              onTap: () => widget.onButtonClicked(widget.currentStage +1),
+              onTap: () => widget.onButtonClicked(widget.currentStage + 1),
               stage: 1,
               color: theme.primaryColor,
-              // color: (widget.currentStage % 2 == 0) ? theme.primaryColor : theme.primaryColorDark,
-              icon:
-                (widget.currentStage % 2 == 0) ? Icons.arrow_forward : Icons.double_arrow
+              icon: (widget.currentStage % 2 == 0)
+                  ? Icons.arrow_forward
+                  : Icons.double_arrow,
             ),
-          )
-
-          ]
-        )
-      );
+          ),
+        ],
+      ),
+    );
   }
 
   @override

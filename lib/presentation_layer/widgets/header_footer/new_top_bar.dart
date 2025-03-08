@@ -18,7 +18,6 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
     with TickerProviderStateMixin {
   late double _fontSize;
   late Color _backgroundColor;
-  late Color _shadowColor;
   late double _borderRadius;
   late double _height;
   late double _bottomPadding;
@@ -35,7 +34,6 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
     super.initState();
     _fontSize = 26.0;
     _backgroundColor = AppColors.screenBackgroundColor;
-    _shadowColor = AppColors.screenBackgroundColor;
     _borderRadius = 0.0;
     _height = 100;
     _bottomPadding = 24;
@@ -68,8 +66,6 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
       _fontSize = lerpDouble(26.0, 21.0, offset / 80.0)!;
       _backgroundColor = Color.lerp(AppColors.screenBackgroundColor,
           AppColors.whiteColor, offset / 80.0)!;
-      _shadowColor = Color.lerp(AppColors.screenBackgroundColor,
-          AppColors.darkColor.withOpacity(0.5), offset / 80)!;
       _borderRadius = lerpDouble(0.0, 50.0, offset / 80.0)!;
       _height = lerpDouble(120.0, 80.0, offset / 80.0)!;
       _bottomPadding = lerpDouble(32, 20.0, offset / 80.0)!;
