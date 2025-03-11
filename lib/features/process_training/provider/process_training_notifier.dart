@@ -1,12 +1,14 @@
 // lib/features/process_training/provider/process_training_notifier.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/common/shared_data/global_stream.dart';
+import 'package:gymini/common/shared_data/shared_preferences/chrono_storage.dart';
+import 'package:gymini/common/shared_data/streams/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/features/process_training/entities/session_tile.dart';
 import 'package:gymini/features/process_training/provider/process_training_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/data/repositories/local_repository_interfaces.dart';
 import 'package:gymini/features/process_training/adapter/session_data_adapter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 /// A simple class representing UI input for the session form.
@@ -108,8 +110,11 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
     }
   }
 
-  void resetStage() {
+  void resetStage() async{
     sharedStreams.selectedExerciseStream.update(null);
+    ChronoStorage.deleteAllChronoStartTimes();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('current_stage', 0);
     state = ProcessTrainingState.initial();
   }
 }

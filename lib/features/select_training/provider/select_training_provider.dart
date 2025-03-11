@@ -1,7 +1,7 @@
 // lib/features/create_training/presentation/create_training_provider.dart
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/common/shared_data/global_stream_provider.dart';
+import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
 import 'package:gymini/data/repositories/session_repository_impl.dart';
 import 'package:gymini/features/select_training/provider/select_training_notifier.dart';
 import 'package:gymini/features/select_training/provider/select_training_state.dart';

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/shared_data/shared_preferences/chrono_storage.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/features/select_training/provider/select_training_provider.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
@@ -14,6 +15,9 @@ class SelectTrainingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // We should handle this differently
+    ChronoStorage.deleteAllChronoStartTimes();
+
     final theme = Theme.of(context);
     final scrollController = ref.watch(scrollControllerProvider);
 

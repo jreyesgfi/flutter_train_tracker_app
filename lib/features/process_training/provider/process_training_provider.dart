@@ -1,7 +1,7 @@
 // lib/features/process_training/provider/process_training_provider.dart
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/common/shared_data/global_stream_provider.dart';
+import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
 import 'package:gymini/data/repositories/local_data_repository_impl.dart';
 import 'package:gymini/data/repositories/session_repository_impl.dart';
 import 'package:gymini/features/process_training/provider/process_training_notifier.dart';

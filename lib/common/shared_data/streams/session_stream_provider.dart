@@ -1,7 +1,7 @@
 // lib/common/shared_data/global_shared_streams.dart
 
 import 'dart:async';
-import 'package:gymini/common/shared_data/global_stream_interface.dart';
+import 'package:gymini/common/shared_data/streams/global_stream_interface.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 
 /// Implementation for a shared session stream.

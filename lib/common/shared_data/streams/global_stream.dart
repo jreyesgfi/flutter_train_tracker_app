@@ -1,7 +1,7 @@
 
-import 'package:gymini/common/shared_data/exercise_stream_provider.dart';
-import 'package:gymini/common/shared_data/muscle_stream_provider.dart';
-import 'package:gymini/common/shared_data/session_stream_provider.dart';
+import 'package:gymini/common/shared_data/streams/exercise_stream_provider.dart';
+import 'package:gymini/common/shared_data/streams/muscle_stream_provider.dart';
+import 'package:gymini/common/shared_data/streams/session_stream_provider.dart';
 
 
 /// Global container for all shared streams.

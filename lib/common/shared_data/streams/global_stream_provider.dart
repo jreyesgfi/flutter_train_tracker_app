@@ -1,6 +1,6 @@
 // lib/common/shared_data/global_shared_streams_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/common/shared_data/global_stream.dart';
+import 'package:gymini/common/shared_data/streams/global_stream.dart';
 
 final globalSharedStreamsProvider = Provider<GlobalSharedStreams>((ref) {
   final globalStreams = GlobalSharedStreams();
