@@ -5,8 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomChrono extends StatefulWidget {
   final Duration duration;
+  final int stage; // Pass the stage as a parameter
 
-  const CustomChrono({super.key, required this.duration});
+  const CustomChrono({super.key, required this.duration, required this.stage});
 
   @override
   CustomChronoState createState() => CustomChronoState();
@@ -17,49 +18,47 @@ class CustomChronoState extends State<CustomChrono> {
   Timer? _timer;
   bool _isRunning = true;
   DateTime? _startTime;
-  bool _isInitialized = false; // New flag to track initialization
+  bool _isInitialized = false;
+
+  // Use a unique key for each stage
+  String get _prefsKey => 'chrono_start_${widget.stage}';
 
   @override
   void initState() {
     super.initState();
-    _resetTimer(false);
+    _resetTimer(loadFromStorage: true);
   }
 
-  void _resetTimer(bool loadFromStorage) async {
+  void _resetTimer({required bool loadFromStorage}) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Clear saved start time for new key
-    await prefs.remove('chrono_start');
-
     if (loadFromStorage) {
-      int? savedStart = prefs.getInt('chrono_start');
-
+      int? savedStart = prefs.getInt(_prefsKey);
       if (savedStart != null) {
         _startTime = DateTime.fromMillisecondsSinceEpoch(savedStart);
         _duration = widget.duration - DateTime.now().difference(_startTime!);
       } else {
         _duration = widget.duration;
         _startTime = DateTime.now();
-        await prefs.setInt('chrono_start', _startTime!.millisecondsSinceEpoch);
+        await prefs.setInt(_prefsKey, _startTime!.millisecondsSinceEpoch);
       }
     } else {
+      // Always reset if loadFromStorage is false
       _duration = widget.duration;
       _startTime = DateTime.now();
-      await prefs.setInt('chrono_start', _startTime!.millisecondsSinceEpoch);
+      await prefs.setInt(_prefsKey, _startTime!.millisecondsSinceEpoch);
     }
     setState(() {
-      _isInitialized = true; // Set the flag to true after initialization
+      _isInitialized = true;
     });
     _startTimer();
   }
 
   void _startTimer() {
-    _timer
-        ?.cancel(); // Ensure any existing timer is cancelled before creating a new one
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_isRunning) {
         setState(() {
-          // Update the UI with the new duration
           _duration = widget.duration - DateTime.now().difference(_startTime!);
         });
       }
@@ -69,8 +68,9 @@ class CustomChronoState extends State<CustomChrono> {
   @override
   void didUpdateWidget(CustomChrono oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.duration != oldWidget.duration) {
-      _resetTimer(false); // Reset with the new duration if it changes
+    // If either the duration or stage changes, reset the timer.
+    if (widget.duration != oldWidget.duration || widget.stage != oldWidget.stage) {
+      _resetTimer(loadFromStorage: false);
     }
   }
 
@@ -83,16 +83,13 @@ class CustomChronoState extends State<CustomChrono> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return const SizedBox
-          .shrink(); // Return an empty widget while initializing
+      return const SizedBox.shrink();
     }
 
     final theme = Theme.of(context);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final exceded = _duration.isNegative;
-    final duration = exceded
-        ? -_duration
-        : _duration; // Calculate the absolute value of the duration
+    final exceeded = _duration.isNegative;
+    final duration = exceeded ? -_duration : _duration;
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
@@ -110,23 +107,18 @@ class CustomChronoState extends State<CustomChrono> {
                 child: CircularProgressIndicator(
                   strokeWidth: 5,
                   strokeCap: StrokeCap.round,
-                  value: exceded
+                  value: exceeded
                       ? 1
-                      : 1 -
-                          duration.inMilliseconds /
-                              widget.duration.inMilliseconds,
+                      : 1 - duration.inMilliseconds / widget.duration.inMilliseconds,
                   backgroundColor: AppColors.lightGreyColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                      exceded ? theme.primaryColor : theme.primaryColorDark),
+                      exceeded ? theme.primaryColor : theme.primaryColorDark),
                 ),
               ),
               Text(
                 "$minutes:$seconds",
-                // "${_duration.isNegative ? "-" : ""}$minutes:$seconds",
                 style: theme.textTheme.headlineLarge!.copyWith(
-                  color: _duration.isNegative
-                      ? theme.primaryColor
-                      : theme.primaryColorDark,
+                  color: _duration.isNegative ? theme.primaryColor : theme.primaryColorDark,
                 ),
               ),
             ],
@@ -140,11 +132,12 @@ class CustomChronoState extends State<CustomChrono> {
                 height: 6,
                 decoration: BoxDecoration(
                     border: Border(
-                        bottom: BorderSide(
-                  color: AppColors.lightGreyColor,
-                  style: BorderStyle.solid,
-                  width: 2,
-                ))),
+                  bottom: BorderSide(
+                    color: AppColors.lightGreyColor,
+                    style: BorderStyle.solid,
+                    width: 2,
+                  ),
+                )),
               ),
               SizedBox(
                 height: 62,
@@ -154,17 +147,13 @@ class CustomChronoState extends State<CustomChrono> {
                     setState(() {
                       _isRunning = !_isRunning;
                       if (!_isRunning) {
-                        _timer?.cancel(); // Stop the timer when paused
+                        _timer?.cancel();
                       } else {
-                        // Adjust the start time based on the paused duration
-                        _startTime = DateTime.now()
-                            .subtract(widget.duration - _duration);
-                        final prefs = SharedPreferences.getInstance();
-                        prefs.then((prefs) {
-                          prefs.setInt('chrono_start',
-                              _startTime!.millisecondsSinceEpoch);
+                        _startTime = DateTime.now().subtract(widget.duration - _duration);
+                        SharedPreferences.getInstance().then((prefs) {
+                          prefs.setInt(_prefsKey, _startTime!.millisecondsSinceEpoch);
                         });
-                        _startTimer(); // Restart the timer
+                        _startTimer();
                       }
                     });
                   },

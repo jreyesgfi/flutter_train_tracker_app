@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/features/process_training/ui/widgets/process_training_big_text_screen.dart';
-import 'package:gymini/presentation_layer/widgets/common/other/custom_chrono.dart';
+import 'package:gymini/features/process_training/ui/widgets/custom_chrono.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/exercise_image_example.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_info_widget.dart';
@@ -78,6 +78,7 @@ class TrainingStageSwitcher extends StatelessWidget {
                 CustomChrono(
                   key: ValueKey(currentStage),
                   duration: const Duration(minutes: 2),
+                  stage: currentStage,
                 ),
                 // ...and Page 2 is the SessionForm.
                 SessionForm(

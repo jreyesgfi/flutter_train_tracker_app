@@ -4,7 +4,7 @@ import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/header_footer/bottom_navigation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/presentation_layer/widgets/header_footer/new_top_bar.dart';
+import 'package:gymini/common/widgets/new_top_bar.dart';
 
 class ScreenWrapper extends ConsumerStatefulWidget {
   final Widget child;
@@ -26,14 +26,20 @@ class _ScreenWrapperState extends ConsumerState<ScreenWrapper> {
       extendBody: true,
       body: Column(
         children: [
+          Container(
+            color: AppColors.screenBackgroundColor,
+            height: 36
+          ),
           NewTopBar(controller: scrollController),
+          
+          
           
           // Expanded to ensure the content fills the available space, allows scrolling within child screens
           Expanded(
             child: Container(
               color: AppColors.screenBackgroundColor,
               padding: EdgeInsets.only(
-                top: GyminiTheme.verticalGapUnit*2,
+                top: GyminiTheme.verticalGapUnit,
                 bottom: 100,
               ),
               child: widget.child,
