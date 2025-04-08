@@ -23,10 +23,10 @@ class CustomButton extends StatefulWidget {
   // : assert(icon != null || label != null, 'An icon or label must be provided.');
 
   @override
-  _CustomButtonState createState() => _CustomButtonState();
+  CustomButtonState createState() => CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton> with SingleTickerProviderStateMixin {
+class CustomButtonState extends State<CustomButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 

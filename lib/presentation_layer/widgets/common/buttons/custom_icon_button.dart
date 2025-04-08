@@ -18,10 +18,10 @@ class CustomIconButton extends StatefulWidget {
   });
 
   @override
-  _CustomIconButtonState createState() => _CustomIconButtonState();
+  CustomIconButtonState createState() => CustomIconButtonState();
 }
 
-class _CustomIconButtonState extends State<CustomIconButton> with SingleTickerProviderStateMixin {
+class CustomIconButtonState extends State<CustomIconButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 

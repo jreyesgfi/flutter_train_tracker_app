@@ -6,10 +6,10 @@ Your Training Tracker.
 lib/
 ├── app/
 │   ├── router/
-│   │   ├── router.dart             // Main GoRouter setup
-│   │   ├── router_provider.dart    // If you expose GoRouter via a provider
-│   │   └── go_router_refresh_stream.dart // Utility for refreshing on streams
-│   └── main.dart                   // Your app entry point (if not in root)
+│   │   ├── router.dart             
+│   │   ├── router_provider.dart    
+│   │   └── go_router_refresh_stream.dart 
+│   └── main.dart                  
 │
 ├── bindings/
 │   └── data/
@@ -60,21 +60,20 @@ lib/
 │   │   └── ui/
 │   │       ├── process_training_view.dart
 │   │       └── widgets/
-│   │           └── ...
-│
-│
-│   ├── charts/
+│   │           └── ... (feature-specific widgets)
+│   ├── report/
 │   │   ├── adapter/
-│   │   │   └── charts_data_adapter.dart
+│   │   │   └── report_data_adapter.dart
 │   │   ├── provider/
-│   │   │   ├── charts_notifier.dart
-│   │   │   ├── charts_state.dart
-│   │   │   └── charts_provider.dart
+│   │   │   ├── report_state.dart
+│   │   │   ├── report_notifier.dart
+│   │   │   └── report_provider.dart
 │   │   └── ui/
-│   │       ├── charts_view.dart
+│   │       ├── report_screen.dart
 │   │       └── widgets/
-│   │           └── ...
-│
+│   │           ├── training_count_bar_chart.dart
+│   │           ├── max_min_line_chart.dart
+│   │           └── other_report_widgets.dart
 │   └── settings/
 │       ├── adapter/
 │       │   └── settings_data_adapter.dart

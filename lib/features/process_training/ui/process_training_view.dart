@@ -51,10 +51,10 @@ class _ProcessTrainingViewState extends ConsumerState<ProcessTrainingView> {
     }
     if (index > lastStage) {
       ref.read(processTrainingProvider.notifier).commitSession();
-      ChronoStorage.deleteAllChronoStartTimes();
-      index = 0;
     }
-    _updateCurrentStage(index);
+    else {
+      _updateCurrentStage(index);
+    }
   }
 
   @override

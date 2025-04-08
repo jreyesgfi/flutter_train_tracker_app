@@ -34,10 +34,10 @@ class MuscleTile extends StatefulWidget {
   });
 
   @override
-  _MuscleTileState createState() => _MuscleTileState();
+  MuscleTileState createState() => MuscleTileState();
 }
 
-class _MuscleTileState extends State<MuscleTile> {
+class MuscleTileState extends State<MuscleTile> {
   bool isHovering = false;
 
   @override

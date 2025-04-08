@@ -40,7 +40,7 @@ class DateSeparator extends StatelessWidget {
   }
 
   // Static method to format the date, useful for consistency across the app
-  static _FormattedDate formatDate(DateTime date) {
+  static FormattedDate formatDate(DateTime date) {
     // Ensure the locale is set for Spanish formatting
     Intl.defaultLocale = 'es_ES';
 
@@ -48,14 +48,14 @@ class DateSeparator extends StatelessWidget {
     final String dayMonthYear = DateFormat('d EEEE').format(date); // "10 Sábado"
     final String monthYear = DateFormat('MMMM, yyyy').format(date); // "Septiembre, 2024"
 
-    return _FormattedDate(dayMonthYear, monthYear);
+    return FormattedDate(dayMonthYear, monthYear);
   }
 }
 
 // Private class to return both date formats together
-class _FormattedDate {
+class FormattedDate {
   final String dayMonthYear;
   final String monthYear;
 
-  _FormattedDate(this.dayMonthYear, this.monthYear);
+  FormattedDate(this.dayMonthYear, this.monthYear);
 }
