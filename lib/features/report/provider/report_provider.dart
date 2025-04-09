@@ -1,5 +1,6 @@
 // lib/features/report/provider/report_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
 import 'package:gymini/features/report/provider/report_notifier.dart';
 import 'package:gymini/features/report/provider/report_state.dart';
 import 'package:gymini/infrastructure_layer/repository_impl/muscle_repository_impl.dart';
@@ -11,12 +12,14 @@ final reportProvider =
   final muscleRepo = ref.watch(muscleRepositoryProvider);
   final exerciseRepo = ref.watch(exerciseRepositoryProvider);
   final sessionRepo = ref.watch(sessionRepositoryProvider);
+  final globalStreams = ref.watch(globalSharedStreamsProvider);
   // final localRepo = ref.watch(localRepositoryProvider);
 
   return ReportNotifier(
     muscleRepository: muscleRepo,
     exerciseRepository: exerciseRepo,
-    sessionRepository: sessionRepo
+    sessionRepository: sessionRepo,
+    sharedStreams: globalStreams,
   );
 });
 

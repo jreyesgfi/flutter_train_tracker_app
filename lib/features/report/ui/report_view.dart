@@ -6,7 +6,7 @@ import 'package:gymini/presentation_layer/widgets/reporting/max_min_line_chart_w
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:gymini/presentation_layer/widgets/common/slivers/filter_slivers.dart';
+import 'package:gymini/common/widgets/filter/filter_slivers.dart';
 import 'package:gymini/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
 
 // Updated widget imports (adjust paths as needed)

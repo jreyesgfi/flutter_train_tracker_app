@@ -2,13 +2,13 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common/shared_data/streams/global_stream.dart';
+import 'package:gymini/common/widgets/filter/provider/filter_state.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/domain_layer/entities/log_filter.dart';
-import 'package:gymini/features/report/provider/report_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:collection/collection.dart';
 
-class ReportNotifier extends StateNotifier<ReportState> {
+class FilterNotifier extends StateNotifier<FilterState> {
   final MuscleRepository muscleRepository;
   final ExerciseRepository exerciseRepository;
   final SessionRepository sessionRepository;
@@ -16,12 +16,13 @@ class ReportNotifier extends StateNotifier<ReportState> {
 
   late final StreamSubscription<LogFilter?> _filterSubscription;
 
-  ReportNotifier({
+  FilterNotifier({
     required this.muscleRepository,
     required this.exerciseRepository,
     required this.sessionRepository,
     required this.sharedStreams,
-  }) : super(ReportState.initial()) {
+  })
+      : super(FilterState.initial()) {
     _init();
   }
 
@@ -47,14 +48,12 @@ class ReportNotifier extends StateNotifier<ReportState> {
     // Listen for changes to the filter
     sharedStreams.logFilterStream.stream.listen((filter) async {
       _updateFilters();
-      _filterSessions();
-      _filterSessionsByDate();
     });
   }
 
   void _updateFilters() async {
     LogFilter? filter = sharedStreams.logFilterStream.latestValue;
-    print('Filter changed to: ${filter?.startMonth}');
+    print('Filter changed: ${filter?.startMonth}');
     state = state.copyWith(
       selectedMuscle: filter?.musclePicked,
       selectedExercise: filter?.exercisePicked,

@@ -1,6 +1,8 @@
 // lib/features/history/provider/history_notifier.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/shared_data/streams/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/log_filter.dart';
 import 'package:gymini/features/history/provider/history_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:gymini/data/repositories/local_repository_interfaces.dart';
@@ -11,14 +13,17 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   final ExerciseRepository exerciseRepository;
   final SessionRepository sessionRepository;
   final LocalRepository localRepository;
+  final GlobalSharedStreams sharedStreams;
 
   HistoryNotifier({
     required this.muscleRepository,
     required this.exerciseRepository,
     required this.sessionRepository,
     required this.localRepository,
+    required this.sharedStreams,
   }) : super(HistoryState.initial()) {
     _fetchAllData();
+    _subscribeToStreams();
   }
 
   Future<void> _fetchAllData() async {
@@ -31,7 +36,24 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
       allExercises: exercises,
       allSessions: allSessions,
     );
-    _filterSessions();
+  }
+
+  void _subscribeToStreams() {
+    // Listen for changes to the filter
+    sharedStreams.logFilterStream.stream.listen((filter) async {
+      _updateFilters();
+      _filterSessions();
+    });
+  }
+
+  void _updateFilters() async {
+    LogFilter? filter = sharedStreams.logFilterStream.latestValue;
+    state = state.copyWith(
+      selectedMuscle: filter?.musclePicked,
+      selectedExercise: filter?.exercisePicked,
+      selectedMonth: filter?.startMonth ?? DateTime.now().month,
+      selectedYear: filter?.startYear ?? DateTime.now().year,
+    );
   }
 
   // Filter sessions based on the selected month/year and filters.

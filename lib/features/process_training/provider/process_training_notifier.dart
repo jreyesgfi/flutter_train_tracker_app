@@ -24,10 +24,10 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
     required this.sharedStreams,
   }) : super(ProcessTrainingState.initial()) {
     createSessionEntity();
-    _suscribeToStreams();
+    _subscribeToStreams();
   }
 
-  void _suscribeToStreams() {
+  void _subscribeToStreams() {
     // Listen for changes to the selected muscle.
     sharedStreams.selectedExerciseStream.stream.listen((exercise) async {
       createSessionEntity();

@@ -1,22 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
+import 'package:gymini/common/widgets/filter/provider/filter_provider.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/common_layer/utils/date_labels.dart';
 import 'package:gymini/common_layer/utils/text_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/presentation_layer/widgets/common/modals_snackbars/custom_snackbar.dart';
+import 'package:gymini/domain_layer/entities/log_filter.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:gymini/presentation_layer/providers/report_screen_provider.dart';
 
 class FilterSection extends ConsumerWidget {
   const FilterSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(reportScreenProvider);
-    final notifier = ref.read(reportScreenProvider.notifier);
+    final state = ref.watch(filterProvider);
+    final notifier = ref.read(filterProvider.notifier);
 
     final theme = Theme.of(context);
+
+    Future<void> selectDate() async{
+      // showWarningSnackbar(context: context, message: 'Attempting to show MonthYearPicker');
+      final selectedDate = await showMonthYearPicker(
+        context: context,
+        initialDate: DateTime(state.selectedYear, state.selectedMonth),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: theme.copyWith(
+              colorScheme: ColorScheme.light(
+                primary: theme.primaryColor,
+                onPrimary: AppColors.whiteColor,
+                surface: theme.primaryColor,
+                onSurface: theme.primaryColorDark,
+                secondary: theme.primaryColor,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(foregroundColor: theme.primaryColor),
+              ),
+            ),
+            child: SizedBox(
+              width: 200,
+              child: Align(
+                alignment: Alignment.center,
+                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 550), child: child!),
+              ),
+            ),
+          );
+        },
+      );
+
+      if (selectedDate != null) {
+        // Compute the end date (start date + 1 month)
+        final endDate = DateTime(selectedDate.year, selectedDate.month + 1, selectedDate.day);
+        // Read the global filter shared stream provider.
+        final sharedStreams = ref.read(globalSharedStreamsProvider);
+        // Create a new LogFilter. Preserve muscle and exercise if already selected.
+        final newFilter = LogFilter(
+          startYear: selectedDate.year,
+          startMonth: selectedDate.month,
+          endYear: endDate.year,
+          endMonth: endDate.month,
+          musclePicked: state.selectedMuscle,
+          exercisePicked: state.selectedExercise,
+        );
+        sharedStreams.logFilterStream.update(newFilter);
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical:GyminiTheme.verticalGapUnit),
@@ -28,52 +79,7 @@ class FilterSection extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
-                onTap: () async {
-                  showWarningSnackbar(context:context, message: 'Attempting to show MonthYearPicker');
-                  final selectedDate = await showMonthYearPicker(
-                    context: context,
-                    initialDate: DateTime(
-                      state.selectedYear, //?? DateTime.now().year,
-                      state.selectedMonth, // ?? DateTime.now().month,
-                    ),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    builder: (context, child) {
-                      return Theme(
-                        data: theme.copyWith(
-                          colorScheme: ColorScheme.light(
-                            primary: theme.primaryColor,
-                            onPrimary: AppColors.whiteColor,
-                            surface: theme.primaryColor,
-                            onSurface: theme.primaryColorDark,
-                            secondary: theme.primaryColor,
-                          ),
-                          textButtonTheme: TextButtonThemeData(
-                            style: TextButton.styleFrom(
-                              foregroundColor: theme.primaryColor,
-                            ),
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: 200,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxWidth: 550,
-                              ),
-                              child: child!,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-
-                  if (selectedDate != null) {
-                    notifier.selectMonthYear(selectedDate.month, selectedDate.year);
-                  }
-                },
+                onTap: selectDate,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal:GyminiTheme.leftInnerPadding*2),
                   constraints: const BoxConstraints(maxWidth: 200),
@@ -118,7 +124,6 @@ class FilterSection extends ConsumerWidget {
       ],
       onChanged: (newValue) {
         notifier.selectMuscleById(newValue ?? '');
-        notifier.filterSessions(); 
       },
     ),
   ),
@@ -161,7 +166,6 @@ class FilterSection extends ConsumerWidget {
                     onChanged: (newValue) {
                       if (newValue != null) {
                         notifier.selectExerciseById(newValue);
-                        notifier.filterSessions();
                       }
                     },
                   ),

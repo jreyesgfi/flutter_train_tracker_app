@@ -8,23 +8,21 @@ import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/features/history/provider/history_provider.dart';
 import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
-import 'package:gymini/presentation_layer/widgets/common/slivers/filter_slivers.dart';
+import 'package:gymini/common/widgets/filter/filter_slivers.dart';
 import 'package:gymini/features/history/ui/widgets/date_separator.dart';
 import 'package:gymini/features/history/ui/widgets/session_log_card.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
-
-  /// Build date sections once and return them as a list of Widgets.
   List<Widget> buildDateSections(
-      List<SessionEntity> sessions, Set<String> filteredSessionIds) {
+    List<SessionEntity> filteredSessions) {
     List<Widget> dateSections = [];
     DateTime? currentDate;
     List<Widget> itemsForCurrentDate = [];
+    for (int i = 0; i < filteredSessions.length; i++) {
 
-    for (int i = 0; i < sessions.length; i++) {
-      final session = sessions[i];
-      final bool filteredOut = !filteredSessionIds.contains(session.id);
+      final session = filteredSessions[i];
+      const bool filteredOut = false;
 
       // When the day changes (or on first session) finalize previous group.
       if (currentDate == null || session.timeStamp.day != currentDate.day) {
@@ -58,15 +56,60 @@ class HistoryScreen extends ConsumerWidget {
     return dateSections;
   }
 
+  /// Build date sections once and return them as a list of Widgets.
+  // List<Widget> buildDateSections(
+  //     List<SessionEntity> sessions, Set<String> filteredSessionIds) {
+  //   List<Widget> dateSections = [];
+  //   DateTime? currentDate;
+  //   List<Widget> itemsForCurrentDate = [];
+
+  //   for (int i = 0; i < filteredSessionIds.length; i++) {
+  //     final session = sessions[i];
+  //     final bool filteredOut = !filteredSessionIds.contains(session.id);
+
+  //     // When the day changes (or on first session) finalize previous group.
+  //     if (currentDate == null || session.timeStamp.day != currentDate.day) {
+  //       if (itemsForCurrentDate.isNotEmpty && currentDate != null) {
+  //         dateSections.add(
+  //           DateSection(
+  //             dateStamp: currentDate,
+  //             items: itemsForCurrentDate,
+  //           ),
+  //         );
+  //         itemsForCurrentDate = [];
+  //       }
+  //       currentDate = session.timeStamp;
+  //     }
+  //     itemsForCurrentDate.add(
+  //       EntryTransition(
+  //         position: (i % 8) + 2,
+  //         totalAnimations: 10,
+  //         child: SessionLogCard(session: session, filteredOut: filteredOut),
+  //       ),
+  //     );
+  //   }
+  //   if (itemsForCurrentDate.isNotEmpty && currentDate != null) {
+  //     dateSections.add(
+  //       DateSection(
+  //         dateStamp: currentDate,
+  //         items: itemsForCurrentDate,
+  //       ),
+  //     );
+  //   }
+  //   return dateSections;
+  // }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = ref.watch(scrollControllerProvider);
     final historyState = ref.watch(historyProvider);
     final List<SessionEntity> allSessions = historyState.allSessions;
-    final filteredSessionIds = historyState.filteredSessions.map((s) => s.id).toSet();
+    final filteredSessionIds =
+        historyState.filteredSessions.map((s) => s.id).toSet();
+    final filteredSessions = historyState.filteredSessions;
 
     // Build the date sections once.
-    final dateSections = buildDateSections(allSessions, filteredSessionIds);
+    final dateSections = buildDateSections(filteredSessions);
 
     return CustomScrollView(
       controller: scrollController,
@@ -85,7 +128,8 @@ class HistoryScreen extends ConsumerWidget {
         ),
         // Use a MultiSliver to merge the dateSections into a single sliver.
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: GyminiTheme.leftOuterPadding),
+          padding:
+              EdgeInsets.symmetric(horizontal: GyminiTheme.leftOuterPadding),
           sliver: MultiSliver(
             children: dateSections,
           ),
