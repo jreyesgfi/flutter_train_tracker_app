@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gymini/app/router/router_notifier.dart';
 import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
+import 'package:gymini/features/history/ui/history_view.dart';
 import 'package:gymini/features/process_training/ui/process_training_view.dart';
+import 'package:gymini/features/report/ui/report_view.dart';
 import 'package:gymini/features/select_training/ui/select_training_view.dart';
-import 'package:gymini/presentation_layer/screens/history_screen.dart';
 import 'package:gymini/common/widgets/screen_wrapper.dart';
 import 'package:gymini/presentation_layer/screens/settings_screen.dart';
-import 'package:gymini/presentation_layer/screens/report_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final globalStreams = ref.watch(globalSharedStreamsProvider);

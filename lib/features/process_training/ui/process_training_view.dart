@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/common/shared_data/shared_preferences/chrono_storage.dart';
 import 'package:gymini/features/process_training/provider/process_training_provider.dart';
 import 'package:gymini/features/process_training/ui/widgets/process_training_buttons_wrapper.dart';
 import 'package:gymini/features/process_training/ui/widgets/process_training_header_widget.dart';

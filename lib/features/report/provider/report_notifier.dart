@@ -3,20 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/features/report/provider/report_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
-import 'package:gymini/data/repositories/local_repository_interfaces.dart';
 import 'package:collection/collection.dart';
 
 class ReportNotifier extends StateNotifier<ReportState> {
   final MuscleRepository muscleRepository;
   final ExerciseRepository exerciseRepository;
   final SessionRepository sessionRepository;
-  final LocalRepository localRepository; // if needed
 
   ReportNotifier({
     required this.muscleRepository,
     required this.exerciseRepository,
     required this.sessionRepository,
-    required this.localRepository,
   }) : super(ReportState.initial()) {
     _init();
   }

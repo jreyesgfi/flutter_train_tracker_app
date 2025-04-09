@@ -79,7 +79,7 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
   /// Commit (save) the session and clear shared signals.
   Future<void> commitSession() async {
     // Check by session id (if empty, no valid session).
-    print("Commit session: ${state.session.id}");
+    // print("Commit session: ${state.session.id}");
     if (state.session.id.isEmpty) return;
     try {
       state = state.copyWith(isLoading: true, errorMessage: null);
