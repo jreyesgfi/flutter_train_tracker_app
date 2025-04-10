@@ -19,7 +19,7 @@ class FilterSection extends ConsumerWidget {
 
     final theme = Theme.of(context);
 
-    Future<void> selectDate() async{
+    Future<void> selectDate() async {
       // showWarningSnackbar(context: context, message: 'Attempting to show MonthYearPicker');
       final selectedDate = await showMonthYearPicker(
         context: context,
@@ -37,14 +37,17 @@ class FilterSection extends ConsumerWidget {
                 secondary: theme.primaryColor,
               ),
               textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(foregroundColor: theme.primaryColor),
+                style:
+                    TextButton.styleFrom(foregroundColor: theme.primaryColor),
               ),
             ),
             child: SizedBox(
               width: 200,
               child: Align(
                 alignment: Alignment.center,
-                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 550), child: child!),
+                child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 550),
+                    child: child!),
               ),
             ),
           );
@@ -53,7 +56,8 @@ class FilterSection extends ConsumerWidget {
 
       if (selectedDate != null) {
         // Compute the end date (start date + 1 month)
-        final endDate = DateTime(selectedDate.year, selectedDate.month + 1, selectedDate.day);
+        final endDate = DateTime(
+            selectedDate.year, selectedDate.month + 1, selectedDate.day);
         // Read the global filter shared stream provider.
         final sharedStreams = ref.read(globalSharedStreamsProvider);
         // Create a new LogFilter. Preserve muscle and exercise if already selected.
@@ -69,8 +73,14 @@ class FilterSection extends ConsumerWidget {
       }
     }
 
+    // Create sorted copies of the muscle and exercise lists.
+    final sortedMuscles = [...state.allMuscles]
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    final sortedExercises = [...state.filteredExercises]
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical:GyminiTheme.verticalGapUnit),
+      padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -81,56 +91,71 @@ class FilterSection extends ConsumerWidget {
               GestureDetector(
                 onTap: selectDate,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal:GyminiTheme.leftInnerPadding*2),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: GyminiTheme.leftInnerPadding * 2),
                   constraints: const BoxConstraints(maxWidth: 200),
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
+                    borderRadius:
+                        BorderRadius.circular(customThemeValues.borderRadius),
                   ),
                   child: Text(
                     '${clipText(numToMonthDict[state.selectedMonth]!, 3, false)}, ${state.selectedYear}',
-                    style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(color: theme.primaryColorDark),
                   ),
                 ),
               ),
               const SizedBox(width: 8),
               // Muscle selector
               Expanded(
-  child: Container(
-    padding: const EdgeInsets.all(12),
-    height: 50,
-    decoration: BoxDecoration(
-      color: AppColors.whiteColor,
-      borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
-    ),
-    child: DropdownButton<String>(
-      underline: Container(),
-      hint: Text(
-        'Select Muscle',
-        style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
-      ),
-      value: state.selectedMuscle?.id,
-      items: [
-        const DropdownMenuItem<String>(
-          value: '', 
-          child: Text("Todos"), 
-        ),
-        ...state.allMuscles.map((muscle) {
-          return DropdownMenuItem<String>(
-            value: muscle.id,
-            child: Text(clipText(muscle.name, 20)), // Limit text length
-          );
-        }),
-      ],
-      onChanged: (newValue) {
-        notifier.selectMuscleById(newValue ?? '');
-      },
-    ),
-  ),
-),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteColor,
+                    borderRadius:
+                        BorderRadius.circular(customThemeValues.borderRadius),
+                  ),
+                  child: DropdownButton<String>(
+                    underline: Container(),
+                    hint: Text(
+                      'Filtro músculo',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: theme.primaryColorDark),
+                    ),
+                    value: state.selectedMuscle?.id,
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: '',
+                        child: Text("Todos"),
+                      ),
+                      ...sortedMuscles.map((muscle) {
+                        return DropdownMenuItem<String>(
+                          value: muscle.id,
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 150),
+                            child: Text(
+                              muscle.name,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(color: theme.primaryColorDark),
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                    onChanged: (newValue) {
+                      notifier.selectMuscleById(newValue ?? '');
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
-          
+
           const SizedBox(height: 16), // Spacing between rows
 
           // Second Line: Exercise Filter
@@ -139,37 +164,69 @@ class FilterSection extends ConsumerWidget {
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal:GyminiTheme.leftInnerPadding*2),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
-                  ),
-                  child: DropdownButton<String>(
-                    underline: Container(),
-                    hint: Text(
-                      'Select Exercise',
-                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: GyminiTheme.leftInnerPadding * 2),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor,
+                      borderRadius:
+                          BorderRadius.circular(customThemeValues.borderRadius),
                     ),
-                    value: state.filteredExercises.any((e) => e.id == state.selectedExercise?.id)
-                        ? state.selectedExercise?.id
-                        : null,
-                    items: state.filteredExercises.map((exercise) {
-                      return DropdownMenuItem<String>(
-                        value: exercise.id,
-                        child: Text(
-                          clipText(exercise.name, 40),
-                          style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColorDark),
-                        ), // Limit text length
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        notifier.selectExerciseById(newValue);
-                      }
-                    },
-                  ),
-                ),
+
+                    // Exercise selector
+                    child: DropdownButton<String>(
+                      underline: Container(),
+                      hint: Text(
+                        'Selecciona un ejercicio',
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(color: theme.primaryColorDark),
+                      ),
+                      value: state.filteredExercises
+                              .any((e) => e.id == state.selectedExercise?.id)
+                          ? state.selectedExercise?.id
+                          : null,
+                      items: sortedExercises.map((exercise) {
+                        final bool isSelected =
+                            state.selectedExercise?.id == exercise.id;
+                        return DropdownMenuItem<String>(
+                          value: exercise.id,
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 248),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? theme.primaryColor.withOpacity(0.2)
+                                  : Colors.transparent,
+                              border: Border(
+                                left: BorderSide(
+                                  color: isSelected
+                                      ? theme.primaryColor
+                                      : theme.primaryColorDark,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              exercise.name,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(color: theme.primaryColorDark),
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          // If the selected id is tapped again, reset the selection.
+                          if (newValue == state.selectedExercise?.id) {
+                            notifier.selectExerciseById("");
+                          } else {
+                            notifier.selectExerciseById(newValue);
+                          }
+                        }
+                      },
+                    )),
               ),
             ],
           ),

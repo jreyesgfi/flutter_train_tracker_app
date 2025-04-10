@@ -122,7 +122,9 @@ class ReportNotifier extends StateNotifier<ReportState> {
   }
 
   void selectExerciseById(String exerciseId) {
-    final selectedExercise = _retrieveExerciseById(exerciseId);
+    ExerciseEntity emptyExerciseEntity = ExerciseEntity(id: "", name: "", muscleId: "");
+    ExerciseEntity? selectedExercise = _retrieveExerciseById(exerciseId);
+    selectedExercise ??= emptyExerciseEntity;
     state = state.copyWith(selectedExercise: selectedExercise);
   }
 
