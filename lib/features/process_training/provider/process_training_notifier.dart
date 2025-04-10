@@ -40,17 +40,29 @@ class ProcessTrainingNotifier extends StateNotifier<ProcessTrainingState> {
     MuscleEntity? muscle = sharedStreams.selectedMuscleStream.latestValue;
     // Optionally load an existing session if selections exist.
     if (exercise != null && muscle != null) {
-      final lastSession =
-          await sessionRepository.fetchLastSessionByExerciseId(exercise.id);
-      if (lastSession != null) {
-        final tile = adapter.transformSessionToTile(
+      SessionEntity? lastSession = await sessionRepository.fetchLastSessionByExerciseId(exercise.id);
+      lastSession ??= createInitialSessionEntity(exercise.id, muscle.id);
+      
+      final tile = adapter.transformSessionToTile(
           lastSession,
           exercise: exercise,
           muscle: muscle,
-        );
-        state = state.copyWith(session: lastSession, sessionTile: tile);
-      }
+      );
+      state = state.copyWith(session: lastSession, sessionTile: tile);
     }
+    
+  }
+
+  SessionEntity createInitialSessionEntity(exerciseId, muscleId){
+    return SessionEntity(
+          id: const Uuid().v4(), 
+          exerciseId: exerciseId, 
+          muscleId: muscleId, 
+          timeStamp: DateTime.now(), 
+          maxWeight: 0, 
+          minWeight: 0, 
+          maxReps: 0, 
+          minReps: 0);
   }
 
   /// Update the session values based on UI input.

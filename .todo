@@ -1,4 +1,4 @@
-☐ Solve default image in exercises without previous data.
+✔ Solve default image in exercises without previous data. @started(25-04-10 15:08) @done(25-04-10 15:43) @lasted(35m10s)
 ☐ Sync after create the session.
 ✔ Porcentual charts @started(25-04-09 22:41) @done(25-04-10 11:46) @lasted(13h5m10s)
 ☐ Add KPIs of trained sessions in the current month.
@@ -7,3 +7,4 @@
 ☐ Enhance filters in report section.
 ☐ Offer three options for time selection: current month, current year, all time.
 ✔ Refactor history of sessions to use new structure. @started(25-04-08 11:20) @done(25-04-09 14:30) @lasted(1d3h10m12s)
+☐ Prevent overflow in filters.

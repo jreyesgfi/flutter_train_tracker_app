@@ -46,7 +46,7 @@ class ProcessTrainingHeaderWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "${sessionTile.timeSinceLastSession} days ago",
+                      "${sessionTile.timeSinceLastSession == 0?"∞": sessionTile.timeSinceLastSession} days ago",
                       style: theme.textTheme.bodySmall
                           ?.copyWith(color: theme.shadowColor),
                     ),
