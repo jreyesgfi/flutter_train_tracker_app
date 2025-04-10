@@ -1,17 +1,21 @@
 // lib/features/report/provider/report_state.dart
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/log_provider_state.dart';
 
-class ReportState {
+class ReportState implements SessionLogGrainedProviderState{
   final List<MuscleEntity> allMuscles;
   final List<ExerciseEntity> allExercises;
   final List<ExerciseEntity> filteredExercises;
-  final List<SessionEntity> filteredSessions;
-  final List<SessionEntity> filteredSessionsByDate;
   final List<SessionEntity> allSessions;
-
   final MuscleEntity? selectedMuscle;
   final ExerciseEntity? selectedExercise;
+  @override
+  final List<SessionEntity> filteredSessions;
+  @override
+  final List<SessionEntity> filteredSessionsByDate;
+  @override
   final int selectedMonth;
+  @override
   final int selectedYear;
 
   const ReportState({

@@ -1,16 +1,18 @@
 // lib/features/history/provider/history_state.dart
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/log_provider_state.dart';
 
-class HistoryState {
+class HistoryState implements SessionLogProviderState {
   final List<MuscleEntity> allMuscles;
   final List<ExerciseEntity> allExercises;
   final List<SessionEntity> allSessions;
-  final List<SessionEntity> filteredSessions;
-  
-  // Optionally, you might have fields that store currently selected filters
   final MuscleEntity? selectedMuscle;
   final ExerciseEntity? selectedExercise;
+  @override
+  final List<SessionEntity> filteredSessions;
+  @override
   final int selectedMonth;
+  @override
   final int selectedYear;
   
   const HistoryState({

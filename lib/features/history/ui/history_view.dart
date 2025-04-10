@@ -103,9 +103,9 @@ class HistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = ref.watch(scrollControllerProvider);
     final historyState = ref.watch(historyProvider);
-    final List<SessionEntity> allSessions = historyState.allSessions;
-    final filteredSessionIds =
-        historyState.filteredSessions.map((s) => s.id).toSet();
+    // final List<SessionEntity> allSessions = historyState.allSessions;
+    // final filteredSessionIds =
+    //     historyState.filteredSessions.map((s) => s.id).toSet();
     final filteredSessions = historyState.filteredSessions;
 
     // Build the date sections once.

@@ -1,6 +1,7 @@
 ☐ Solve default image in exercises without previous data.
 ☐ Sync after create the session.
-☐ Porcentual charts
+✔ Porcentual charts @started(25-04-09 22:41) @done(25-04-10 11:46) @lasted(13h5m10s)
+☐ Add KPIs of trained sessions in the current month.
 ☐ Deletion capability in history of sessions.
 ✔ History of sessions with new hidden sessions. @started(25-04-09 14:30) @done(25-04-09 22:38) @lasted(8h8m32s)
 ☐ Enhance filters in report section.

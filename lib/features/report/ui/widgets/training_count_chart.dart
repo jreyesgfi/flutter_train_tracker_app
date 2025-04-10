@@ -1,51 +1,93 @@
 // lib/features/report/ui/widgets/training_count_bar_chart.dart
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:gymini/common/widgets/reporting/custom_legend.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/common_layer/utils/date_labels.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/features/report/provider/report_provider.dart';
+import 'package:gymini/domain_layer/entities/log_provider_state.dart';
 
 class TrainingCountBarChart extends ConsumerWidget {
-  final bool countMusclesTrained; // Count muscles versus sessions
+  final SessionLogGrainedProviderState sessionLogState;
 
-  const TrainingCountBarChart._({this.countMusclesTrained = false});
+  const TrainingCountBarChart({
+    super.key,
+    required this.sessionLogState
+  });
 
-  factory TrainingCountBarChart({bool countMusclesTrained = false}) {
-    return TrainingCountBarChart._(countMusclesTrained: countMusclesTrained);
-  }
 
-  /// Groups sessions by day of week. If [countMusclesTrained] is true,
-  /// the count for each day is the unique number of muscles trained.
-  Map<int, int> _groupSessionsByDayOfWeek(List<SessionEntity> sessions) {
-    // Map dates to unique sets of muscleIds
-    final Map<DateTime, Set<String>> dateMuscleMap = {};
+
+
+  Map<int, Map<String, int>> _groupTrainingsByDayOfWeekCombined(List<SessionEntity> sessions) {
+    // Group sessions by the date (ignoring time).
+    final Map<DateTime, List<SessionEntity>> sessionsByDate = {};
     for (var session in sessions) {
       final date = DateTime(session.timeStamp.year, session.timeStamp.month, session.timeStamp.day);
-      dateMuscleMap.putIfAbsent(date, () => {}).add(session.muscleId);
+      sessionsByDate.putIfAbsent(date, () => []).add(session);
     }
-    // Aggregate counts by day of week (1=Monday, 7=Sunday)
-    final Map<int, int> dayOfWeekCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0};
-    for (var entry in dateMuscleMap.entries) {
-      int dayOfWeek = entry.key.weekday;
-      int count = countMusclesTrained ? entry.value.length : 1;
-      dayOfWeekCounts[dayOfWeek] = (dayOfWeekCounts[dayOfWeek] ?? 0) + count;
-    }
-    return dayOfWeekCounts;
+
+    // Initialize a map from weekday (1 = Monday, ... 7 = Sunday)
+    // with keys 'trainings' and 'muscles', both starting at 0.
+    final Map<int, Map<String, int>> dayOfWeekData = {
+      1: {'trainings': 0, 'muscles': 0},
+      2: {'trainings': 0, 'muscles': 0},
+      3: {'trainings': 0, 'muscles': 0},
+      4: {'trainings': 0, 'muscles': 0},
+      5: {'trainings': 0, 'muscles': 0},
+      6: {'trainings': 0, 'muscles': 0},
+      7: {'trainings': 0, 'muscles': 0},
+    };
+
+    // For each unique date, increment the training count by 1
+    // and add the distinct muscle count for that date.
+    sessionsByDate.forEach((date, sessionsList) {
+      final int day = date.weekday;
+      // Since each date counts as only one training, increment by 1.
+      dayOfWeekData[day]!['trainings'] = dayOfWeekData[day]!['trainings']! + 1;
+      // Count how many unique muscles were trained that day.
+      final int uniqueMuscles = sessionsList.map((s) => s.muscleId).toSet().length;
+      dayOfWeekData[day]!['muscles'] = dayOfWeekData[day]!['muscles']! + uniqueMuscles;
+    });
+
+    return dayOfWeekData;
   }
+
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final reportState = ref.watch(reportProvider);
     // Depending on the flag, choose filtered sessions by date or overall filtered sessions.
-    final List<SessionEntity> sessions = countMusclesTrained 
-        ? reportState.filteredSessionsByDate 
-        : reportState.filteredSessions;
+    final List<SessionEntity> sessions = sessionLogState.filteredSessions;
 
-    final groupedSessions = _groupSessionsByDayOfWeek(sessions);
+    final groupedData = _groupTrainingsByDayOfWeekCombined(sessions);
+    final barGroups = groupedData.entries.map((entry) {
+      final day = entry.key;
+      final sessionsCount = entry.value['trainings']!.toDouble();
+      final musclesCount = entry.value['muscles']!.toDouble();
+      return BarChartGroupData(
+        x: day,
+        barRods: [
+          // First bar: sessions count using the main gimini color.
+          BarChartRodData(
+            toY: sessionsCount,
+            color: theme.primaryColor,
+            width: 8,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          // Second bar: muscles count using the secondary color.
+          BarChartRodData(
+            toY: musclesCount,
+            color: theme.primaryColorDark,
+            width: 8,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ],
+        barsSpace: 4, // Space between the two bars in the same group.
+      );
+    }).toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit * 2),
@@ -53,10 +95,15 @@ class TrainingCountBarChart extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "${countMusclesTrained ? 'Muscles Trained' : 'Sessions'} by Day of Week",
+            "Conteo Entrenamientos",
             style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
           ),
           const SizedBox(height: 12),
+          CustomLegend(
+            items:const ["Entrenamientos", "Músculos"],
+            colors:[theme.primaryColor, theme.primaryColorDark]
+          ),
+          const SizedBox(height: 4),
           Container(
             height: 200,
             padding: const EdgeInsets.all(20.0),
@@ -64,20 +111,19 @@ class TrainingCountBarChart extends ConsumerWidget {
               borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
               color: AppColors.whiteColor,
             ),
-            child: BarChart(
+            child: BarChart(           
               BarChartData(
                 alignment: BarChartAlignment.spaceBetween,
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: countMusclesTrained ? 2 : 1,
                       reservedSize: 55,
                       getTitlesWidget: (value, meta) {
                         return Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: 16.0),
                             child: Text(value.toStringAsFixed(0), style: const TextStyle(fontSize: 12)),
                           ),
                         );
@@ -106,19 +152,22 @@ class TrainingCountBarChart extends ConsumerWidget {
                 ),
                 borderData: FlBorderData(show: false),
                 gridData: const FlGridData(show: false),
-                barGroups: groupedSessions.entries.map((entry) {
-                  return BarChartGroupData(
-                    x: entry.key,
-                    barRods: [
-                      BarChartRodData(
-                        toY: entry.value.toDouble(),
-                        color: theme.primaryColorDark,
-                        width: 16,
-                        borderRadius: BorderRadius.circular(4),
-                      )
-                    ],
-                  );
-                }).toList(),
+                barGroups: barGroups,
+
+                // Tooltip
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final label = rodIndex == 0 ? "Entrenamientos: " : "Músculos: ";
+                      return BarTooltipItem(
+                        label + rod.toY.toStringAsFixed(0),
+                        const TextStyle(fontSize: 12, color: Colors.white),
+                      );
+                    },
+                  ),
+                ),
+
               ),
             ),
           ),

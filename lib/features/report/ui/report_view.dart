@@ -1,13 +1,14 @@
 // lib/features/report/ui/report_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/presentation_layer/widgets/reporting/count_bar_chart.dart';
-import 'package:gymini/presentation_layer/widgets/reporting/max_min_line_chart_widget.dart';
+import 'package:gymini/features/report/provider/report_provider.dart';
+import 'package:gymini/features/report/ui/widgets/max_min_line_chart.dart';
+import 'package:gymini/features/report/ui/widgets/sessions_history_calendar_widget.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
+import 'package:gymini/features/report/ui/widgets/training_count_chart.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
 import 'package:gymini/presentation_layer/widgets/common/animation/entering_animation.dart';
 import 'package:gymini/common/widgets/filter/filter_slivers.dart';
-import 'package:gymini/presentation_layer/widgets/reporting/sessions_history_calendar_widget.dart';
 
 // Updated widget imports (adjust paths as needed)
 
@@ -17,35 +18,29 @@ class ReportScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ScrollController scrollController = ref.watch(scrollControllerProvider);
-    // // Optionally, read your report state:
-    // final reportState = ref.watch(reportProvider);
+    final reportState = ref.watch(reportProvider);
 
     // Build the list of report widgets.
     final List<Widget> elements = [
-      const EntryTransition(
+      EntryTransition(
         position: 2,
         totalAnimations: 6,
-        child: SessionsHistoryCalendarWidget(),
+        child: SessionsHistoryCalendarWidget(sessionLogState: reportState),
       ),
       EntryTransition(
         position: 3,
         totalAnimations: 6,
-        child: TrainingCountBarChart(),  // This widget will read reportProvider internally.
+        child: TrainingCountBarChart(sessionLogState: reportState),
       ),
       EntryTransition(
         position: 4,
         totalAnimations: 6,
-        child: TrainingCountBarChart(countMusclesTrained: true),
+        child: MaxMinLineChart(sessionLogState: reportState),
       ),
       EntryTransition(
         position: 5,
         totalAnimations: 6,
-        child: MaxMinLineChart(),
-      ),
-      EntryTransition(
-        position: 6,
-        totalAnimations: 6,
-        child: MaxMinLineChart(repsRepresentation: true),
+        child: MaxMinLineChart(repsRepresentation: true, sessionLogState: reportState),
       ),
     ];
 

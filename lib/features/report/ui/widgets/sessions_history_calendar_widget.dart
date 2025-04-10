@@ -1,4 +1,3 @@
-// lib/features/report/ui/widgets/sessions_history_calendar_widget.dart
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,10 +6,16 @@ import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/features/report/provider/report_provider.dart'; // Updated import
+import 'package:gymini/domain_layer/entities/log_provider_state.dart'; // Updated import
 
 class SessionsHistoryCalendarWidget extends ConsumerWidget {
-  const SessionsHistoryCalendarWidget({super.key});
+  final SessionLogProviderState sessionLogState;
+  
+  const SessionsHistoryCalendarWidget({
+    super.key,
+    required this.sessionLogState,
+    });
+  
 
   /// Returns the number of days in the given month.
   int _getDaysInMonth(int year, int month) {
@@ -87,15 +92,14 @@ class SessionsHistoryCalendarWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    // Read report state from the new provider.
-    final reportState = ref.watch(reportProvider);
+    final sessions = sessionLogState.filteredSessions;
 
-    final selectedYear = reportState.selectedYear;
-    final selectedMonth = reportState.selectedMonth;
+    final selectedYear = sessionLogState.selectedYear;
+    final selectedMonth = sessionLogState.selectedMonth;
     final daysInMonth = _getDaysInMonth(selectedYear, selectedMonth);
 
     // Group sessions into a data structure for the scatter chart.
-    final sessionData = _groupSessionsByWeekAndDay(reportState.filteredSessions);
+    final sessionData = _groupSessionsByWeekAndDay(sessions);
     final Map<int, int> intensityMap = {};
 
     return Padding(

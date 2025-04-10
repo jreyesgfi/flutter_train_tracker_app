@@ -53,7 +53,6 @@ class FilterNotifier extends StateNotifier<FilterState> {
 
   void _updateFilters() async {
     LogFilter? filter = sharedStreams.logFilterStream.latestValue;
-    print('Filter changed: ${filter?.startMonth}');
     state = state.copyWith(
       selectedMuscle: filter?.musclePicked,
       selectedExercise: filter?.exercisePicked,
