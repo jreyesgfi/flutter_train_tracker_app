@@ -4,7 +4,7 @@
 ☐ Add KPIs of trained sessions in the current month.
 ☐ Deletion capability in history of sessions.
 ✔ History of sessions with new hidden sessions. @started(25-04-09 14:30) @done(25-04-09 22:38) @lasted(8h8m32s)
-☐ Enhance filters in report section.
+☐ Enhance filters in report section. @started(25-07-05 15:20)
 ☐ Offer three options for time selection: current month, current year, all time.
 ✔ Refactor history of sessions to use new structure. @started(25-04-08 11:20) @done(25-04-09 14:30) @lasted(1d3h10m12s)
 ✔ Prevent overflow in filters. @started(25-04-10 15:46) @done(25-04-10 16:17) @lasted(31m32s)

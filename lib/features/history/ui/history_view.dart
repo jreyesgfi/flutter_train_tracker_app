@@ -39,8 +39,8 @@ class HistoryScreen extends ConsumerWidget {
       }
       itemsForCurrentDate.add(
         EntryTransition(
-          position: (i % 8) + 2,
-          totalAnimations: 10,
+          position: 3,
+          totalAnimations: 3,
           child: SessionLogCard(session: session, filteredOut: filteredOut),
         ),
       );
@@ -154,8 +154,8 @@ class DateSection extends MultiSliver {
                 color: AppColors.screenBackgroundColor,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: EntryTransition(
-                  position: 2,
-                  totalAnimations: 10,
+                  position: 3,
+                  totalAnimations: 3,
                   child: DateSeparator(date: dateStamp),
                 ),
               ),
