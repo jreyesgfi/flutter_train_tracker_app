@@ -2,6 +2,13 @@
 
 Your Training Tracker.
 
+## Set up
+Steps to run it:
+-   flutter doctor
+-   open android studio and start a device
+-   ctrl + shift + P: select the device
+-   flutter run
+
 ## Project Structure
 lib/
 ├── app/
