@@ -1,8 +1,8 @@
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/log_filter.dart';
 
 abstract class SessionLogProviderState {
-  int get selectedMonth;
-  int get selectedYear;
+  LogFilter get logFilter;
   List<SessionEntity> get filteredSessions;
 }
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/features/report/provider/report_provider.dart';
 import 'package:gymini/features/report/ui/widgets/max_min_line_chart.dart';
-import 'package:gymini/features/report/ui/widgets/sessions_history_calendar_widget.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
 import 'package:gymini/features/report/ui/widgets/training_count_chart.dart';
 import 'package:gymini/presentation_layer/providers/scroll_controller_provider.dart';
@@ -25,7 +24,7 @@ class ReportScreen extends ConsumerWidget {
       EntryTransition(
         position: 2,
         totalAnimations: 6,
-        child: SessionsHistoryCalendarWidget(sessionLogState: reportState),
+        child: TrainingCountBarChart(sessionLogState: reportState),
       ),
       EntryTransition(
         position: 3,

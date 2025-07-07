@@ -1,38 +1,28 @@
 
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:tuple/tuple.dart';
+import 'package:gymini/utils/helpers/copy_with.dart';
 
 class LogFilter {
-  final int startYear;
-  final int startMonth;
-  final int endYear;
-  final int endMonth;
-  final MuscleEntity? musclePicked;    // Assuming MuscleEntity comes from your core_entities.dart
-  final ExerciseEntity? exercisePicked;  // Define this similar to MuscleEntity if not already available
+  final Tuple2<DateTime?, DateTime?>? timeRange;
+  final MuscleEntity? musclePicked;
+  final ExerciseEntity? exercisePicked;
 
-  LogFilter({
-    required this.startYear,
-    required this.startMonth,
-    required this.endYear,
-    required this.endMonth,
+  const LogFilter({
+    this.timeRange,
     this.musclePicked,
     this.exercisePicked,
   });
 
   LogFilter copyWith({
-    int? startYear,
-    int? startMonth,
-    int? endYear,
-    int? endMonth,
-    MuscleEntity? musclePicked,
-    ExerciseEntity? exercisePicked,
+    Object? timeRange      = copyWithUnset,
+    Object? musclePicked   = copyWithUnset,
+    Object? exercisePicked = copyWithUnset,
   }) {
     return LogFilter(
-      startYear: startYear ?? this.startYear,
-      startMonth: startMonth ?? this.startMonth,
-      endYear: endYear ?? this.endYear,
-      endMonth: endMonth ?? this.endMonth,
-      musclePicked: musclePicked ?? this.musclePicked,
-      exercisePicked: exercisePicked ?? this.exercisePicked,
+      timeRange:      valueOrCurrent(timeRange,       this.timeRange),
+      musclePicked:   valueOrCurrent(musclePicked,    this.musclePicked),
+      exercisePicked: valueOrCurrent(exercisePicked,  this.exercisePicked),
     );
   }
 }

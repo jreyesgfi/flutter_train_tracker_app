@@ -1,5 +1,4 @@
 // lib/features/report/ui/widgets/max_min_line_chart_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:gymini/common/widgets/reporting/custom_legend.dart';
@@ -19,115 +18,94 @@ class MaxMinLineChart extends ConsumerWidget {
     this.repsRepresentation = false,
   });
 
-  /// Returns the number of days in the given month.
-  int _getDaysInSelectedMonth(int selectedYear, int selectedMonth) {
-    return DateTime(selectedYear, selectedMonth + 1, 0).day;
+  // ──────────────────────────────────────────────────────────────────────────
+  // NEW: derive initial / end date with sensible fall-backs
+  // ──────────────────────────────────────────────────────────────────────────
+  ({DateTime start, DateTime end}) _getRange() {
+    final range = sessionLogState.logFilter.timeRange;
+    final now   = DateTime.now();
+    final end   = range?.item2 ?? now;                       // note: item2 !
+    final start = range?.item1 ?? end.subtract(const Duration(days: 30));
+    return (start: start, end: end);
   }
 
-  /// Compute relative percentage changes for each session based on the first session’s value
-  /// in each exercise group.
-  ///
-  /// The steps are:
-  ///   1. Group sessions by exerciseId.
-  ///   2. For each group, sort sessions by date.
-  ///   3. For each session, compute the relative percentage difference from the group baseline.
-  ///   4. Group these relative values by date.
-  ///   5. For each date, compute the mean of the relative values.
-  ///
-  /// [isMax] indicates whether to use the max value (otherwise, min is used).
-  List<FlSpot> _generateRelativeSpotsByExerciseGrouping(bool isMax) {
-    final sessions = sessionLogState.filteredSessions;
-    // Group sessions by exerciseId.
-    final Map<String, List<SessionEntity>> groups = {};
-    for (final session in sessions) {
-      groups.putIfAbsent(session.exerciseId, () => []).add(session);
-    }
-    // List to hold (date, relativePercentage) entries.
-    List<MapEntry<DateTime, double>> allRelativeValues = [];
+  // ──────────────────────────────────────────────────────────────────────────
+  // NEW: convert a calendar date → “days since start”
+  // ──────────────────────────────────────────────────────────────────────────
+  double _toDayOffset(DateTime date, DateTime start) =>
+      date.difference(DateTime(start.year, start.month, start.day)).inDays.toDouble();
 
-    // Iterate through each exercise group.
-    groups.forEach((exerciseId, group) {
-      // Sort sessions by date.
+  /// Compute relative values (exactly your old algorithm) but use
+  /// `_toDayOffset()` for the x-coordinate.
+  List<FlSpot> _generateRelativeSpotsByExerciseGrouping(bool isMax, DateTime start) {
+    final sessions = sessionLogState.filteredSessions;
+
+    // 1) group by exercise •••
+    final Map<String, List<SessionEntity>> groups = {};
+    for (final s in sessions) {
+      groups.putIfAbsent(s.exerciseId, () => []).add(s);
+    }
+
+    final List<MapEntry<DateTime, double>> relativeByDate = [];
+
+    // 2) per group •••
+    groups.forEach((_, group) {
       group.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
       if (group.isEmpty) return;
-      // Get baseline from the first session of the group.
-      final firstSession = group.first;
-      double baseline;
-      if (isMax) {
-        baseline = repsRepresentation
-            ? firstSession.maxReps.toDouble()
-            : firstSession.maxWeight.toDouble();
-      } else {
-        baseline = repsRepresentation
-            ? firstSession.minReps.toDouble()
-            : firstSession.minWeight.toDouble();
-      }
-      // If baseline is 0, skip the group (avoid division by 0).
+
+      final first = group.first;
+      final baseline = isMax
+          ? (repsRepresentation ? first.maxReps : first.maxWeight).toDouble()
+          : (repsRepresentation ? first.minReps : first.minWeight).toDouble();
       if (baseline == 0) return;
-      // For each session in the group, compute the relative percentage change.
-      for (final session in group) {
-        double currentValue;
-        if (isMax) {
-          currentValue = repsRepresentation
-              ? session.maxReps.toDouble()
-              : session.maxWeight.toDouble();
-        } else {
-          currentValue = repsRepresentation
-              ? session.minReps.toDouble()
-              : session.minWeight.toDouble();
-        }
-        double relativeChange = ((currentValue - baseline) / baseline) * 100;
-        // Use only the date part of the timestamp.
-        final dateKey = DateTime(session.timeStamp.year,
-            session.timeStamp.month, session.timeStamp.day);
-        allRelativeValues.add(MapEntry(dateKey, relativeChange));
+
+      for (final s in group) {
+        final current = isMax
+            ? (repsRepresentation ? s.maxReps : s.maxWeight).toDouble()
+            : (repsRepresentation ? s.minReps : s.minWeight).toDouble();
+        final relPct = ((current - baseline) / baseline) * 100;
+        final dateKey = DateTime(s.timeStamp.year, s.timeStamp.month, s.timeStamp.day);
+        relativeByDate.add(MapEntry(dateKey, relPct));
       }
     });
 
-    // Now group the relative values by date.
-    final Map<DateTime, List<double>> groupedByDate = {};
-    for (final entry in allRelativeValues) {
-      groupedByDate.putIfAbsent(entry.key, () => []).add(entry.value);
+    // 3) average per calendar day •••
+    final Map<DateTime, List<double>> byDate = {};
+    for (final e in relativeByDate) {
+      byDate.putIfAbsent(e.key, () => []).add(e.value);
     }
 
-    // Compute the average relative change for each date.
-    List<FlSpot> spots = [];
-    groupedByDate.forEach((date, values) {
-      final average = values.reduce((a, b) => a + b) / values.length;
-      spots.add(FlSpot(date.day.toDouble(), average));
+    final List<FlSpot> spots = [];
+    byDate.forEach((date, vals) {
+      final avg = vals.reduce((a, b) => a + b) / vals.length;
+      spots.add(FlSpot(_toDayOffset(date, start), avg));
     });
-    // Sort by day.
+
     spots.sort((a, b) => a.x.compareTo(b.x));
     return spots;
   }
 
-  /// Compute an adjusted minimum Y value for the chart (adds a bit of padding).
-  double _getRelativeMinY(List<FlSpot> spots) {
-    if (spots.isEmpty) return 0;
-    final minY = spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
-    return minY - 1;
-  }
+  double _getRelativeMinY(List<FlSpot> s) =>
+      s.isEmpty ? 0 : s.map((e) => e.y).reduce((a, b) => a < b ? a : b) - 1;
 
-  /// Compute an adjusted maximum Y value for the chart (adds a bit of padding).
-  double _getRelativeMaxY(List<FlSpot> spots) {
-    if (spots.isEmpty) return 10;
-    final maxY = spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
-    return maxY + 1;
-  }
+  double _getRelativeMaxY(List<FlSpot> s) =>
+      s.isEmpty ? 10 : s.map((e) => e.y).reduce((a, b) => a > b ? a : b) + 1;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final selectedMonth = sessionLogState.selectedMonth;
-    final selectedYear = sessionLogState.selectedYear;
-    final daysInMonth = _getDaysInSelectedMonth(selectedYear, selectedMonth);
 
-    // Generate spots for both the min and max series.
-    final relativeSpotsMin = _generateRelativeSpotsByExerciseGrouping(false);
-    final relativeSpotsMax = _generateRelativeSpotsByExerciseGrouping(true);
-    final allSpots = [...relativeSpotsMin, ...relativeSpotsMax];
-    final minY = _getRelativeMinY(allSpots);
-    final maxY = _getRelativeMaxY(allSpots);
+    // ────────────────────────────────────────────────────────────────────────
+    // NEW: date window & #days
+    // ────────────────────────────────────────────────────────────────────────
+    final range = _getRange();
+    final totalDays = range.end.difference(range.start).inDays + 1;
+
+    // generate series
+    final spotsMin = _generateRelativeSpotsByExerciseGrouping(false, range.start);
+    final spotsMax = _generateRelativeSpotsByExerciseGrouping(true,  range.start);
+    final minY     = _getRelativeMinY([...spotsMin, ...spotsMax]);
+    final maxY     = _getRelativeMaxY([...spotsMin, ...spotsMax]);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: GyminiTheme.verticalGapUnit * 2),
@@ -136,29 +114,29 @@ class MaxMinLineChart extends ConsumerWidget {
         children: [
           Text(
             "Max-Min ${repsRepresentation ? 'Reps' : 'Pesos'} (%)",
-            style: theme.textTheme.titleMedium
-                ?.copyWith(color: theme.primaryColorDark),
+            style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColorDark),
           ),
           const SizedBox(height: 12),
-
           CustomLegend(
-            items:const ["Max", "Min"],
-            colors:[theme.primaryColor, theme.primaryColorDark]
+            items: const ["Max", "Min"],
+            colors: [theme.primaryColor, theme.primaryColorDark],
           ),
           const SizedBox(height: 4),
-          
+
+          // ──────────────────────────────────────────────────────────────────
+          // chart
+          // ──────────────────────────────────────────────────────────────────
           Container(
             height: 300,
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(customThemeValues.borderRadius),
+              borderRadius: BorderRadius.circular(customThemeValues.borderRadius),
               color: AppColors.whiteColor,
             ),
             child: LineChart(
               LineChartData(
-                minX: 1,
-                maxX: daysInMonth.toDouble(),
+                minX: 0,                           // start == day 0
+                maxX: (totalDays - 1).toDouble(),  // inclusive end
                 minY: minY,
                 maxY: maxY,
                 titlesData: FlTitlesData(
@@ -166,33 +144,29 @@ class MaxMinLineChart extends ConsumerWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 55,
-                      getTitlesWidget: (value, meta) {
-                        return Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Text("${value.toStringAsFixed(1)}%",
-                                style: const TextStyle(fontSize: 12)),
-                          ),
-                        );
-                      },
+                      getTitlesWidget: (v, _) => Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Text("${v.toStringAsFixed(1)}%",
+                              style: const TextStyle(fontSize: 12)),
+                        ),
+                      ),
                     ),
                   ),
-
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      // Set the interval to 7 days
-                      interval: 7,
+                      interval: 7,                 // one tick per week
                       reservedSize: 40,
-                      getTitlesWidget: (value, meta) {
-                        final day = value.toInt();
+                      getTitlesWidget: (v, _) {
+                        final date = range.start.add(Duration(days: v.toInt()));
                         return Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 8),
                             child: Text(
-                              '$day',
+                              "${date.day}/${date.month}",  // e.g. 05/07
                               style: const TextStyle(fontSize: 12),
                             ),
                           ),
@@ -200,17 +174,16 @@ class MaxMinLineChart extends ConsumerWidget {
                       },
                     ),
                   ),
-                  topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: false),
                 gridData: const FlGridData(show: false),
-                // Lines
+
+                // 2 series
                 lineBarsData: [
                   LineChartBarData(
-                    spots: relativeSpotsMin,
+                    spots: spotsMin,
                     isCurved: true,
                     dashArray: [3, 6],
                     color: theme.primaryColorDark,
@@ -219,7 +192,7 @@ class MaxMinLineChart extends ConsumerWidget {
                     dotData: const FlDotData(show: false),
                   ),
                   LineChartBarData(
-                    spots: relativeSpotsMax,
+                    spots: spotsMax,
                     isCurved: true,
                     color: theme.primaryColor,
                     barWidth: 3,
@@ -227,20 +200,18 @@ class MaxMinLineChart extends ConsumerWidget {
                     dotData: const FlDotData(show: false),
                   ),
                 ],
-                // Tooltip
+
+                // tool-tip
                 lineTouchData: LineTouchData(
                   handleBuiltInTouches: true,
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                      return touchedSpots.map((barSpot) {
-                        // Determine label based on line index.
-                        final label = barSpot.barIndex == 0 ? "Min" : "Max";
-                        return LineTooltipItem(
-                          "$label: ${barSpot.y.toStringAsFixed(1)}%",
-                          const TextStyle(fontSize: 12, color: Colors.white),
-                        );
-                      }).toList();
-                    },
+                    getTooltipItems: (touched) => touched.map((barSpot) {
+                      final label = barSpot.barIndex == 0 ? "Min" : "Max";
+                      return LineTooltipItem(
+                        "$label: ${barSpot.y.toStringAsFixed(1)}%",
+                        const TextStyle(fontSize: 12, color: Colors.white),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),

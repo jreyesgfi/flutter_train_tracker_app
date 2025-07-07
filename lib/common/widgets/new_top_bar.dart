@@ -35,8 +35,8 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
     _fontSize = 26.0;
     _backgroundColor = AppColors.screenBackgroundColor;
     _borderRadius = 0.0;
-    _height = 100;
-    _bottomPadding = 24;
+    _height = 80;
+    _bottomPadding = 12;
     widget.controller.addListener(_updateAppBar);
 
     _fadeController = AnimationController(
@@ -61,14 +61,15 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
   }
 
   void _updateAppBar() {
-    double offset = widget.controller.offset.clamp(0.0, 80.0);
+    double offset = widget.controller.offset.clamp(0.0, 60.0);
     setState(() {
-      _fontSize = lerpDouble(26.0, 21.0, offset / 80.0)!;
+      _fontSize = lerpDouble(26.0, 21.0, offset / 60.0)!;
       _backgroundColor = Color.lerp(AppColors.screenBackgroundColor,
-          AppColors.whiteColor, offset / 80.0)!;
-      _borderRadius = lerpDouble(0.0, 50.0, offset / 80.0)!;
-      _height = lerpDouble(120.0, 80.0, offset / 80.0)!;
-      _bottomPadding = lerpDouble(32, 20.0, offset / 80.0)!;
+          AppColors.whiteColor, offset / 60.0)!;
+      _borderRadius = lerpDouble(0.0, 20.0, offset / 60.0)!;
+      _height = lerpDouble(80.0, 60.0, offset / 60.0)!;
+      _bottomPadding = lerpDouble(16, 12.0, offset / 60.0)!;
+      
     });
   }
 
@@ -100,7 +101,7 @@ class _NewTopBarState extends ConsumerState<NewTopBar>
               child: SlideTransition(
                 position: _slideAnimation,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 12, left: 4, right: 4),
+                  margin: const EdgeInsets.only(top: 4, left: 4, right: 4),
                   decoration: BoxDecoration(
                     color: _backgroundColor,
                     borderRadius: BorderRadius.circular(_borderRadius),

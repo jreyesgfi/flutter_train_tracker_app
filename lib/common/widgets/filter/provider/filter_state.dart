@@ -1,4 +1,6 @@
 import 'package:gymini/domain_layer/entities/core_entities.dart';
+import 'package:gymini/domain_layer/entities/log_filter.dart';
+import 'package:tuple/tuple.dart';
 
 class FilterState {
   final List<MuscleEntity> allMuscles;
@@ -8,10 +10,7 @@ class FilterState {
   final List<SessionEntity> filteredSessionsByDate;
   final List<SessionEntity> allSessions;
 
-  final MuscleEntity? selectedMuscle;
-  final ExerciseEntity? selectedExercise;
-  final int selectedMonth;
-  final int selectedYear;
+  final LogFilter logFilter;
 
   const FilterState({
     this.allMuscles = const [],
@@ -20,17 +19,18 @@ class FilterState {
     this.filteredSessions = const [],
     this.filteredSessionsByDate = const [],
     this.allSessions = const [],
-    this.selectedMuscle,
-    this.selectedExercise,
-    required this.selectedMonth,
-    required this.selectedYear,
+    required this.logFilter,
   });
 
   factory FilterState.initial() {
     final now = DateTime.now();
+    LogFilter initialFilter = LogFilter(
+      timeRange: Tuple2<DateTime?, DateTime?>(now.subtract(const Duration(days: 30)), now),
+      musclePicked: null,
+      exercisePicked: null,
+    );
     return FilterState(
-      selectedMonth: now.month,
-      selectedYear: now.year,
+      logFilter: initialFilter,
     );
   }
 
@@ -41,10 +41,7 @@ class FilterState {
     List<SessionEntity>? filteredSessions,
     List<SessionEntity>? filteredSessionsByDate,
     List<SessionEntity>? allSessions,
-    MuscleEntity? selectedMuscle,
-    ExerciseEntity? selectedExercise,
-    int? selectedMonth,
-    int? selectedYear,
+    LogFilter? logFilter,
   }) {
     return FilterState(
       allMuscles: allMuscles ?? this.allMuscles,
@@ -53,10 +50,7 @@ class FilterState {
       filteredSessions: filteredSessions ?? this.filteredSessions,
       filteredSessionsByDate: filteredSessionsByDate ?? this.filteredSessionsByDate,
       allSessions: allSessions ?? this.allSessions,
-      selectedMuscle: selectedMuscle ?? this.selectedMuscle,
-      selectedExercise: selectedExercise ?? this.selectedExercise,
-      selectedMonth: selectedMonth ?? this.selectedMonth,
-      selectedYear: selectedYear ?? this.selectedYear,
+      logFilter: logFilter ?? this.logFilter,
     );
   }
 }

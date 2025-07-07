@@ -1,12 +1,14 @@
 // lib/features/report/provider/report_notifier.dart
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/widgets/filter/utils/filters.dart';
 import 'package:gymini/common/shared_data/streams/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
 import 'package:gymini/domain_layer/entities/log_filter.dart';
 import 'package:gymini/features/report/provider/report_state.dart';
 import 'package:gymini/data/repositories/cloud_repository_interfaces.dart';
 import 'package:collection/collection.dart';
+import 'package:tuple/tuple.dart';
 
 class ReportNotifier extends StateNotifier<ReportState> {
   final MuscleRepository muscleRepository;
@@ -55,42 +57,25 @@ class ReportNotifier extends StateNotifier<ReportState> {
   void _updateFilters() async {
     LogFilter? filter = sharedStreams.logFilterStream.latestValue;
     state = state.copyWith(
-      selectedMuscle: filter?.musclePicked,
-      selectedExercise: filter?.exercisePicked,
-      selectedMonth: filter?.startMonth ?? DateTime.now().month,
-      selectedYear: filter?.startYear ?? DateTime.now().year,
+      logFilter: filter,
     );
   }
 
-  bool _filterLogic(SessionEntity session) {
-    final sameMonthYear =
-        session.timeStamp.month == state.selectedMonth &&
-        session.timeStamp.year == state.selectedYear;
-
-    bool sameMuscle = true;
-    bool sameExercise = true;
-
-    if (state.selectedMuscle != null && state.selectedMuscle!.id.isNotEmpty) {
-      sameMuscle = (session.muscleId == state.selectedMuscle!.id);
-    }
-    if (state.selectedExercise != null && state.selectedExercise!.id.isNotEmpty) {
-      sameExercise = (session.exerciseId == state.selectedExercise!.id);
-    }
-
-    return sameMonthYear && sameMuscle && sameExercise;
-  }
 
   void _filterSessions() {
-    final filtered = state.allSessions.where(_filterLogic).toList();
-    state = state.copyWith(filteredSessions: filtered);
+    List<SessionEntity> filteredSessions = Filters.filterSessions(
+      state.allSessions,
+      state.logFilter
+    );
+    state = state.copyWith(filteredSessions: filteredSessions);
   }
 
   void _filterSessionsByDate() {
-    final filtered = state.allSessions.where((session) {
-      return session.timeStamp.month == state.selectedMonth &&
-             session.timeStamp.year == state.selectedYear;
-    }).toList();
-    state = state.copyWith(filteredSessionsByDate: filtered);
+    final filteredSessions = Filters.filterSessions(
+      state.allSessions, 
+      state.logFilter.copyWith(musclePicked: null, exercisePicked: null)
+    );
+    state = state.copyWith(filteredSessionsByDate: filteredSessions);
   }
 
   MuscleEntity? _retrieveMuscleById(String muscleId) {
@@ -115,24 +100,29 @@ class ReportNotifier extends StateNotifier<ReportState> {
     }
 
     state = state.copyWith(
-      selectedMuscle: selectedMuscle,
-      selectedExercise: null, // Reset exercise selection.
+      logFilter: state.logFilter.copyWith(
+        musclePicked: selectedMuscle,
+        exercisePicked: null,
+      ),
       filteredExercises: filteredExercises,
     );
   }
 
+
   void selectExerciseById(String exerciseId) {
-    ExerciseEntity emptyExerciseEntity = ExerciseEntity(id: "", name: "", muscleId: "");
-    ExerciseEntity? selectedExercise = _retrieveExerciseById(exerciseId);
-    selectedExercise ??= emptyExerciseEntity;
-    state = state.copyWith(selectedExercise: selectedExercise);
+    final selectedExercise = _retrieveExerciseById(exerciseId);
+    state = state.copyWith(
+      logFilter: state.logFilter.copyWith(
+        exercisePicked: selectedExercise,
+      ),
+    );
   }
 
-  void selectMonthYear(int monthNum, int year) {
-    if (monthNum < 1 || monthNum > 12) return;
+  void selectTimeRange(Tuple2<DateTime?, DateTime?> timeRange) {
     state = state.copyWith(
-      selectedMonth: monthNum,
-      selectedYear: year,
+      logFilter: state.logFilter.copyWith(
+        timeRange: timeRange,
+      ),
     );
     _filterSessions();
     _filterSessionsByDate();
