@@ -17,7 +17,7 @@ abstract class Filters{
         sameMuscle = (session.muscleId == logFilter!.musclePicked!.id);
       }
       
-      if (logFilter?.musclePicked?.id.isNotEmpty == true) {
+      if (logFilter?.exercisePicked?.id.isNotEmpty == true) {
         sameExercise = (session.exerciseId == logFilter!.exercisePicked!.id);
       }
       

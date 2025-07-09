@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymini/common/widgets/filter/provider/filter_provider.dart';
-import 'package:gymini/common/shared_data/streams/global_stream_provider.dart';
 import 'package:gymini/common_layer/theme/app_colors.dart';
 import 'package:gymini/common_layer/theme/app_theme.dart';
-import 'package:gymini/common_layer/utils/text_utils.dart';
 import 'package:tuple/tuple.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -69,7 +67,7 @@ class DateFilterWidget extends ConsumerStatefulWidget {
 
 class _DateFilterWidgetState extends ConsumerState<DateFilterWidget> {
   late DateFilterMode _mode;
-  late int _selectedMonth; // 1–12
+  late int _selectedMonth;
   late int _selectedYear;
 
   @override
@@ -79,12 +77,11 @@ class _DateFilterWidgetState extends ConsumerState<DateFilterWidget> {
     _mode = DateFilterMode.month;
     _selectedMonth = now.month;
     _selectedYear = now.year;
-    _updateFilter(); // initialise provider with current month
   }
 
   // Updates global filter whenever a change occurs
   void _updateFilter() {
-    final sharedStreams = ref.read(globalSharedStreamsProvider);
+    final notifier = ref.read(filterProvider.notifier);
     DateTime start;
     DateTime end;
 
@@ -96,11 +93,7 @@ class _DateFilterWidgetState extends ConsumerState<DateFilterWidget> {
       end = DateTime(_selectedYear + 1, 1, 1);
     }
 
-    final filterState = ref.read(filterProvider);
-    final newFilter = filterState.logFilter.copyWith(
-      timeRange: Tuple2<DateTime, DateTime>(start, end),
-    );
-    sharedStreams.logFilterStream.update(newFilter);
+    notifier.selectTimeRange(Tuple2<DateTime, DateTime>(start, end));
   }
 
   // Toggle between month and year modes

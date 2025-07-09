@@ -1,6 +1,7 @@
 // lib/features/report/provider/report_notifier.dart
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymini/common/widgets/filter/filter_section.dart';
 import 'package:gymini/common/widgets/filter/utils/filters.dart';
 import 'package:gymini/common/shared_data/streams/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
@@ -29,7 +30,7 @@ class ReportNotifier extends StateNotifier<ReportState> {
 
   Future<void> _init() async {
     await _fetchAllData();
-    selectMuscleById('');
+    initialiseFilter();
     _subscribeToStreams();
   }
 
@@ -45,13 +46,31 @@ class ReportNotifier extends StateNotifier<ReportState> {
     );
   }
 
+  void initialiseFilter() {
+    final now = DateTime.now();
+    int selectedYear = now.year;
+    int selectedMonth = now.month;
+    DateTime start = DateTime(selectedYear, selectedMonth, 1);
+    DateTime end = DateTime(selectedYear, selectedMonth + 1, 1);
+    state = state.copyWith(
+      logFilter: LogFilter(
+        timeRange: Tuple2<DateTime, DateTime>(start, end),
+        musclePicked: null,
+        exercisePicked: null,
+      ),
+    );
+    _updateStreams();
+  }
+
   void _subscribeToStreams() {
     // Listen for changes to the filter
     sharedStreams.logFilterStream.stream.listen((filter) async {
       _updateFilters();
-      _filterSessions();
-      _filterSessionsByDate();
     });
+  }
+
+  void _updateStreams() {
+    sharedStreams.logFilterStream.update(state.logFilter);
   }
 
   void _updateFilters() async {
@@ -59,10 +78,13 @@ class ReportNotifier extends StateNotifier<ReportState> {
     state = state.copyWith(
       logFilter: filter,
     );
+    _filterSessions();
   }
 
 
   void _filterSessions() {
+    print("Filtering");
+    print(state.logFilter.musclePicked?.name);
     List<SessionEntity> filteredSessions = Filters.filterSessions(
       state.allSessions,
       state.logFilter
@@ -70,13 +92,13 @@ class ReportNotifier extends StateNotifier<ReportState> {
     state = state.copyWith(filteredSessions: filteredSessions);
   }
 
-  void _filterSessionsByDate() {
-    final filteredSessions = Filters.filterSessions(
-      state.allSessions, 
-      state.logFilter.copyWith(musclePicked: null, exercisePicked: null)
-    );
-    state = state.copyWith(filteredSessionsByDate: filteredSessions);
-  }
+  // void _filterSessionsByDate() {
+  //   final filteredSessions = Filters.filterSessions(
+  //     state.allSessions, 
+  //     state.logFilter.copyWith(musclePicked: null, exercisePicked: null)
+  //   );
+  //   state = state.copyWith(filteredSessionsByDate: filteredSessions);
+  // }
 
   MuscleEntity? _retrieveMuscleById(String muscleId) {
     return state.allMuscles.firstWhereOrNull((m) => m.id == muscleId);
@@ -106,6 +128,8 @@ class ReportNotifier extends StateNotifier<ReportState> {
       ),
       filteredExercises: filteredExercises,
     );
+
+    _updateStreams();
   }
 
 
@@ -116,6 +140,7 @@ class ReportNotifier extends StateNotifier<ReportState> {
         exercisePicked: selectedExercise,
       ),
     );
+    _updateStreams();
   }
 
   void selectTimeRange(Tuple2<DateTime?, DateTime?> timeRange) {
@@ -124,8 +149,7 @@ class ReportNotifier extends StateNotifier<ReportState> {
         timeRange: timeRange,
       ),
     );
-    _filterSessions();
-    _filterSessionsByDate();
+    _updateStreams();
   }
 
   @override
