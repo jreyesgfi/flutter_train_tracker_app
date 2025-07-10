@@ -75,7 +75,9 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
                   
               stage: 1,
               color: theme.primaryColorDark,
-              icon: Icons.stop,
+              icon: (widget.currentStage == 0)
+                  ? Icons.stop
+                  : Icons.arrow_back_sharp,
             ),
           ),
 
@@ -106,8 +108,8 @@ class _SessionButtonsWrapperState extends ConsumerState<SessionButtonsWrapper> {
               stage: 1,
               color: theme.primaryColor,
               icon: (widget.currentStage % 2 == 0)
-                  ? Icons.arrow_forward
-                  : Icons.double_arrow,
+                  ? Icons.arrow_forward_ios
+                  : Icons.check_rounded,
             ),
           ),
         ],

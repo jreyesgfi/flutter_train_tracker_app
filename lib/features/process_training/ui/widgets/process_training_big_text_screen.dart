@@ -8,16 +8,28 @@ class BigTrainingText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        "Serie $stage, \n\n¡a entrenar!",
-        textAlign: TextAlign.center,
-        style: Theme.of(context)
-            .textTheme
-            .headlineLarge
-            ?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 48,
-            ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '¡Entrena\nAHORA!',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 48,
+                ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'serie $stage',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+          ),
+        ],
       ),
     );
   }

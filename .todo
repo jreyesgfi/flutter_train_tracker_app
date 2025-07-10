@@ -1,8 +1,11 @@
 ✔ Solve default image in exercises without previous data. @started(25-04-10 15:08) @done(25-04-10 15:43) @lasted(35m10s)
 ☐ Sync after create the session.
 ✔ Porcentual charts @started(25-04-09 22:41) @done(25-04-10 11:46) @lasted(13h5m10s)
+☐ Enhance UI in the process training screen. @started(25-07-10 22:42)
 ☐ Add KPIs of trained sessions in the current month.
 ☐ Deletion capability in history of sessions.
+☐ When the chrono is paused save the state so it is still paused.
+☐ When long press cancel the pause chrono.
 ✔ History of sessions with new hidden sessions. @started(25-04-09 14:30) @done(25-04-09 22:38) @lasted(8h8m32s)
 ✔ Enhance filters in report section. @started(25-07-05 15:20) @done(25-07-08 00:10) @lasted(2d8h50m55s)
 ✘ Offer three options for time selection: current month, current year, all time. @cancelled(25-07-08 23:40)

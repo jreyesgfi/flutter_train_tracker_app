@@ -5,6 +5,7 @@ import 'package:gymini/features/process_training/ui/widgets/process_training_big
 import 'package:gymini/presentation_layer/widgets/training_session/exercise_image_example.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_form.dart';
 import 'package:gymini/presentation_layer/widgets/training_session/session_info_widget.dart';
+
 class TrainingStageSwitcher extends StatelessWidget {
   final int currentStage;
   final dynamic sessionTile; // Replace with your actual SessionTile type.
@@ -86,9 +87,15 @@ class TrainingStageSwitcher extends StatelessWidget {
                       return const Center(child: Text("Error loading timer"));
                     }
                     final startTime = snapshot.data!;
-                    return SimpleChrono(
-                      duration: const Duration(minutes: 2),
-                      startTime: startTime,
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: SimpleChrono(
+                            duration: const Duration(minutes: 2),
+                            startTime: startTime,
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),

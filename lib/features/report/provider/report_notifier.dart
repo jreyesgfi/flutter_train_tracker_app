@@ -1,7 +1,6 @@
 // lib/features/report/provider/report_notifier.dart
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymini/common/widgets/filter/filter_section.dart';
 import 'package:gymini/common/widgets/filter/utils/filters.dart';
 import 'package:gymini/common/shared_data/streams/global_stream.dart';
 import 'package:gymini/domain_layer/entities/core_entities.dart';
