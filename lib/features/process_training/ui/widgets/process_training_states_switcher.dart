@@ -75,7 +75,8 @@ class TrainingStageSwitcher extends StatelessWidget {
                 ),
               ]
             : [
-                // For even stages (not last): Page 1 is the chrono.
+                // For even stages (not last)
+                // Page 1 is the chrono.
                 FutureBuilder<DateTime>(
                   future: ChronoStorage.loadStartTime(currentStage),
                   builder: (context, snapshot) {
@@ -91,7 +92,7 @@ class TrainingStageSwitcher extends StatelessWidget {
                     );
                   },
                 ),
-                // ...and Page 2 is the SessionForm.
+                // Page 2 is the SessionForm.
                 SessionForm(
                   initialData: sessionTile,
                   onChanged: onSessionDataChanged, // Pass callback here too

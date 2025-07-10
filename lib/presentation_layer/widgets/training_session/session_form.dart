@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gymini/features/process_training/entities/session_tile.dart';
-import 'package:gymini/presentation_layer/widgets/common/inputs/roulette_numeric_input.dart';
+import 'package:gymini/presentation_layer/widgets/common/inputs/numeric_roulette_input.dart';
 
+/// Four numeric pickers (max/min weight & reps) + public `getCurrentFormData()`.
 class SessionForm extends StatefulWidget {
   final SessionTile initialData;
-  final ValueChanged<SessionFormTile>? onChanged; // New callback
+  final ValueChanged<SessionFormTile>? onChanged;
 
   const SessionForm({
     super.key,
@@ -13,66 +14,50 @@ class SessionForm extends StatefulWidget {
   });
 
   @override
-  SessionFormState createState() => SessionFormState();
+  State<SessionForm> createState() => SessionFormState();
 }
 
 class SessionFormState extends State<SessionForm> {
-  late TextEditingController _maxWeightController;
-  late TextEditingController _minWeightController;
-  late TextEditingController _maxRepsController;
-  late TextEditingController _minRepsController;
+  late final TextEditingController _maxWeightCtl;
+  late final TextEditingController _minWeightCtl;
+  late final TextEditingController _maxRepsCtl;
+  late final TextEditingController _minRepsCtl;
 
   @override
   void initState() {
     super.initState();
-    _maxWeightController = TextEditingController(
-        text: widget.initialData.maxWeight.toString());
-    _minWeightController = TextEditingController(
-        text: widget.initialData.minWeight.toString());
-    _maxRepsController =
+    _maxWeightCtl =
+        TextEditingController(text: widget.initialData.maxWeight.toString());
+    _minWeightCtl =
+        TextEditingController(text: widget.initialData.minWeight.toString());
+    _maxRepsCtl =
         TextEditingController(text: widget.initialData.maxReps.toString());
-    _minRepsController =
+    _minRepsCtl =
         TextEditingController(text: widget.initialData.minReps.toString());
-
-    // Add listeners to call the onChanged callback whenever a field is updated.
-    _maxWeightController.addListener(_onFormChanged);
-    _minWeightController.addListener(_onFormChanged);
-    _maxRepsController.addListener(_onFormChanged);
-    _minRepsController.addListener(_onFormChanged);
   }
 
   @override
   void dispose() {
-    _maxWeightController.removeListener(_onFormChanged);
-    _minWeightController.removeListener(_onFormChanged);
-    _maxRepsController.removeListener(_onFormChanged);
-    _minRepsController.removeListener(_onFormChanged);
-    _maxWeightController.dispose();
-    _minWeightController.dispose();
-    _maxRepsController.dispose();
-    _minRepsController.dispose();
+    _maxWeightCtl.dispose();
+    _minWeightCtl.dispose();
+    _maxRepsCtl.dispose();
+    _minRepsCtl.dispose();
     super.dispose();
   }
 
-  void _onFormChanged() {
-    // Call the callback if it exists.
-    if (widget.onChanged != null) {
-      try {
-        widget.onChanged!(getCurrentFormData());
-      } catch (e) {
-        // Optionally handle parse errors.
-      }
-    }
-  }
+  /// ------------  PUBLIC API  ------------
+  /// Your `ProcessTrainingView` calls this via a `GlobalKey`.
+  SessionFormTile getCurrentFormData() => _collectFormData();
+  /// --------------------------------------
 
-  SessionFormTile getCurrentFormData() {
-    return SessionFormTile(
-      maxWeight: double.parse(_maxWeightController.text),
-      minWeight: double.parse(_minWeightController.text),
-      maxReps: int.parse(_maxRepsController.text),
-      minReps: int.parse(_minRepsController.text),
-    );
-  }
+  SessionFormTile _collectFormData() => SessionFormTile(
+        maxWeight: double.parse(_maxWeightCtl.text),
+        minWeight: double.parse(_minWeightCtl.text),
+        maxReps: int.parse(_maxRepsCtl.text),
+        minReps: int.parse(_minRepsCtl.text),
+      );
+
+  void _notifyParent() => widget.onChanged?.call(_collectFormData());
 
   @override
   Widget build(BuildContext context) {
@@ -80,44 +65,47 @@ class SessionFormState extends State<SessionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         NumericRoulettePicker(
-          controller: _maxWeightController,
+          controller: _maxWeightCtl,
           value: widget.initialData.maxWeight.toDouble(),
-          label: "Max Weight",
+          label: 'Max Weight',
           allowDecimal: true,
           minValue: 0,
           maxValue: 300,
           step: 0.5,
-          vertical: false,
+          onSubmitted: _notifyParent,
         ),
         const SizedBox(height: 8),
         NumericRoulettePicker(
-          controller: _minWeightController,
+          controller: _minWeightCtl,
           value: widget.initialData.minWeight.toDouble(),
-          label: "Min Weight",
+          label: 'Min Weight',
           allowDecimal: true,
           minValue: 0,
           maxValue: 300,
           step: 0.5,
+          onSubmitted: _notifyParent,
         ),
         const SizedBox(height: 8),
         NumericRoulettePicker(
-          controller: _maxRepsController,
+          controller: _maxRepsCtl,
           value: widget.initialData.maxReps.toDouble(),
-          label: "Max Reps",
+          label: 'Max Reps',
           allowDecimal: false,
           minValue: 0,
           maxValue: 100,
           step: 1,
+          onSubmitted: _notifyParent,
         ),
         const SizedBox(height: 8),
         NumericRoulettePicker(
-          controller: _minRepsController,
+          controller: _minRepsCtl,
           value: widget.initialData.minReps.toDouble(),
-          label: "Min Reps",
+          label: 'Min Reps',
           allowDecimal: false,
           minValue: 0,
           maxValue: 100,
           step: 1,
+          onSubmitted: _notifyParent,
         ),
       ],
     );

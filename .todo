@@ -8,5 +8,5 @@
 ✘ Offer three options for time selection: current month, current year, all time. @cancelled(25-07-08 23:40)
 ✔ Refactor history of sessions to use new structure. @started(25-04-08 11:20) @done(25-04-09 14:30) @lasted(1d3h10m12s)
 ✔ Prevent overflow in filters. @started(25-04-10 15:46) @done(25-04-10 16:17) @lasted(31m32s)
-☐ Fix the manual number input in the process training screen.
-☐ Fix the filtering application. @started(25-07-08 23:41)
+✔ Fix the manual number input in the process training screen. @started(25-07-10 22:06) @done(25-07-10 22:40) @lasted(34m4s)
+✔ Fix the filtering application. @started(25-07-08 23:41) @done(25-07-09 21:59) @lasted(22h18m26s)
